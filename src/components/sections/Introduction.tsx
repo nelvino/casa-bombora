@@ -5,12 +5,22 @@ import { Button } from "@/components/ui/Button";
 import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import { useScrollAnimation, fadeInVariants, fadeInUpVariants } from "@/hooks/useScrollAnimation";
+import { createSmoothScrollHandler } from "@/lib/utils/smoothScroll";
 
 export function Introduction() {
   const titleAnimation = useScrollAnimation({ threshold: 0.1 });
   const subtitleAnimation = useScrollAnimation({ threshold: 0.1 });
   const ctaAnimation = useScrollAnimation({ threshold: 0.1 });
   const statsAnimation = useScrollAnimation({ threshold: 0.1 });
+  const smoothScrollHandler = createSmoothScrollHandler(80);
+
+  // Function to handle smooth scrolling to sections
+  const handleSectionScroll = (sectionId: string) => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <section id="introduction" className="py-24 bg-alabaster relative overflow-hidden">
@@ -79,7 +89,7 @@ export function Introduction() {
             transition={{ delay: 0.4 }}
             className="overflow-hidden"
           >
-            <p className="text-lg md:text-xl text-gunmetal/80 mb-8 max-w-2xl mx-auto mt-6">
+            <p className="font-cursive text-xl md:text-2xl text-gunmetal/90 mb-8 max-w-3xl mx-auto mt-8 leading-relaxed tracking-wide px-4 font-medium">
               End-to-end luxury villa investment with guaranteed 16-20% annual ROI. From land acquisition to property management, we handle everything.
             </p>
           </motion.div>
@@ -92,7 +102,11 @@ export function Introduction() {
             transition={{ delay: 0.6 }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <Button size="lg" className="relative overflow-hidden group">
+            <Button 
+              size="lg" 
+              className="relative overflow-hidden group"
+              onClick={() => handleSectionScroll('contact')}
+            >
               <span className="relative z-10">Start Your Investment</span>
               <motion.div 
                 className="absolute inset-0 bg-blue-green/90 z-0"
@@ -101,7 +115,12 @@ export function Introduction() {
                 transition={{ duration: 0.3, ease: "easeInOut" }}
               />
             </Button>
-            <Button variant="outline" size="lg" className="group">
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="group"
+              onClick={() => handleSectionScroll('projects')}
+            >
               Learn More
               <motion.div
                 animate={{ x: [0, 5, 0] }}

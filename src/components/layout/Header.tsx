@@ -32,6 +32,7 @@ const navLinks = [
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [pastHeroSection, setPastHeroSection] = useState(false);
+  const [pastIntroSection, setPastIntroSection] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuHovered, setMenuHovered] = useState(false);
   const [activeLink, setActiveLink] = useState("/");
@@ -53,6 +54,13 @@ export function Header() {
       if (heroSection) {
         const heroBottom = heroSection.getBoundingClientRect().bottom;
         setPastHeroSection(heroBottom < 0);
+      }
+      
+      // Check if we've scrolled past the introduction section
+      const introSection = document.getElementById("introduction");
+      if (introSection) {
+        const introBottom = introSection.getBoundingClientRect().bottom;
+        setPastIntroSection(introBottom < 0);
       }
       
       // Update active section based on scroll position
@@ -114,7 +122,7 @@ export function Header() {
     return () => {
       document.body.style.overflow = '';
     };
-  }, []);
+  }, [menuOpen]);
 
   const handleNavLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const href = e.currentTarget.getAttribute("href");
@@ -139,15 +147,15 @@ export function Header() {
       <motion.header 
         className={cn(
           "fixed top-0 left-0 right-0 z-[100]", 
-          "py-4 transition-all duration-300",
+          "h-16 md:h-auto transition-colors duration-300", // Fixed height on mobile, auto on desktop
           isScrolled ? "bg-alabaster/90 backdrop-blur-sm shadow-sm" : "bg-transparent"
         )}
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1.0] }}
       >
-        <Container>
-          <div className="flex items-center justify-between">
+        <Container className="h-full">
+          <div className="flex items-center justify-between h-full">
             {/* Left section - text logo */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -207,33 +215,38 @@ export function Header() {
             
             {/* Right section - contact button and menu */}
             <div className="flex items-center justify-end space-x-6 flex-1">
-              {/* Optional contact button always visible */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                className="hidden sm:block"
-              >
-                <Button 
-                  variant="default" 
-                  size="default" 
-                  className="flex items-center space-x-2 px-5 group"
-                  onClick={handleContactClick}
-                >
-                  <span>Contact</span>
+              {/* Contact button - only visible after introduction section on tablet/desktop */}
+              <AnimatePresence>
+                {pastIntroSection && (
                   <motion.div
-                    animate={{ x: [0, 3, 0] }}
-                    transition={{
-                      duration: 1.5,
-                      repeat: Infinity,
-                      repeatType: "loop",
-                      ease: "easeInOut",
-                    }}
+                    initial={{ opacity: 0, scale: 0.9, y: -10 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.9, y: -10 }}
+                    transition={{ duration: 0.4 }}
+                    className="hidden sm:block"
                   >
-                    <ChevronRight className="h-4 w-4 group-hover:text-white transition-colors" />
+                    <Button 
+                      variant="outline" 
+                      size="default" 
+                      className="flex items-center space-x-2 px-5 group"
+                      onClick={handleContactClick}
+                    >
+                      <span>Contact</span>
+                      <motion.div
+                        animate={{ x: [0, 3, 0] }}
+                        transition={{
+                          duration: 1.5,
+                          repeat: Infinity,
+                          repeatType: "loop",
+                          ease: "easeInOut",
+                        }}
+                      >
+                        <ChevronRight className="h-4 w-4 group-hover:text-blue-green transition-colors" />
+                      </motion.div>
+                    </Button>
                   </motion.div>
-                </Button>
-              </motion.div>
+                )}
+              </AnimatePresence>
               
               {/* Menu button - always visible on all screen sizes */}
               <motion.button 

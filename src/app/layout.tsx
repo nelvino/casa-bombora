@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Inter, Playfair_Display, Dancing_Script } from "next/font/google";
 import "./globals.css";
 import { ScrollToTopButton } from "@/components/ui/ScrollToTopButton";
 import { PageTransition } from "@/components/ui/PageTransition";
@@ -13,6 +13,11 @@ const inter = Inter({
 const playfairDisplay = Playfair_Display({
   variable: "--font-playfair-display",
   subsets: ["latin"],
+});
+
+const dancingScript = Dancing_Script({
+  subsets: ["latin"],
+  variable: "--font-dancing-script",
 });
 
 export const metadata: Metadata = {
@@ -29,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`${inter.variable} ${playfairDisplay.variable}`}
+        className={`${inter.variable} ${playfairDisplay.variable} ${dancingScript.variable}`}
       >
         <PageTransition>
           {children}

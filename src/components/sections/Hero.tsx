@@ -5,9 +5,36 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { CasaLogo } from "@/components/icons/CasaLogo";
 
+// Custom hook for responsive design
+function useResponsiveSize() {
+  // Default to larger size for server-side rendering
+  const [logoSize, setLogoSize] = useState(400);
+  
+  useEffect(() => {
+    // Function to update size based on window width
+    const updateSize = () => {
+      setLogoSize(window.innerWidth <= 400 ? 300 : 400);
+    };
+    
+    // Set initial size
+    updateSize();
+    
+    // Add event listener for window resize
+    window.addEventListener('resize', updateSize);
+    
+    // Clean up
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+  
+  return logoSize;
+}
+
 export function Hero() {
   // Using state to handle client/server rendering mismatch
   const [isMounted, setIsMounted] = useState(false);
+  
+  // Get responsive logo size
+  const logoSize = useResponsiveSize();
   
   // Only render the dynamic content after component has mounted on client
   useEffect(() => {
@@ -88,7 +115,7 @@ export function Hero() {
                 
                 {/* Main Logo */}
                 <CasaLogo 
-                  size={400} 
+                  size={logoSize} 
                   color="#BF9880" 
                   className="relative z-10 drop-shadow-xl" 
                 />

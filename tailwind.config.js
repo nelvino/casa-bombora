@@ -18,6 +18,7 @@ module.exports = {
       fontFamily: {
         sans: ['var(--font-inter)'],
         serif: ['var(--font-playfair-display)'],
+        cursive: ['var(--font-dancing-script)'], // Updated to a more legible cursive font
       },
     },
   },
