@@ -1,7 +1,7 @@
 "use client";
 
 import { Container } from "@/components/ui/Container";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { CasaLogo } from "@/components/icons/CasaLogo";
 
@@ -33,12 +33,22 @@ export function Hero() {
   // Using state to handle client/server rendering mismatch
   const [isMounted, setIsMounted] = useState(false);
   
+  // State to control the transition from text to logo
+  const [showTextFirst, setShowTextFirst] = useState(true);
+  
   // Get responsive logo size
   const logoSize = useResponsiveSize();
   
   // Only render the dynamic content after component has mounted on client
   useEffect(() => {
     setIsMounted(true);
+    
+    // Set a timeout to transition from text to logo after a delay
+    const timer = setTimeout(() => {
+      setShowTextFirst(false);
+    }, 2500); // 2.5 seconds delay before showing the logo
+    
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -87,53 +97,91 @@ export function Hero() {
           {/* Dynamic logo and content only rendered on client side */}
           {isMounted && (
             <>
-              {/* Large Logo */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ 
-                  duration: 1.5, 
-                  ease: [0.25, 0.1, 0.25, 1.0],
-                  delay: 0.2
-                }}
-                className="relative"
-              >
-                {/* Logo Glow Effect */}
-                <motion.div
-                  className="absolute -inset-10 rounded-full blur-3xl opacity-20"
-                  style={{ backgroundColor: "#BF9880" }}
-                  animate={{ 
-                    opacity: [0.15, 0.25, 0.15],
-                    scale: [1, 1.05, 1]
-                  }}
-                  transition={{
-                    duration: 6,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                />
-                
-                {/* Main Logo */}
-                <CasaLogo 
-                  size={logoSize} 
-                  color="#BF9880" 
-                  className="relative z-10 drop-shadow-xl" 
-                />
-              </motion.div>
+              {/* First block: Logo or text based on state - with fixed height */}
+              <div style={{ height: logoSize * 0.75 }} className="w-full flex items-center justify-center">
+                <AnimatePresence mode="wait">
+                  {showTextFirst ? (
+                    <motion.div
+                      key="text"
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 1.1 }}
+                      transition={{ 
+                        duration: 0.8, 
+                        ease: [0.25, 0.1, 0.25, 1.0]
+                      }}
+                    >
+                      <motion.h1 
+                        className="font-serif text-5xl md:text-7xl font-medium text-center"
+                        animate={{ y: [5, 0, 5] }}
+                        transition={{ 
+                          duration: 3, 
+                          repeat: Infinity,
+                          repeatType: "reverse",
+                          ease: "easeInOut" 
+                        }}
+                      >
+                        <span className="text-lion">Casa</span>{" "}
+                        <span className="text-blue-green">Bombora</span>
+                      </motion.h1>
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="logo"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ 
+                        duration: 1.2, 
+                        ease: [0.25, 0.1, 0.25, 1.0],
+                        delay: 0.2
+                      }}
+                    >
+                      {/* Logo Glow Effect */}
+                      <motion.div
+                        className="absolute -inset-10 rounded-full blur-3xl opacity-20"
+                        style={{ backgroundColor: "#BF9880" }}
+                        animate={{ 
+                          opacity: [0.15, 0.25, 0.15],
+                          scale: [1, 1.05, 1]
+                        }}
+                        transition={{
+                          duration: 6,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }}
+                      />
+                      
+                      {/* Main Logo */}
+                      <CasaLogo 
+                        size={logoSize} 
+                        color="#BF9880" 
+                        className="relative z-10 drop-shadow-xl" 
+                      />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
               
-              {/* Animated text tagline */}
-              <motion.p 
-                className="mt-12 text-xl md:text-2xl text-gunmetal/80 text-center font-serif"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ 
-                  duration: 1, 
-                  delay: 0.8,
-                  ease: [0.25, 0.1, 0.25, 1.0]
-                }}
+              {/* Second block: Animated text tagline - always completely separate */}
+              <motion.div
+                className="mt-8 md:mt-12"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8 }}
               >
-                Luxury Villa Investment in Uluwatu, Bali
-              </motion.p>
+                <motion.p 
+                  className="text-xl md:text-2xl text-gunmetal/80 text-center font-serif"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ 
+                    duration: 1, 
+                    delay: 0.8,
+                    ease: [0.25, 0.1, 0.25, 1.0]
+                  }}
+                >
+                  Luxury Villa Investment in Uluwatu, Bali
+                </motion.p>
+              </motion.div>
             </>
           )}
         </div>
