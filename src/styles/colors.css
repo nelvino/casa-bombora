@@ -1,0 +1,123 @@
+:root {
+  --gunmetal: #1D2632;
+  --blue-green: #009CBC;
+  --lion: #BF9880;
+  --moss-green: #949665;
+  --brown: #994A18;
+  --alabaster: #EEEAE0;
+}
+
+.bg-gunmetal {
+  background-color: var(--gunmetal);
+}
+.bg-blue-green {
+  background-color: var(--blue-green);
+}
+.bg-lion {
+  background-color: var(--lion);
+}
+.bg-moss-green {
+  background-color: var(--moss-green);
+}
+.bg-brown {
+  background-color: var(--brown);
+}
+.bg-alabaster {
+  background-color: var(--alabaster);
+}
+
+.text-gunmetal {
+  color: var(--gunmetal);
+}
+.text-blue-green {
+  color: var(--blue-green);
+}
+.text-lion {
+  color: var(--lion);
+}
+.text-moss-green {
+  color: var(--moss-green);
+}
+.text-brown {
+  color: var(--brown);
+}
+.text-alabaster {
+  color: var(--alabaster);
+}
+
+.border-gunmetal {
+  border-color: var(--gunmetal);
+}
+.border-blue-green {
+  border-color: var(--blue-green);
+}
+.border-lion {
+  border-color: var(--lion);
+}
+.border-moss-green {
+  border-color: var(--moss-green);
+}
+.border-brown {
+  border-color: var(--brown);
+}
+.border-alabaster {
+  border-color: var(--alabaster);
+}
+
+/* Opacity variants */
+.bg-gunmetal\/90 {
+  background-color: rgba(29, 38, 50, 0.9);
+}
+.bg-blue-green\/90 {
+  background-color: rgba(0, 156, 188, 0.9);
+}
+.bg-alabaster\/90 {
+  background-color: rgba(238, 234, 224, 0.9);
+}
+.bg-blue-green\/10 {
+  background-color: rgba(0, 156, 188, 0.1);
+}
+.text-blue-green\/80 {
+  color: rgba(0, 156, 188, 0.8);
+}
+.text-gunmetal\/80 {
+  color: rgba(29, 38, 50, 0.8);
+}
+.text-gunmetal\/70 {
+  color: rgba(29, 38, 50, 0.7);
+}
+.text-gunmetal\/60 {
+  color: rgba(29, 38, 50, 0.6);
+}
+.text-alabaster\/80 {
+  color: rgba(238, 234, 224, 0.8);
+}
+
+/* Hover variants */
+.hover\:bg-blue-green\/90:hover {
+  background-color: rgba(0, 156, 188, 0.9);
+}
+.hover\:bg-lion\/90:hover {
+  background-color: rgba(191, 152, 128, 0.9);
+}
+.hover\:bg-blue-green\/10:hover {
+  background-color: rgba(0, 156, 188, 0.1);
+}
+.hover\:bg-gunmetal\/10:hover {
+  background-color: rgba(29, 38, 50, 0.1);
+}
+.hover\:bg-transparent:hover {
+  background-color: transparent;
+}
+.hover\:text-blue-green:hover {
+  color: var(--blue-green);
+}
+.hover\:text-gunmetal:hover {
+  color: var(--gunmetal);
+}
+.hover\:text-blue-green\/80:hover {
+  color: rgba(0, 156, 188, 0.8);
+}
+.hover\:bg-alabaster\/10:hover {
+  background-color: rgba(238, 234, 224, 0.1);
+}
