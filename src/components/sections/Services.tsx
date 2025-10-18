@@ -182,15 +182,9 @@ export function Services() {
           variants={fadeInUpVariants}
           transition={{ delay: 0.7 }}
         >
-          <Button size="lg" className="relative overflow-hidden group">
-            <span className="relative z-10">View All Services</span>
-            <motion.div 
-              className="absolute inset-0 bg-lion z-0"
-              initial={{ x: '-100%' }}
-              whileHover={{ x: 0 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-            />
-          </Button>
+          <a href="#contact">
+            <Button size="lg">Contact us</Button>
+          </a>
         </motion.div>
       </Container>
     </section>
