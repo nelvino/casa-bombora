@@ -4,26 +4,30 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import Image from "next/image";
+import villa1 from "@/images/villa-1.png";
+import villa2 from "@/images/villa-2.png";
+import villa3 from "@/images/villa-3.jpeg";
 
 const projects = [
   {
     title: "Villa Serenity",
     description: "4-bedroom luxury villa with infinity pool overlooking the ocean",
-    imageSrc: "/images/villa-1.jpg",
+    imageSrc: villa1,
     roi: "19% annual ROI",
     location: "Uluwatu Cliff",
   },
   {
     title: "Casa Azul",
     description: "Modern 3-bedroom villa with private garden and entertainment area",
-    imageSrc: "/images/villa-2.jpg",
+    imageSrc: villa2,
     roi: "17% annual ROI",
     location: "Bingin Beach",
   },
   {
     title: "Villa Horizon",
     description: "5-bedroom estate with panoramic ocean views and luxury amenities",
-    imageSrc: "/images/villa-3.jpg",
+    imageSrc: villa3,
     roi: "20% annual ROI",
     location: "Padang Padang",
   },
@@ -61,10 +65,14 @@ export function Projects() {
             >
               <div className="relative h-64 overflow-hidden">
                 <div className="absolute inset-0 bg-gunmetal/30 z-10" />
-                <div className="w-full h-full relative">
-                  {/* Note: You'll need to add actual images to the public folder */}
-                  <div className="w-full h-full bg-lion/30" />
-                </div>
+                <Image
+                  src={project.imageSrc}
+                  alt={project.title}
+                  fill
+                  className="object-cover"
+                  sizes="(min-width: 768px) 33vw, 100vw"
+                  priority={index === 0}
+                />
               </div>
               <div className="p-6">
                 <div className="flex justify-between items-start mb-3">
