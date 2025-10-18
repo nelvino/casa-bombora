@@ -7,7 +7,7 @@ import { Mail, MapPin, Phone } from "lucide-react";
 
 export function Contact() {
   return (
-    <section id="contact" className="py-24 bg-alabaster">
+    <section id="contact" className="py-8 md:py-20 bg-alabaster/10">
       <Container>
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <motion.div

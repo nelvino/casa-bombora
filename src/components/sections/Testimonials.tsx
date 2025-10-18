@@ -39,7 +39,7 @@ export function Testimonials() {
   }, []);
   
   return (
-    <section id="testimonials" className="py-24 bg-lion/10">
+    <section id="testimonials" className="py-8 md:py-20 bg-white">
       <Container>
         <div className="text-center max-w-3xl mx-auto mb-16">
           <motion.div
@@ -65,7 +65,7 @@ export function Testimonials() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+              className="bg-alabaster p-8 rounded-lg shadow-sm hover:shadow-md border border-gunmetal/10 transition-shadow"
             >
               <div className="mb-6 text-blue-green">
                 <Quote className="h-8 w-8" />
@@ -86,7 +86,7 @@ export function Testimonials() {
           {/* Skeleton state for SSR */}
           {!isClient && (
             <>
-              <div className="bg-white p-8 rounded-lg shadow-sm animate-pulse">
+              <div className="bg-alabaster p-8 rounded-lg shadow-sm animate-pulse">
                 <div className="h-8 w-8 bg-gray-200 mb-6 rounded"></div>
                 <div className="h-4 bg-gray-200 mb-2 rounded w-3/4"></div>
                 <div className="h-4 bg-gray-200 mb-2 rounded"></div>
@@ -99,7 +99,7 @@ export function Testimonials() {
                   </div>
                 </div>
               </div>
-              <div className="bg-white p-8 rounded-lg shadow-sm animate-pulse">
+              <div className="bg-alabaster p-8 rounded-lg shadow-sm animate-pulse">
                 <div className="h-8 w-8 bg-gray-200 mb-6 rounded"></div>
                 <div className="h-4 bg-gray-200 mb-2 rounded w-3/4"></div>
                 <div className="h-4 bg-gray-200 mb-2 rounded"></div>
@@ -112,7 +112,7 @@ export function Testimonials() {
                   </div>
                 </div>
               </div>
-              <div className="bg-white p-8 rounded-lg shadow-sm animate-pulse">
+              <div className="bg-alabaster p-8 rounded-lg shadow-sm animate-pulse">
                 <div className="h-8 w-8 bg-gray-200 mb-6 rounded"></div>
                 <div className="h-4 bg-gray-200 mb-2 rounded w-3/4"></div>
                 <div className="h-4 bg-gray-200 mb-2 rounded"></div>

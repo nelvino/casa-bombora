@@ -45,7 +45,7 @@ export function Services() {
   const buttonAnimation = useScrollAnimation({ threshold: 0.1 });
 
   return (
-    <section id="services" className="py-24 bg-alabaster relative">
+    <section id="services" className="py-8 md:py-20 bg-alabaster relative">
       {/* Background decorative elements */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <motion.div 

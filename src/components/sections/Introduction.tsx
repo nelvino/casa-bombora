@@ -23,7 +23,7 @@ export function Introduction() {
   };
 
   return (
-    <section id="introduction" className="py-24 bg-alabaster relative overflow-hidden">
+    <section id="introduction" className="py-8 md:py-20 bg-alabaster relative overflow-hidden">
       {/* Decorative background elements */}
       <div className="absolute inset-0 -z-10">
         {/* Subtle floating elements */}

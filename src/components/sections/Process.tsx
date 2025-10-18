@@ -55,7 +55,7 @@ export function Process() {
   const timelineAnimation = useScrollAnimation({ threshold: 0.1 });
 
   return (
-    <section id="process" className="py-24 bg-white relative overflow-hidden">
+    <section id="process" className="pt-8 !pb-20 md:py-20 bg-white relative overflow-hidden">
       {/* Background Pattern */}
       <motion.div 
         className="absolute inset-0 opacity-[0.03] pointer-events-none -z-10"

@@ -35,7 +35,7 @@ const projects = [
 
 export function Projects() {
   return (
-    <section id="projects" className="py-24 bg-alabaster">
+    <section id="projects" className="py-8 md:py-20 bg-alabaster">
       <Container>
         <div className="text-center max-w-3xl mx-auto mb-16">
           <motion.div

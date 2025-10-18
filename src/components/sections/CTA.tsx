@@ -10,7 +10,7 @@ export function CTA() {
   const ctaAnimation = useScrollAnimation();
 
   return (
-    <section className="py-24 bg-gunmetal text-alabaster relative overflow-hidden">
+    <section className="py-8 md:py-20 bg-gunmetal text-alabaster relative overflow-hidden">
       {/* Background decorative elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
         {/* Animated gradient blur */}

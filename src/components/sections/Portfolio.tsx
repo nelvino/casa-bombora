@@ -146,7 +146,7 @@ export function Portfolio() {
   }, [pdfUrl, width]);
 
   return (
-    <section id="portfolio" className="py-20 bg-alabaster">
+    <section id="portfolio" className="py-8 md:py-20 bg-lion/10">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl md:text-4xl font-serif text-gunmetal mb-6">Portfolio</h2>
         <p className="text-gunmetal/80 max-w-2xl mb-8">Flip through our portfolio like a book.</p>
