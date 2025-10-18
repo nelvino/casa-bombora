@@ -15,6 +15,7 @@ export function Portfolio() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const hasFirstImageRef = useRef(false);
+  const [aspect, setAspect] = useState(0.65); // height/width, default for horizontal pages
 
   // Resize handling
   useEffect(() => {
@@ -87,6 +88,11 @@ export function Portfolio() {
           const targetWidth = width; // scale to container width
           const scale = targetWidth / viewport.width;
           const scaledViewport = page.getViewport({ scale });
+          // Capture aspect ratio from the first page
+          if (!hasFirstImageRef.current) {
+            const nextAspect = scaledViewport.height / scaledViewport.width;
+            if (Number.isFinite(nextAspect) && nextAspect > 0) setAspect(nextAspect);
+          }
 
           const canvas = document.createElement("canvas");
           const context = canvas.getContext("2d");
@@ -165,7 +171,7 @@ export function Portfolio() {
               <div className="flex justify-center">
                 <PageFlipAny
                   width={width}
-                  height={Math.round(width * 1.3)}
+                  height={Math.round(width * aspect)}
                   size="fixed"
                   minWidth={320}
                   maxWidth={1000}
