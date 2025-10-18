@@ -19,7 +19,8 @@ export async function GET(request: Request) {
       headers.set('Content-Disposition', 'attachment; filename="Casa_bombora_Portfolio.pdf"')
     }
 
-    return new NextResponse(fileBuffer, { status: 200, headers })
+    const arrayBuffer = fileBuffer.buffer.slice(fileBuffer.byteOffset, fileBuffer.byteOffset + fileBuffer.byteLength)
+    return new NextResponse(arrayBuffer as ArrayBuffer, { status: 200, headers })
   } catch (err) {
     return NextResponse.json({ error: 'PDF not found' }, { status: 404 })
   }
