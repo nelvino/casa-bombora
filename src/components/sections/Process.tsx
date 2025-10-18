@@ -4,6 +4,12 @@ import { Container } from "@/components/ui/Container";
 import { motion } from "framer-motion";
 import { CheckCircle } from "lucide-react";
 import { useScrollAnimation, fadeInUpVariants } from "@/hooks/useScrollAnimation";
+import Image from "next/image";
+import sketch1 from "@/images/sketch-1.jpg";
+import sketch3 from "@/images/sketch-3.png";
+import phase1Img from "@/images/phase-1.png";
+import phase3Img from "@/images/phase-3.png";
+import phase4Img from "@/images/phase-4.png";
 
 const phases = [
   {
@@ -226,6 +232,107 @@ export function Process() {
                   </motion.ul>
                 </motion.div>
               </motion.div>
+
+              {phase.number === 1 && (
+                <div className="mx-10 mt-8 md:mt-10 mb-4 md:mb-6">
+                  <motion.div
+                    className="relative w-full h-56 md:h-64 rounded-2xl overflow-hidden shadow-md md:max-w-xl md:ml-auto md:translate-x-4 border border-blue-green/20"
+                    initial={{ opacity: 0, y: 12 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1.0] }}
+                    whileHover={{ scale: 1.01 }}
+                  >
+                    <Image
+                      src={phase1Img}
+                      alt="Pre-design illustration"
+                      fill
+                      sizes="(min-width: 768px) 50vw, 100vw"
+                      className="object-cover"
+                    />
+                  </motion.div>
+                </div>
+              )}
+
+              {phase.number === 3 && (
+                <div className="mx-10 mt-8 md:mt-10 mb-4 md:mb-6">
+                  <motion.div
+                    className="relative w-full h-56 md:h-64 rounded-2xl overflow-hidden shadow-md md:max-w-xl md:mr-auto md:-translate-x-4 border border-blue-green/20"
+                    initial={{ opacity: 0, y: 12 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1.0] }}
+                    whileHover={{ scale: 1.01 }}
+                  >
+                    <Image
+                      src={phase3Img}
+                      alt="Construction phase illustration"
+                      fill
+                      sizes="(min-width: 768px) 50vw, 100vw"
+                      className="object-cover"
+                    />
+                  </motion.div>
+                </div>
+              )}
+
+              {phase.number === 4 && (
+                <div className="mx-10 mt-8 md:mt-10 mb-4 md:mb-6">
+                  <motion.div
+                    className="relative w-full h-56 md:h-64 rounded-2xl overflow-hidden shadow-md md:max-w-xl md:ml-auto md:translate-x-4 border border-blue-green/20"
+                    initial={{ opacity: 0, y: 12 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1.0] }}
+                    whileHover={{ scale: 1.01 }}
+                  >
+                    <Image
+                      src={phase4Img}
+                      alt="Keys phase illustration"
+                      fill
+                      sizes="(min-width: 768px) 50vw, 100vw"
+                      className="object-cover"
+                    />
+                  </motion.div>
+                </div>
+              )}
+
+              {phase.number === 2 && (
+                <div className="mx-10 mt-8 md:mt-10 mb-4 md:mb-6 space-y-6">
+                  <motion.div
+                    className="relative w-full h-56 md:h-64 rounded-2xl overflow-hidden shadow-md md:max-w-xl md:mr-auto md:-translate-x-4 border border-blue-green/20"
+                    initial={{ opacity: 0, y: 12 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1.0] }}
+                    whileHover={{ scale: 1.01 }}
+                  >
+                    <Image
+                      src={sketch1}
+                      alt="Design sketch 1"
+                      fill
+                      sizes="(min-width: 768px) 50vw, 100vw"
+                      className="object-cover"
+                    />
+                  </motion.div>
+
+                  <motion.div
+                    className="relative w-full h-56 md:h-64 rounded-2xl overflow-hidden shadow-md md:max-w-xl md:ml-auto md:translate-x-4 border border-blue-green/20"
+                    initial={{ opacity: 0, y: 12 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 0.1, ease: [0.25, 0.1, 0.25, 1.0] }}
+                    whileHover={{ scale: 1.01 }}
+                  >
+                    <Image
+                      src={sketch3}
+                      alt="Design sketch 2"
+                      fill
+                      sizes="(min-width: 768px) 50vw, 100vw"
+                      className="object-cover"
+                    />
+                  </motion.div>
+                </div>
+              )}
             </div>
           ))}
         </div>
