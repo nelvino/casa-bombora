@@ -8,12 +8,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'gunmetal': '#1D2632',
-        'blue-green': '#009CBC',
-        'lion': '#BF9880',
-        'moss-green': '#949665',
-        'brown': '#994A18',
-        'alabaster': '#EEEAE0',
+        'gunmetal': '#1C232C',
+        'blue-green': '#445464',
+        'lion': '#C89C7E',
+        'moss-green': '#7C7A53',
+        'brown': '#8C5031',
+        'alabaster': '#DCD2BC',
       },
       fontFamily: {
         sans: ['var(--font-inter)'],

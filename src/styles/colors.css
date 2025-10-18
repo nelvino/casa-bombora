@@ -66,45 +66,45 @@
 
 /* Opacity variants */
 .bg-gunmetal\/90 {
-  background-color: rgba(29, 38, 50, 0.9);
+  background-color: rgba(28, 35, 44, 0.9);
 }
 .bg-blue-green\/90 {
-  background-color: rgba(0, 156, 188, 0.9);
+  background-color: rgba(68, 84, 100, 0.9);
 }
 .bg-alabaster\/90 {
-  background-color: rgba(238, 234, 224, 0.9);
+  background-color: rgba(220, 210, 188, 0.9);
 }
 .bg-blue-green\/10 {
-  background-color: rgba(0, 156, 188, 0.1);
+  background-color: rgba(68, 84, 100, 0.1);
 }
 .text-blue-green\/80 {
-  color: rgba(0, 156, 188, 0.8);
+  color: rgba(68, 84, 100, 0.8);
 }
 .text-gunmetal\/80 {
-  color: rgba(29, 38, 50, 0.8);
+  color: rgba(28, 35, 44, 0.8);
 }
 .text-gunmetal\/70 {
-  color: rgba(29, 38, 50, 0.7);
+  color: rgba(28, 35, 44, 0.7);
 }
 .text-gunmetal\/60 {
-  color: rgba(29, 38, 50, 0.6);
+  color: rgba(28, 35, 44, 0.6);
 }
 .text-alabaster\/80 {
-  color: rgba(238, 234, 224, 0.8);
+  color: rgba(220, 210, 188, 0.8);
 }
 
 /* Hover variants */
 .hover\:bg-blue-green\/90:hover {
-  background-color: rgba(0, 156, 188, 0.9);
+  background-color: rgba(68, 84, 100, 0.9);
 }
 .hover\:bg-lion\/90:hover {
-  background-color: rgba(191, 152, 128, 0.9);
+  background-color: rgba(200, 156, 126, 0.9);
 }
 .hover\:bg-blue-green\/10:hover {
-  background-color: rgba(0, 156, 188, 0.1);
+  background-color: rgba(68, 84, 100, 0.1);
 }
 .hover\:bg-gunmetal\/10:hover {
-  background-color: rgba(29, 38, 50, 0.1);
+  background-color: rgba(28, 35, 44, 0.1);
 }
 .hover\:bg-transparent:hover {
   background-color: transparent;
@@ -116,8 +116,8 @@
   color: var(--gunmetal);
 }
 .hover\:text-blue-green\/80:hover {
-  color: rgba(0, 156, 188, 0.8);
+  color: rgba(68, 84, 100, 0.8);
 }
 .hover\:bg-alabaster\/10:hover {
-  background-color: rgba(238, 234, 224, 0.1);
+  background-color: rgba(220, 210, 188, 0.1);
 }
