@@ -21,7 +21,7 @@ const testimonialData = [
   },
   {
     quote: "From start to finish, Casa Bombora delivered exactly what they promised. The weekly updates kept me informed, and the final result is stunning.",
-    name: "James Wilson",
+    name: "Pedro Gonzalez",
     title: "Investor from Colombia",
     image: "/images/testimonial-3.jpg",
   },
