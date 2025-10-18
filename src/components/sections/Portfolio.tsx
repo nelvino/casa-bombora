@@ -7,7 +7,7 @@ const ReactPageFlip = dynamic(() => import("react-pageflip").then(m => m.default
 const PageFlipAny: any = ReactPageFlip as unknown as any;
 
 export function Portfolio() {
-  const pdfUrl = "/api/portfolio-pdf"; // served by src/app/api/portfolio-pdf/route.ts
+  const pdfUrl = "/Casa_bombora_Portofolio.pdf"; // served from public/Casa_bombora_Portofolio.pdf
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [width, setWidth] = useState(900);
@@ -154,7 +154,8 @@ export function Portfolio() {
         <div className="mb-6">
           <a
             className="inline-flex items-center gap-2 px-4 py-2 rounded bg-gunmetal text-alabaster hover:bg-gunmetal/90"
-            href={`${pdfUrl}?download=1`}
+            href={pdfUrl}
+            download
           >
             Download PDF
           </a>

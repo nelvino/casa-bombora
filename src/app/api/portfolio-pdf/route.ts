@@ -7,8 +7,16 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
     const download = searchParams.get('download') === '1'
 
-    const filePath = path.join(process.cwd(), 'src', 'images', 'PDF', 'Casa_bombora_Portofolio.pdf')
-    const fileBuffer = await fs.readFile(filePath)
+    // Prefer public asset in production builds
+    const publicPath = path.join(process.cwd(), 'public', 'pdf', 'portfolio.pdf')
+    let fileBuffer: Buffer
+    try {
+      fileBuffer = await fs.readFile(publicPath)
+    } catch {
+      // Fallback to repo path for local dev
+      const repoPath = path.join(process.cwd(), 'src', 'images', 'PDF', 'Casa_bombora_Portofolio.pdf')
+      fileBuffer = await fs.readFile(repoPath)
+    }
 
     const headers = new Headers({
       'Content-Type': 'application/pdf',
