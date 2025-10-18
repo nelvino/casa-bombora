@@ -3,39 +3,45 @@
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { motion } from "framer-motion";
-import { Building, Landmark, Home, PenTool, Construction, Settings } from "lucide-react";
+import Image from "next/image";
 import { useScrollAnimation, fadeInUpVariants, staggerChildrenVariants } from "@/hooks/useScrollAnimation";
+import landAcquisitionLogo from "@/images/logos/land_acquisition.png";
+import legalServicesLogo from "@/images/logos/legal_services.png";
+import architectureDesignLogo from "@/images/logos/architecture_design.png";
+import constructionLogo from "@/images/logos/construction.png";
+import interiorDesignLogo from "@/images/logos/interior_design.png";
+import propertyManagementLogo from "@/images/logos/property_management.png";
 
 const services = [
   {
     title: "Land Acquisition",
     description: "We help you find and secure the perfect plot of land in Uluwatu, handling all legal aspects of land lease agreements.",
-    icon: Landmark,
+    logo: landAcquisitionLogo,
   },
   {
     title: "Legal Services",
     description: "Our team handles all legal requirements including company formation, permits, and bank account setup in Indonesia.",
-    icon: Building,
+    logo: legalServicesLogo,
   },
   {
     title: "Architecture & Design",
     description: "Our award-winning architects create stunning villa designs that maximize views, space, and investment potential.",
-    icon: PenTool,
+    logo: architectureDesignLogo,
   },
   {
     title: "Construction",
     description: "Expert construction management with weekly progress reports, quality control, and transparent communication.",
-    icon: Construction,
+    logo: constructionLogo,
   },
   {
     title: "Interior Design",
     description: "Curated interior design that blends luxury with Balinese elements to create an unforgettable living experience.",
-    icon: Home,
+    logo: interiorDesignLogo,
   },
   {
     title: "Property Management",
     description: "Comprehensive property management services to maximize your rental income and maintain your investment.",
-    icon: Settings,
+    logo: propertyManagementLogo,
   },
 ];
 
@@ -143,14 +149,13 @@ export function Services() {
               />
 
               <motion.div 
-                className="inline-flex items-center justify-center w-12 h-12 bg-blue-green/10 text-blue-green rounded-lg mb-6 relative z-10"
+                className="mb-5 relative z-10"
                 whileHover={{ 
                   scale: 1.05,
-                  backgroundColor: "rgba(0, 156, 188, 0.2)",
                   transition: { duration: 0.3 } 
                 }}
               >
-                <service.icon className="h-6 w-6" />
+                <Image src={service.logo} alt={`${service.title} logo`} width={64} height={64} className="h-16 w-16 object-contain" />
               </motion.div>
 
               <h3 className="text-xl font-medium mb-3 relative z-10">{service.title}</h3>
