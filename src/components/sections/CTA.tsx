@@ -99,7 +99,7 @@ export function CTA() {
                   }
                 }}
               >
-                Ready to Invest in Your Dream <span className="text-blue-green">Bali Villa?</span>
+                Ready to Invest in Your Dream <span className="text-moss-green">Bali Villa?</span>
               </motion.h2>
             </div>
             
