@@ -121,8 +121,8 @@ export function Hero() {
                           ease: "easeInOut" 
                         }}
                       >
-                        <span className="text-lion">Casa</span>{" "}
-                        <span className="text-blue-green">Bombora</span>
+                        <span className="text-lion">CASA</span>{" "}
+                        <span className="text-blue-green">bombora</span>
                       </motion.h1>
                     </motion.div>
                   ) : (

@@ -3,6 +3,8 @@
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { motion } from "framer-motion";
+import Image from "next/image";
+import taboLogo from "@/images/logos/TABO-Brandmark-Black.svg";
 import { ChevronRight } from "lucide-react";
 import { useScrollAnimation, fadeInVariants, fadeInUpVariants } from "@/hooks/useScrollAnimation";
 import { createSmoothScrollHandler } from "@/lib/utils/smoothScroll";
@@ -136,6 +138,20 @@ export function Introduction() {
           </motion.div>
           
           <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeInUpVariants}
+            transition={{ delay: 0.7 }}
+            className="mt-6 md:mt-8 flex flex-col items-center gap-3"
+          >
+            <span className="text-sm uppercase tracking-widest text-gunmetal/60">Partnered with</span>
+            <a href="https://tabo.ooo/" target="_blank" rel="noopener noreferrer" aria-label="TABO website">
+              <Image src={taboLogo} alt="TABO" width={140} height={40} className="h-8 w-auto opacity-80" />
+            </a>
+          </motion.div>
+          
+          <motion.div
             ref={statsAnimation.ref}
             initial="hidden"
             animate={statsAnimation.controls}
@@ -154,8 +170,8 @@ export function Introduction() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
               {[
                 { stat: "16-20%", label: "Annual ROI" },
-                { stat: "100+", label: "Projects Completed" },
-                { stat: "10+ Years", label: "Experience" },
+                { stat: "50+", label: "Projects Completed" },
+                { stat: "7+ Years", label: "Experience" },
                 { stat: "24/7", label: "Customer Support" }
               ].map((item, index) => (
                 <motion.div 

@@ -161,7 +161,7 @@ export function Header() {
                     transition: { duration: 0.2 }
                   }}
                 >
-                  <span className="text-blue-green">C</span>asa <span className="text-blue-green">B</span>ombora
+                  C<span className="text-blue-green">ASA</span> b<span className="text-blue-green">ombora</span>
                 </motion.span>
               </Link>
             </motion.div>
@@ -461,7 +461,7 @@ export function Header() {
                 
                 {/* Copyright or additional info */}
                 <div className="mt-8 text-xs text-gunmetal/50">
-                  © {new Date().getFullYear()} Casa Bombora. All rights reserved.
+                  © {new Date().getFullYear()} Casa bombora. All rights reserved.
                 </div>
               </div>
             </motion.div>

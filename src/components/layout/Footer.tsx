@@ -9,7 +9,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div>
-            <h3 className="font-serif text-2xl mb-4">Casa Bombora</h3>
+            <h3 className="font-serif text-2xl mb-4">CASA bombora</h3>
             <p className="text-alabaster/80 mb-4">
               Your end-to-end solution for luxury villa investment in Uluwatu, Bali.
             </p>
