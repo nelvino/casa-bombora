@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Netlify Forms Detector</title>
+  </head>
+  <body>
+    <!-- This file is not rendered in the app. It exists for Netlify's Next.js runtime to detect forms. -->
+    <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="contact" />
+      <p style="display:none">
+        <label>
+          Don’t fill this out: <input name="bot-field" />
+        </label>
+      </p>
+
+      <input type="text" name="firstName" />
+      <input type="text" name="lastName" />
+      <input type="email" name="email" />
+      <input type="tel" name="phone" />
+      <textarea name="message"></textarea>
+
+      <button type="submit">Send</button>
+    </form>
+  </body>
+</html>
