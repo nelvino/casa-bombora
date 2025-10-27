@@ -67,14 +67,14 @@ export function Contact() {
             <form
               name="contact"
               method="POST"
-              action="/thank-you.html"
+              action="/thank-you"
               data-netlify="true"
               netlify-honeypot="bot-field"
               onSubmit={(e) => {
                 const form = e.currentTarget as HTMLFormElement;
                 const data = new FormData(form);
                 const firstName = ((data.get('firstName') as string) || '').trim();
-                form.action = `/thank-you.html${firstName ? `?name=${encodeURIComponent(firstName)}` : ''}`;
+                form.action = `/thank-you${firstName ? `?name=${encodeURIComponent(firstName)}` : ''}`;
               }}
             >
               <input type="hidden" name="form-name" value="contact" />
