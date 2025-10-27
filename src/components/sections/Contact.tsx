@@ -64,7 +64,19 @@ export function Contact() {
             className="bg-white p-8 rounded-lg shadow-sm"
           >
             <h3 className="text-2xl font-serif mb-6">Send us a message</h3>
-            <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+            <form
+              name="contact"
+              method="POST"
+              action="/thank-you.html"
+              data-netlify="true"
+              netlify-honeypot="bot-field"
+              onSubmit={(e) => {
+                const form = e.currentTarget as HTMLFormElement;
+                const data = new FormData(form);
+                const firstName = ((data.get('firstName') as string) || '').trim();
+                form.action = `/thank-you.html${firstName ? `?name=${encodeURIComponent(firstName)}` : ''}`;
+              }}
+            >
               <input type="hidden" name="form-name" value="contact" />
               <p className="hidden">
                 <label>

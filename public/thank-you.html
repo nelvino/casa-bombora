@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Thank you | CASA bombora</title>
+    <style>
+      :root {
+        --gunmetal: #1C232C;
+        --blue-green: #445464;
+        --lion: #C89C7E;
+        --alabaster: #DCD2BC;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+        color: var(--gunmetal);
+        background: linear-gradient(180deg, rgba(220,210,188,0.25), rgba(220,210,188,0.15));
+      }
+      .container {
+        min-height: 100dvh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+      }
+      .card {
+        background: #fff;
+        border: 1px solid rgba(0,0,0,0.05);
+        border-radius: 16px;
+        padding: 32px;
+        max-width: 640px;
+        width: 100%;
+        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.05);
+        text-align: center;
+      }
+      .brand {
+        font-family: Georgia, "Times New Roman", Times, serif;
+        font-size: 28px;
+        margin-bottom: 8px;
+        letter-spacing: 0.5px;
+      }
+      .brand .lion { color: var(--lion); }
+      .brand .blue { color: var(--blue-green); }
+      .title { font-family: Georgia, "Times New Roman", Times, serif; font-size: 28px; margin: 8px 0 6px; }
+      .muted { color: rgba(28,35,44,0.7); margin: 0 0 16px; }
+      .countdown { margin-top: 16px; color: rgba(28,35,44,0.7); }
+      .actions { margin-top: 20px; }
+      .btn {
+        display: inline-flex; align-items: center; justify-content: center;
+        padding: 12px 20px; border-radius: 8px; text-decoration: none; font-weight: 600;
+        color: #fff; background: var(--gunmetal); position: relative; overflow: hidden;
+      }
+      .btn:hover { background: #2a3340; }
+    </style>
+    <script>
+      // Read ?name= from query string
+      function getQueryParam(name) {
+        const params = new URLSearchParams(window.location.search);
+        return params.get(name) || '';
+      }
+      document.addEventListener('DOMContentLoaded', function () {
+        var name = getQueryParam('name');
+        var target = document.getElementById('name');
+        if (name) target.textContent = ' ' + name;
+        var seconds = 5;
+        var el = document.getElementById('seconds');
+        el.textContent = seconds;
+        var interval = setInterval(function(){
+          seconds -= 1;
+          el.textContent = seconds;
+          if (seconds <= 0) { clearInterval(interval); window.location.href = '/'; }
+        }, 1000);
+      });
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <div class="brand"><span class="lion">CASA</span> <span class="blue">bombora</span></div>
+        <h1 class="title">Thank you<span id="name"></span>!</h1>
+        <p class="muted">We've received your message and will get back to you shortly.</p>
+        <div class="actions">
+          <a class="btn" href="/" aria-label="Back to homepage">Back to homepage</a>
+        </div>
+        <div class="countdown">Redirecting in <span id="seconds">5</span>s…</div>
+      </div>
+    </div>
+  </body>
+</html>
