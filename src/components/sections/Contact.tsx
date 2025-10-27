@@ -3,7 +3,8 @@
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { motion } from "framer-motion";
-import { Mail, MapPin, Phone } from "lucide-react";
+// import { Mail, MapPin, Phone } from "lucide-react";
+import { MapPin, Phone } from "lucide-react";
 
 export function Contact() {
   return (
@@ -34,7 +35,7 @@ export function Contact() {
                 </div>
               </div>
               
-              <div className="flex items-start">
+              {/* <div className="flex items-start">
                 <div className="bg-blue-green/10 p-3 rounded-lg mr-4">
                   <Mail className="h-6 w-6 text-blue-green" />
                 </div>
@@ -42,7 +43,7 @@ export function Contact() {
                   <h4 className="font-medium mb-1">Email</h4>
                   <p className="text-gunmetal/70">info@casabombora.com</p>
                 </div>
-              </div>
+              </div> */}
               
               <div className="flex items-start">
                 <div className="bg-blue-green/10 p-3 rounded-lg mr-4">
