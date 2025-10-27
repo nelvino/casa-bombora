@@ -50,7 +50,7 @@ export function Contact() {
                 </div>
                 <div>
                   <h4 className="font-medium mb-1">Phone</h4>
-                  <p className="text-gunmetal/70">+62 123 456 7890</p>
+                  <p className="text-gunmetal/70">+61 415 164 208</p>
                 </div>
               </div>
             </div>
@@ -64,7 +64,13 @@ export function Contact() {
             className="bg-white p-8 rounded-lg shadow-sm"
           >
             <h3 className="text-2xl font-serif mb-6">Send us a message</h3>
-            <form>
+            <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+              <input type="hidden" name="form-name" value="contact" />
+              <p className="hidden">
+                <label>
+                  Don’t fill this out: <input name="bot-field" />
+                </label>
+              </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                 <div>
                   <label htmlFor="firstName" className="block text-sm font-medium text-gunmetal mb-1">
@@ -73,6 +79,7 @@ export function Contact() {
                   <input
                     type="text"
                     id="firstName"
+                    name="firstName"
                     className="w-full px-4 py-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-green"
                   />
                 </div>
@@ -83,6 +90,7 @@ export function Contact() {
                   <input
                     type="text"
                     id="lastName"
+                    name="lastName"
                     className="w-full px-4 py-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-green"
                   />
                 </div>
@@ -95,6 +103,7 @@ export function Contact() {
                 <input
                   type="email"
                   id="email"
+                  name="email"
                   className="w-full px-4 py-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-green"
                 />
               </div>
@@ -106,6 +115,7 @@ export function Contact() {
                 <input
                   type="tel"
                   id="phone"
+                  name="phone"
                   className="w-full px-4 py-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-green"
                 />
               </div>
@@ -117,6 +127,7 @@ export function Contact() {
                 <textarea
                   id="message"
                   rows={4}
+                  name="message"
                   className="w-full px-4 py-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-green"
                 ></textarea>
               </div>

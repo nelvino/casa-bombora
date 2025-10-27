@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display, Dancing_Script } from "next/font/google";
 import "./globals.css";
 import { ScrollToTopButton } from "@/components/ui/ScrollToTopButton";
+import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 import { PageTransition } from "@/components/ui/PageTransition";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 
@@ -39,6 +40,7 @@ export default function RootLayout({
         <PageTransition>
           {children}
         </PageTransition>
+        <WhatsAppButton />
         <ScrollToTopButton />
         <CustomCursor />
       </body>
