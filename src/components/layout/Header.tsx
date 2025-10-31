@@ -17,6 +17,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { createSmoothScrollHandler } from "@/lib/utils/smoothScroll";
 import { CasaLogo } from "@/components/icons/CasaLogo";
+import monkySvg from "@/images/Monky.svg";
 
 const navLinks = [
   { name: "Home", href: "/" },
@@ -327,7 +328,7 @@ export function Header() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.2 }}
                 >
-                  <CasaLogo size={36} color="#009CBC" className="mr-3" />
+                  <CasaLogo size={44} color="#009CBC" className="mr-3" />
                   <div>
                     <div className="font-serif text-2xl font-semibold">
                       <span className="text-blue-green">Casa</span> <span className="text-gunmetal">Bombora</span>
@@ -335,6 +336,31 @@ export function Header() {
                     <p className="text-sm text-gunmetal/60 mt-1">Luxury Villa Investment in Bali</p>
                   </div>
                 </motion.div>
+
+                {/* Divider line under the logo */}
+                <div className="border-t border-gunmetal/40" />
+
+                {/* Animated monkey hanging from the border */}
+                <div className="relative h-28">
+                  <motion.div
+                    className="absolute left-1/2 -translate-x-1/2"
+                    style={{ transformOrigin: "top center" }}
+                    initial={{ y: -20, opacity: 0, rotate: 0 }}
+                    animate={{
+                      y: 0,
+                      opacity: 1,
+                      rotate: [0, -10, 8, -6, 3, 0],
+                    }}
+                    transition={{ duration: 1.8, ease: [0.25, 0.1, 0.25, 1.0] }}
+                  >
+                    <img
+                      src={monkySvg.src}
+                      alt="Hanging monkey"
+                      className="h-24 w-auto select-none pointer-events-none"
+                      draggable={false}
+                    />
+                  </motion.div>
+                </div>
                 
                 {/* Navigation links */}
                 <motion.nav 

@@ -5,27 +5,28 @@ import { Button } from "@/components/ui/Button";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import villa1 from "@/images/villa-1.png";
 import villa2 from "@/images/villa-2.png";
 import villa3 from "@/images/villa-3.jpeg";
 
 const projects = [
   {
-    title: "Villa Serenity",
+    title: "1 Level Villa",
     description: "Thoughtfully designed 1‑story, 1‑bedroom villa with a cosy indoor–outdoor flow. A private backyard pool with a sunbed creates a calm retreat for lazy afternoons and evening dips.",
     imageSrc: villa1,
     roi: "19% annual ROI",
     location: "Uluwatu Cliff",
   },
   {
-    title: "Casa Azul",
+    title: "Mezzanine Villa",
     description: "Compact mezzanine concept: bedroom upstairs for privacy; open living room and kitchen downstairs for relaxed entertaining. Lush greenery frames a backyard pool with sunbed and an outdoor bath for spa‑like evenings.",
     imageSrc: villa3,
     roi: "18% annual ROI",
     location: "Bingin Beach",
   },
   {
-    title: "Villa Horizon",
+    title: "2 Levels Villa",
     description: "Elegant 2‑story, 2‑bedroom layout—one bedroom on each level. An upper‑level terrace features a soaking bath; below, a beautiful backyard pool with sunbed and outdoor shower completes the resort vibe.",
     imageSrc: villa2,
     roi: "17% annual ROI",
@@ -34,6 +35,7 @@ const projects = [
 ];
 
 export function Projects() {
+  const slugs = ["/villas/one-level", "/villas/mezzanine", "/villas/two-levels"];
   return (
     <section id="projects" className="py-8 md:py-20 bg-alabaster">
       <Container>
@@ -83,10 +85,12 @@ export function Projects() {
                 <div className="flex items-center text-sm text-gunmetal/60 mb-5">
                   <span>{project.location}</span>
                 </div>
-                <Button variant="outline" className="w-full group">
-                  View Project
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Button>
+                <Link href={slugs[index]} className="w-full block">
+                  <Button variant="outline" className="w-full group">
+                    View Project
+                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </Link>
               </div>
             </motion.div>
           ))}
