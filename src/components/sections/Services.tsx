@@ -166,9 +166,11 @@ export function Services() {
                 transition={{ duration: 0.3 }}
                 className="relative z-10"
               >
-                <Button variant="ghost" className="text-blue-green p-0 h-auto hover:bg-transparent hover:underline">
-                  Learn more
-                </Button>
+                <a href="#contact">
+                  <Button variant="ghost" className="text-blue-green p-0 h-auto hover:bg-transparent hover:underline">
+                    Learn more
+                  </Button>
+                </a>
               </motion.div>
             </motion.div>
           ))}

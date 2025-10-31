@@ -15,22 +15,22 @@ const projects = [
     title: "1 Level Villa",
     description: "Thoughtfully designed 1‑story, 1‑bedroom villa with a cosy indoor–outdoor flow. A private backyard pool with a sunbed creates a calm retreat for lazy afternoons and evening dips.",
     imageSrc: villa1,
-    roi: "19% annual ROI",
-    location: "Uluwatu Cliff",
+    roi: "18% annual ROI",
+    location: "Petjatu, Uluwatu",
   },
   {
     title: "Mezzanine Villa",
     description: "Compact mezzanine concept: bedroom upstairs for privacy; open living room and kitchen downstairs for relaxed entertaining. Lush greenery frames a backyard pool with sunbed and an outdoor bath for spa‑like evenings.",
     imageSrc: villa3,
-    roi: "18% annual ROI",
-    location: "Bingin Beach",
+    roi: "19% annual ROI",
+    location: "Petjatu, Uluwatu",
   },
   {
     title: "2 Levels Villa",
     description: "Elegant 2‑story, 2‑bedroom layout—one bedroom on each level. An upper‑level terrace features a soaking bath; below, a beautiful backyard pool with sunbed and outdoor shower completes the resort vibe.",
     imageSrc: villa2,
     roi: "17% annual ROI",
-    location: "Padang Padang",
+    location: "Petjatu, Uluwatu",
   },
 ];
 

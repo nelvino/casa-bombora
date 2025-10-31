@@ -14,14 +14,16 @@ export default function TwoLevelsVillaPage() {
 
   return (
     <main className="bg-alabaster relative">
-      <Link href="/#projects" className="absolute left-4 top-4 z-20">
-        <Button variant="outline" size="sm" className="flex items-center gap-2">
-          <ArrowLeft className="h-4 w-4" />
-          Back to Home
-        </Button>
-      </Link>
       <section className="py-10 md:py-16">
         <Container className="text-center">
+          <div className="text-left mb-4 md:mb-6">
+            <Link href="/#projects">
+              <Button variant="outline" size="sm" className="flex items-center gap-2">
+                <ArrowLeft className="h-4 w-4" />
+                Back to Home
+              </Button>
+            </Link>
+          </div>
           <h1 className="text-3xl md:text-5xl font-serif text-gunmetal">
             2 Levels <span className="text-blue-green">Villa</span>
           </h1>
@@ -47,6 +49,19 @@ export default function TwoLevelsVillaPage() {
               </div>
             ))}
           </div>
+
+          <p className="mt-6 text-center text-gunmetal/80">
+            Scan the QR code or click{' '}
+            <a
+              href="https://cloud.chaos.com/collaboration/n/DKXBPD82AVntq4ibNEvbNa?pan="
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-green underline hover:text-blue-green/80"
+            >
+              HERE
+            </a>
+            {' '}to see the 3D model!
+          </p>
 
           <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white rounded-lg p-6 shadow">

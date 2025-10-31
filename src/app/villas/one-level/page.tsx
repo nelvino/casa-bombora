@@ -11,14 +11,16 @@ export default function OneLevelVillaPage() {
 
   return (
     <main className="bg-alabaster relative">
-      <Link href="/#projects" className="absolute left-4 top-4 z-20">
-        <Button variant="outline" size="sm" className="flex items-center gap-2">
-          <ArrowLeft className="h-4 w-4" />
-          Back to Home
-        </Button>
-      </Link>
       <section className="py-10 md:py-16">
         <Container className="text-center">
+          <div className="text-left mb-4 md:mb-6">
+            <Link href="/#projects">
+              <Button variant="outline" size="sm" className="flex items-center gap-2">
+                <ArrowLeft className="h-4 w-4" />
+                Back to Home
+              </Button>
+            </Link>
+          </div>
           <h1 className="text-3xl md:text-5xl font-serif text-gunmetal">
             1 Level <span className="text-blue-green">Villa</span>
           </h1>
