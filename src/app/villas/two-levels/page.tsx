@@ -13,7 +13,7 @@ export default function TwoLevelsVillaPage() {
 
   return (
     <main className="bg-alabaster relative">
-      <Link href="/" className="absolute left-4 top-4 z-20">
+      <Link href="/#projects" className="absolute left-4 top-4 z-20">
         <Button variant="outline" size="sm" className="flex items-center gap-2">
           <ArrowLeft className="h-4 w-4" />
           Back to Home

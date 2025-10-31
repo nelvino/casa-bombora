@@ -1,9 +1,11 @@
 "use client";
 
 import { Container } from "@/components/ui/Container";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
-import { CasaLogo } from "@/components/icons/CasaLogo";
+// import { CasaLogoWhite } from "@/components/icons/CasaLogoWhite";
+import heroLogoWebp from "@/components/icons/CasaLogoWhiteShadowWithBorder.webp";
 
 // Custom hook for responsive design
 function useResponsiveSize() {
@@ -58,31 +60,16 @@ export function Hero() {
         {isMounted && (
           <>
             <div 
-              className="absolute inset-0 bg-no-repeat bg-cover bg-center opacity-70"
+              className="absolute inset-0 bg-no-repeat bg-cover bg-center"
               style={{ backgroundImage: "url('/images/backgrounds/Hero_bg.svg')" }}
             ></div>
-            <div className="absolute inset-0 bg-alabaster/40 backdrop-blur-[2px]"></div>
+            <div className="absolute inset-0 "></div>
           </>
         )}
       </div>
       
-      {/* Decorative background elements */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-b from-alabaster/40 to-transparent"></div>
-        
-        {/* Animated background blur - only render on client */}
-        {isMounted && (
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ 
-              opacity: 0.5,
-              scale: 1,
-              transition: { duration: 2, ease: "easeOut" }
-            }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-blue-green/5 blur-3xl"
-          />
-        )}
-      </div>
+      {/* Decorative background elements (none to keep background fully crisp) */}
+      <div className="absolute inset-0 -z-10" />
       
       <Container>
         <div className="flex flex-col items-center justify-center">
@@ -151,12 +138,16 @@ export function Hero() {
                         }}
                       />
                       
-                      {/* Main Logo */}
-                      <CasaLogo 
-                        size={logoSize} 
-                        color="#BF9880" 
-                        className="relative z-10 drop-shadow-xl" 
-                      />
+                      {/* Main Logo with strong custom shadow (WebP via next/image) */}
+                      <div className="relative z-10 filter drop-shadow-[0_40px_80px_rgba(28,35,44,0.55)] drop-shadow-[0_10px_20px_rgba(28,35,44,0.35)]">
+                        <Image
+                          src={heroLogoWebp}
+                          alt="Casa Bombora Logo"
+                          priority
+                          sizes="100vw"
+                          style={{ width: logoSize, height: "auto" }}
+                        />
+                      </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -170,7 +161,7 @@ export function Hero() {
                 transition={{ duration: 0.8 }}
               >
                 <motion.p 
-                  className="text-xl md:text-2xl text-gunmetal/80 text-center font-serif"
+                  className="text-2xl md:text-5xl text-white text-center font-serif"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ 

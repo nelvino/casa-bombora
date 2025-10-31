@@ -6,9 +6,9 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import villa1 from "@/images/villa-1.png";
+import villa1 from "@/images/villa-1-level.jpeg";
 import villa2 from "@/images/villa-2.png";
-import villa3 from "@/images/villa-3.jpeg";
+import villa3 from "@/images/MazzanineFacade.jpeg";
 
 const projects = [
   {

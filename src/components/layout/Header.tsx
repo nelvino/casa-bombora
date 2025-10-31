@@ -4,20 +4,20 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { cn } from "@/lib/utils/cn";
-import { 
-  Menu, 
-  X, 
-  Instagram, 
-  Facebook, 
-  Linkedin, 
-  Mail, 
-  Phone, 
+import {
+  Menu,
+  X,
+  Instagram,
+  Facebook,
+  Linkedin,
+  Mail,
+  Phone,
   Compass
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { createSmoothScrollHandler } from "@/lib/utils/smoothScroll";
 import { CasaLogo } from "@/components/icons/CasaLogo";
-import monkySvg from "@/images/Monky.svg";
+// Using public path for the monkey image
 
 const navLinks = [
   { name: "Home", href: "/" },
@@ -37,7 +37,8 @@ export function Header() {
   const [logoHovered, setLogoHovered] = useState(false);
   const [closeHovered, setCloseHovered] = useState(false);
   const smoothScrollHandler = createSmoothScrollHandler(80);
-  
+  const prefersReducedMotion = useReducedMotion();
+
   useEffect(() => {
     const handleScroll = () => {
       // Update isScrolled state based on scroll position
@@ -46,32 +47,32 @@ export function Header() {
       } else {
         setIsScrolled(false);
       }
-      
+
       // Check if we've scrolled past the hero section
       const heroSection = document.getElementById("hero");
       if (heroSection) {
         const heroBottom = heroSection.getBoundingClientRect().bottom;
         setPastHeroSection(heroBottom < 0);
       }
-      
+
       // Update active section based on scroll position
       const sections = navLinks.map(link => {
         if (link.href.startsWith('#')) {
           const el = document.getElementById(link.href.substring(1));
           if (el) {
             const rect = el.getBoundingClientRect();
-            return { 
-              href: link.href, 
+            return {
+              href: link.href,
               top: rect.top + window.scrollY,
-              bottom: rect.bottom + window.scrollY 
+              bottom: rect.bottom + window.scrollY
             };
           }
         }
         return null;
       }).filter(Boolean);
-      
+
       const scrollPosition = window.scrollY + window.innerHeight / 3;
-      
+
       // Find the current active section
       for (const section of sections) {
         if (section && scrollPosition >= section.top && scrollPosition <= section.bottom) {
@@ -82,12 +83,12 @@ export function Header() {
         }
       }
     };
-    
+
     window.addEventListener("scroll", handleScroll);
-    
+
     // Run once to initialize
     handleScroll();
-    
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -98,7 +99,7 @@ export function Header() {
         setMenuOpen(false);
       }
     };
-    
+
     window.addEventListener("keydown", handleEscape);
     return () => window.removeEventListener("keydown", handleEscape);
   }, []);
@@ -132,12 +133,12 @@ export function Header() {
       setMenuOpen(false);
     }
   };
-  
+
   return (
     <>
-      <motion.header 
+      <motion.header
         className={cn(
-          "fixed top-0 left-0 right-0 z-[100]", 
+          "fixed top-0 left-0 right-0 z-[100]",
           "h-16 md:py-6 lg:py-7 transition-colors duration-300", // Fixed height on mobile, padding on md/lg
           isScrolled ? "bg-alabaster/90 backdrop-blur-sm shadow-sm" : "bg-transparent"
         )}
@@ -155,18 +156,24 @@ export function Header() {
               className="flex-1"
             >
               <Link href="/" className="flex items-center group">
-                <motion.span 
-                  className="font-serif text-2xl font-semibold text-gunmetal hidden md:block"
-                  whileHover={{ 
+                <motion.span
+                  className={cn(
+                    "font-serif text-3xl font-semibold hidden md:block",
+                    isScrolled ? "text-gunmetal" : "text-white"
+                  )}
+                  whileHover={{
                     color: "rgb(0, 156, 188)",
                     transition: { duration: 0.2 }
                   }}
                 >
-                  C<span className="text-blue-green">ASA</span> b<span className="text-blue-green">ombora</span>
+                  C
+                  <span className={isScrolled ? "text-blue-green" : "text-white"}>ASA</span>
+                  {" "}b
+                  <span className={isScrolled ? "text-blue-green" : "text-white"}>ombora</span>
                 </motion.span>
               </Link>
             </motion.div>
-            
+
             {/* Center section - SVG logo (only visible after scrolling past hero section) */}
             <AnimatePresence>
               {pastHeroSection && (
@@ -184,14 +191,14 @@ export function Header() {
                       whileHover={{ scale: 1.05 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <CasaLogo 
-                        size={isScrolled ? 42 : 48} 
+                      <CasaLogo
+                        size={isScrolled ? 42 : 48}
                         color="#009CBC"
-                        className="transition-all duration-300 relative z-10" 
+                        className="transition-all duration-300 relative z-10"
                       />
-                      <motion.div 
+                      <motion.div
                         className="absolute -inset-2 bg-alabaster/60 rounded-full -z-10"
-                        animate={{ 
+                        animate={{
                           scale: logoHovered ? 1.15 : 1,
                           opacity: logoHovered || isScrolled ? 0.8 : 0
                         }}
@@ -203,11 +210,11 @@ export function Header() {
                 </motion.div>
               )}
             </AnimatePresence>
-            
+
             {/* Right section - menu button only */}
             <div className="flex items-center justify-end flex-1">
               {/* Menu button - always visible on all screen sizes */}
-              <motion.button 
+              <motion.button
                 type="button"
                 className="p-2 z-[9999] relative" /* Increased z-index */
                 onClick={() => setMenuOpen(!menuOpen)}
@@ -220,16 +227,16 @@ export function Header() {
                 whileTap={{ scale: 0.95 }}
               >
                 {/* Button background effect */}
-                <motion.div 
-                  className="absolute inset-0 rounded-full bg-blue-green/10"
+                <motion.div
+                  className="absolute inset-0 rounded-full bg-white"
                   initial={{ scale: 0, opacity: 0 }}
-                  animate={{ 
+                  animate={{
                     scale: menuHovered ? 1 : 0,
-                    opacity: menuHovered ? 1 : 0 
+                    opacity: menuHovered ? 1 : 0
                   }}
                   transition={{ duration: 0.3 }}
                 />
-                
+
                 <AnimatePresence mode="wait">
                   {menuOpen ? (
                     <motion.div
@@ -240,7 +247,7 @@ export function Header() {
                       transition={{ duration: 0.3 }}
                       className="relative z-50"
                     >
-                      <X className="h-6 w-6" />
+                      <X className={cn("h-6 w-6", isScrolled ? "text-gunmetal" : "text-white")} />
                     </motion.div>
                   ) : (
                     <motion.div
@@ -250,7 +257,7 @@ export function Header() {
                       exit={{ rotate: -90, opacity: 0 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <Menu className="h-6 w-6" />
+                      <Menu className={cn("h-6 w-6", isScrolled ? "text-gunmetal" : "text-white")} />
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -259,13 +266,13 @@ export function Header() {
           </div>
         </Container>
       </motion.header>
-      
+
       {/* Move menu outside of the header for proper stacking context */}
       <AnimatePresence>
         {menuOpen && (
           <>
             {/* Backdrop overlay */}
-            <motion.div 
+            <motion.div
               className="fixed inset-0 bg-gunmetal/40 backdrop-blur-sm z-[9990]" /* Dramatically increased z-index */
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -274,7 +281,7 @@ export function Header() {
               onClick={() => setMenuOpen(false)}
               style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
             />
-            
+
             {/* Menu panel - slides in from RIGHT side */}
             <motion.div
               className="fixed right-0 top-0 bottom-0 w-full sm:max-w-md bg-alabaster z-[9995] shadow-2xl overflow-y-auto" /* Even higher z-index */
@@ -285,7 +292,7 @@ export function Header() {
               style={{ position: 'fixed' }}
             >
               {/* Subtle pattern background */}
-              <motion.div 
+              <motion.div
                 className="absolute inset-0 opacity-[0.03]"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 0.03 }}
@@ -294,16 +301,16 @@ export function Header() {
                   backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231D2632' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")",
                 }}
               />
-              
+
               {/* Decorative accent line - on left side */}
-              <motion.div 
+              <motion.div
                 className="absolute top-0 left-0 bottom-0 w-1 bg-blue-green/20"
                 initial={{ scaleY: 0 }}
                 animate={{ scaleY: 1 }}
                 transition={{ duration: 0.7, delay: 0.5 }}
                 style={{ transformOrigin: "top" }}
               />
-              
+
               {/* Close button - added to the top-right corner inside the menu */}
               <motion.button
                 className="absolute top-4 right-4 p-3 rounded-full bg-gunmetal/5 hover:bg-gunmetal/10 transition-colors z-10"
@@ -319,51 +326,46 @@ export function Header() {
               >
                 <X className={`h-5 w-5 ${closeHovered ? 'text-blue-green' : 'text-gunmetal'} transition-colors`} />
               </motion.button>
-              
-              <div className="p-8 pt-20 pb-12 h-full flex flex-col relative">
+
+              <div className="p-8 pt-10 pb-12 h-full flex flex-col relative">
                 {/* Logo in menu */}
-                <motion.div 
-                  className="mb-10 flex items-center"
+                <motion.div
+                  className="mb-2 flex items-center"
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.2 }}
                 >
-                  <CasaLogo size={44} color="#009CBC" className="mr-3" />
-                  <div>
-                    <div className="font-serif text-2xl font-semibold">
-                      <span className="text-blue-green">Casa</span> <span className="text-gunmetal">Bombora</span>
+                  <div className="mr-3 flex items-center">
+                    <CasaLogo size={60} color="#009CBC" self-center />
+                  </div>
+                  <div className="leading-tight">
+                    <div className="font-serif text-3xl font-semibold">
+                      <span className="text-blue-green">CASA</span> <span className="text-gunmetal">bombora</span>
                     </div>
-                    <p className="text-sm text-gunmetal/60 mt-1">Luxury Villa Investment in Bali</p>
+                    <p className="text-md text-gunmetal/60 mt-1 leading-snug">Luxury Villa Investment in Bali</p>
                   </div>
                 </motion.div>
 
-                {/* Divider line under the logo */}
-                <div className="border-t border-gunmetal/40" />
-
                 {/* Animated monkey hanging from the border */}
-                <div className="relative h-28">
+                <div className="relative h-16 mb-12">
                   <motion.div
-                    className="absolute left-1/2 -translate-x-1/2"
+                    className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1"
                     style={{ transformOrigin: "top center" }}
                     initial={{ y: -20, opacity: 0, rotate: 0 }}
-                    animate={{
-                      y: 0,
-                      opacity: 1,
-                      rotate: [0, -10, 8, -6, 3, 0],
-                    }}
-                    transition={{ duration: 1.8, ease: [0.25, 0.1, 0.25, 1.0] }}
+                    animate={prefersReducedMotion ? { y: 0, opacity: 1, rotate: 0 } : { y: 0, opacity: 1, rotate: [0, -10, 8, -6, 3, 0] }}
+                    transition={{ duration: prefersReducedMotion ? 0.4 : 1.8, ease: [0.25, 0.1, 0.25, 1.0] }}
                   >
                     <img
-                      src={monkySvg.src}
+                      src="/images/Monkey.png"
                       alt="Hanging monkey"
-                      className="h-24 w-auto select-none pointer-events-none"
+                      className="h-16 w-auto select-none pointer-events-none"
                       draggable={false}
                     />
                   </motion.div>
                 </div>
-                
+
                 {/* Navigation links */}
-                <motion.nav 
+                <motion.nav
                   className="flex flex-col space-y-6"
                   initial="hidden"
                   animate="visible"
@@ -388,7 +390,7 @@ export function Header() {
                         onClick={handleNavLinkClick}
                       >
                         {activeLink === link.href && (
-                          <motion.span 
+                          <motion.span
                             className="absolute -left-5 top-1/2 transform -translate-y-1/2 text-blue-green"
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
@@ -398,7 +400,7 @@ export function Header() {
                           </motion.span>
                         )}
                         {link.name}
-                        <motion.span 
+                        <motion.span
                           className={`absolute left-0 bottom-0 h-[2px] bg-blue-green ${activeLink === link.href ? 'w-10' : 'w-0 group-hover:w-10'}`}
                           transition={{ duration: 0.3 }}
                         />
@@ -406,7 +408,7 @@ export function Header() {
                     </motion.div>
                   ))}
                 </motion.nav>
-                
+
                 {/* Contact section */}
                 <div className="mt-auto pt-10">
                   <motion.div
@@ -427,21 +429,21 @@ export function Header() {
                           </div>
                           <span>info@casabombora.com</span>
                         </a>
-                        <a href="tel:+6281234567890" className="text-gunmetal hover:text-blue-green flex items-center group">
+                        <a href="tel:+61415164208" className="text-gunmetal hover:text-blue-green flex items-center group">
                           <div className="bg-blue-green/10 p-2 rounded-full mr-3 group-hover:bg-blue-green/20 transition-colors">
                             <Phone className="h-4 w-4 text-blue-green group-hover:scale-110 transition-transform" />
                           </div>
-                          <span>+62 812 3456 7890</span>
+                          <span>+61 0415 164 208</span>
                         </a>
                       </div>
                     </div>
-                    
-                    <button 
+
+                    <button
                       className="w-full bg-blue-green hover:bg-blue-green/90 text-white font-medium py-3 px-5 rounded relative overflow-hidden group"
                       onClick={handleContactClick}
                     >
                       <span className="relative z-10">Contact Us</span>
-                      <motion.div 
+                      <motion.div
                         className="absolute inset-0 bg-gunmetal z-0"
                         initial={{ x: '-100%' }}
                         whileHover={{ x: 0 }}
@@ -450,33 +452,33 @@ export function Header() {
                     </button>
                   </motion.div>
                 </div>
-                
+
                 {/* Social links */}
-                <motion.div 
+                <motion.div
                   className="flex mt-8 space-x-4 items-center"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.5 }}
                 >
                   <p className="text-sm text-gunmetal/70 mr-2">Follow us:</p>
-                  <motion.a 
-                    href="#" 
+                  <motion.a
+                    href="#"
                     className="text-gunmetal hover:text-blue-green p-2 hover:bg-blue-green/5 rounded-full transition-colors"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
                   >
                     <Instagram className="h-5 w-5" />
                   </motion.a>
-                  <motion.a 
-                    href="#" 
+                  <motion.a
+                    href="#"
                     className="text-gunmetal hover:text-blue-green p-2 hover:bg-blue-green/5 rounded-full transition-colors"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
                   >
                     <Facebook className="h-5 w-5" />
                   </motion.a>
-                  <motion.a 
-                    href="#" 
+                  <motion.a
+                    href="#"
                     className="text-gunmetal hover:text-blue-green p-2 hover:bg-blue-green/5 rounded-full transition-colors"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
@@ -484,7 +486,7 @@ export function Header() {
                     <Linkedin className="h-5 w-5" />
                   </motion.a>
                 </motion.div>
-                
+
                 {/* Copyright or additional info */}
                 <div className="mt-8 text-xs text-gunmetal/50">
                   © {new Date().getFullYear()} Casa bombora. All rights reserved.

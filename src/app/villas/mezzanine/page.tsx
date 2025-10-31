@@ -4,15 +4,15 @@ import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
-import mezzanineGround from "@/images/villaImages/Mezzanine plan - Gorund Level.png";
-import mezzaninePlan from "@/images/villaImages/Mennanine plan.png";
+import mezzanineGround from "@/images/villaImages/MEZZANINE LEVEL -  01.webp";
+import mezzaninePlan from "@/images/villaImages/MEZZANINE LEVEL -  02.webp";
 
 export default function MezzanineVillaPage() {
   const images = [mezzanineGround, mezzaninePlan];
 
   return (
     <main className="bg-alabaster relative">
-      <Link href="/" className="absolute left-4 top-4 z-20">
+      <Link href="/#projects" className="absolute left-4 top-4 z-20">
         <Button variant="outline" size="sm" className="flex items-center gap-2">
           <ArrowLeft className="h-4 w-4" />
           Back to Home
@@ -34,7 +34,7 @@ export default function MezzanineVillaPage() {
         <Container>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {images.map((src, i) => (
-              <div key={i} className="relative w-full aspect-[4/3] overflow-hidden rounded-lg shadow-md bg-white">
+              <div key={i} className="relative w-full aspect-[4/3] overflow-hidden rounded-lg shadow-md bg-blue-green">
                 <Image
                   src={src}
                   alt={`Mezzanine Villa image ${i + 1}`}
