@@ -153,14 +153,14 @@ export function Process() {
                   }}
                 >
                   <motion.div 
-                    className="flex items-center justify-center w-24 h-24 bg-blue-green text-white rounded-full font-serif text-4xl"
+                    className="flex items-center justify-center w-24 h-24 bg-blue-green text-white rounded-full font-tahoma text-5xl font-bold"
                     whileHover={{ 
                       scale: 1.05,
                       boxShadow: "0 10px 25px -5px rgba(0, 156, 188, 0.3)",
                       transition: { duration: 0.3 }
                     }}
                   >
-                    {phase.number}
+                    {String(phase.number).padStart(2, "0")}
                   </motion.div>
                 </motion.div>
                 

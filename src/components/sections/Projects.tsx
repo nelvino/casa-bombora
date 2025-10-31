@@ -63,7 +63,7 @@ export function Projects() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-white rounded-lg overflow-hidden shadow-md group"
+              className="bg-white rounded-lg overflow-hidden shadow-md group flex flex-col h-full"
             >
               <div className="relative h-64 overflow-hidden">
                 <div className="absolute inset-0 bg-gunmetal/30 z-10" />
@@ -76,7 +76,7 @@ export function Projects() {
                   priority={index === 0}
                 />
               </div>
-              <div className="p-6">
+              <div className="p-6 flex flex-col flex-1">
                 <div className="flex justify-between items-start mb-3">
                   <h3 className="text-xl font-serif">{project.title}</h3>
                   <span className="text-blue-green font-medium text-sm">{project.roi}</span>
@@ -85,7 +85,7 @@ export function Projects() {
                 <div className="flex items-center text-sm text-gunmetal/60 mb-5">
                   <span>{project.location}</span>
                 </div>
-                <Link href={slugs[index]} className="w-full block">
+                <Link href={slugs[index]} className="w-full mt-auto block">
                   <Button variant="outline" className="w-full group">
                     View Project
                     <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />

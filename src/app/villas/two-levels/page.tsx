@@ -7,9 +7,10 @@ import { ArrowLeft } from "lucide-react";
 import groundLevel from "@/images/villaImages/2 Levels - Ground Level.png";
 import levelOne from "@/images/villaImages/2 Levels - Level 1 .png";
 import plans from "@/images/villaImages/2 Levels arwuitectomic plans.png";
+import qrCode from "@/images/QR_Code.jpeg";
 
 export default function TwoLevelsVillaPage() {
-  const images = [groundLevel, levelOne, plans];
+  const images = [groundLevel, levelOne, plans, qrCode];
 
   return (
     <main className="bg-alabaster relative">
