@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
-import mezzanineGround from "@/images/villaImages/MEZZANINE LEVEL -  01.webp";
+import mezzanineGround from "@/images/villaImages/Mezzanine-Level1.webp";
 import mezzaninePlan from "@/images/villaImages/MEZZANINE LEVEL -  02.webp";
 
 export default function MezzanineVillaPage() {

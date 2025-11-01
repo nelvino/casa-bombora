@@ -123,21 +123,6 @@ export function Hero() {
                         delay: 0.2
                       }}
                     >
-                      {/* Logo Glow Effect */}
-                      <motion.div
-                        className="absolute -inset-10 rounded-full blur-3xl opacity-20"
-                        style={{ backgroundColor: "#BF9880" }}
-                        animate={{ 
-                          opacity: [0.15, 0.25, 0.15],
-                          scale: [1, 1.05, 1]
-                        }}
-                        transition={{
-                          duration: 6,
-                          repeat: Infinity,
-                          ease: "easeInOut"
-                        }}
-                      />
-                      
                       {/* Main Logo with strong custom shadow (WebP via next/image) */}
                       <div className="relative z-10 filter drop-shadow-[0_40px_80px_rgba(28,35,44,0.55)] drop-shadow-[0_10px_20px_rgba(28,35,44,0.35)]">
                         <Image
@@ -161,7 +146,7 @@ export function Hero() {
                 transition={{ duration: 0.8 }}
               >
                 <motion.p 
-                  className="text-2xl md:text-5xl text-white text-center font-serif"
+                  className="text-2xl md:text-5xl text-white text-center font-serif drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ 
