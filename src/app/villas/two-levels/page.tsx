@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
-import groundLevel from "@/images/villaImages/2 Levels - Ground Level.png";
-import levelOne from "@/images/villaImages/2 Levels - Level 1 .png";
+import groundLevel from "@/images/villaImages/2-levels/2 Levels-01.webp";
+import levelOne from "@/images/villaImages/2-levels/2 Levels-02.webp";
 import plans from "@/images/villaImages/2 Levels arwuitectomic plans.png";
 import qrCode from "@/images/QR_Code.jpeg";
 
@@ -70,7 +70,7 @@ export default function TwoLevelsVillaPage() {
             </div>
             <div className="bg-white rounded-lg p-6 shadow">
               <h3 className="font-serif text-lg text-gunmetal mb-1">Location</h3>
-              <p className="text-gunmetal/80">Padang Padang</p>
+              <p className="text-gunmetal/80">Petjatu, Uluwatu</p>
             </div>
             <div className="bg-white rounded-lg p-6 shadow">
               <h3 className="font-serif text-lg text-gunmetal mb-1">Configuration</h3>

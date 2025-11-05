@@ -75,7 +75,7 @@ export function Footer() {
               <div className="flex items-start">
                 <Phone className="h-5 w-5 mr-3 text-blue-green flex-shrink-0 mt-1" />
                 <span className="text-alabaster/80">
-                  +62 123 456 7890
+                  +61 0415 164 208
                 </span>
               </div>
               <div className="flex items-start">

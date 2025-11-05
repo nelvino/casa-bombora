@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
-import oneLevelPng from "@/images/villaImages/1 Level.png";
+import oneLevelPng from "@/images/villaImages/1-level/1 Level-01.webp";
 
 export default function OneLevelVillaPage() {
   const images = [oneLevelPng];
@@ -55,7 +55,7 @@ export default function OneLevelVillaPage() {
             </div>
             <div className="bg-white rounded-lg p-6 shadow">
               <h3 className="font-serif text-lg text-gunmetal mb-1">Location</h3>
-              <p className="text-gunmetal/80">Uluwatu Cliff</p>
+              <p className="text-gunmetal/80">Petjatu, Uluwatu</p>
             </div>
             <div className="bg-white rounded-lg p-6 shadow">
               <h3 className="font-serif text-lg text-gunmetal mb-1">Configuration</h3>

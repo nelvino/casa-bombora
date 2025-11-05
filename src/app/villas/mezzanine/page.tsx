@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
-import mezzanineGround from "@/images/villaImages/Mezzanine-Level1.webp";
-import mezzaninePlan from "@/images/villaImages/MEZZANINE LEVEL -  02.webp";
+import mezzanineGround from "@/images/villaImages/mezzanine/Mezzanine-01.webp";
+import mezzaninePlan from "@/images/villaImages/mezzanine/Mezzanine-02.webp";
 
 export default function MezzanineVillaPage() {
   const images = [mezzanineGround, mezzaninePlan];
@@ -56,7 +56,7 @@ export default function MezzanineVillaPage() {
             </div>
             <div className="bg-white rounded-lg p-6 shadow">
               <h3 className="font-serif text-lg text-gunmetal mb-1">Location</h3>
-              <p className="text-gunmetal/80">Bingin Beach</p>
+              <p className="text-gunmetal/80">Petjatu, Uluwatu</p>
             </div>
             <div className="bg-white rounded-lg p-6 shadow">
               <h3 className="font-serif text-lg text-gunmetal mb-1">Configuration</h3>
