@@ -12,7 +12,7 @@ import qrCode from "@/images/QR_Code.jpeg";
 export default function TwoLevelsVillaPage() {
   const images = [
     { src: groundLevel, caption: "Ground level" },
-    { src: levelOne, caption: "Second level" },
+    { src: levelOne, caption: "Level 1" },
     { src: plans, caption: "Isometric View" },
     { src: qrCode, caption: "Scan me!" },
   ];
