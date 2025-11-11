@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 
 const ReactPageFlip = dynamic(() => import("react-pageflip").then(m => m.default), { ssr: false });

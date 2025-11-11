@@ -7,7 +7,7 @@ import { ArrowLeft } from "lucide-react";
 import oneLevelPng from "@/images/villaImages/1-level/1 Level-01.webp";
 
 export default function OneLevelVillaPage() {
-  const images = [oneLevelPng];
+  const images = [{ src: oneLevelPng, caption: "Ground level" }];
 
   return (
     <main className="bg-alabaster relative">
@@ -34,16 +34,19 @@ export default function OneLevelVillaPage() {
       <section className="pb-10 md:pb-16">
         <Container>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {images.map((src, i) => (
+            {images.map(({ src, caption }, i) => (
               <div key={i} className="relative w-full aspect-[4/3] overflow-hidden rounded-lg shadow-md bg-blue-green">
                 <Image
                   src={src}
                   alt={`1 Level Villa image ${i + 1}`}
                   fill
-                  className="object-contain p-3"
+                  className="object-contain p-2 pb-14"
                   sizes="(min-width: 768px) 50vw, 100vw"
                   priority={i === 0}
                 />
+                {caption && (
+                  <p className="absolute bottom-0 left-0 right-0 text-center text-white text-md md:text-lg">{caption}</p>
+                )}
               </div>
             ))}
           </div>

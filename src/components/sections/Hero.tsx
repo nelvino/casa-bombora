@@ -130,7 +130,7 @@ export function Hero() {
                           alt="Casa Bombora Logo"
                           priority
                           sizes="100vw"
-                          style={{ width: logoSize, height: "auto" }}
+                          style={{ width: logoSize, height: "auto", opacity: 0.7 }}
                         />
                       </div>
                     </motion.div>

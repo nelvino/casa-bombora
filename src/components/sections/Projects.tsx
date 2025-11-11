@@ -6,29 +6,29 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import villa1 from "@/images/villa-1-level.jpeg";
-import villa2 from "@/images/villa-2.png";
-import villa3 from "@/images/MazzanineFacade.jpeg";
+import villa1Level from "@/images/villa-1-level.jpeg";
+import villa2Levels from "@/images/villa-2.png";
+import villaMezzanine from "@/images/MazzanineFacade.jpeg";
 
 const projects = [
   {
     title: "1 Level Villa",
     description: "Thoughtfully designed 1‑story, 1‑bedroom villa with a cosy indoor–outdoor flow. A private backyard pool with a sunbed creates a calm retreat for lazy afternoons and evening dips.",
-    imageSrc: villa1,
+    imageSrc: villa1Level,
     roi: "18% annual ROI",
     location: "Petjatu, Uluwatu",
   },
   {
     title: "Mezzanine Villa",
     description: "Compact mezzanine concept: bedroom upstairs for privacy; open living room and kitchen downstairs for relaxed entertaining. Lush greenery frames a backyard pool with sunbed and an outdoor bath for spa‑like evenings.",
-    imageSrc: villa3,
+    imageSrc: villaMezzanine,
     roi: "19% annual ROI",
     location: "Petjatu, Uluwatu",
   },
   {
     title: "2 Levels Villa",
     description: "Elegant 2‑story, 2‑bedroom layout—one bedroom on each level. An upper‑level terrace features a soaking bath; below, a beautiful backyard pool with sunbed and outdoor shower completes the resort vibe.",
-    imageSrc: villa2,
+    imageSrc: villa2Levels,
     roi: "17% annual ROI",
     location: "Petjatu, Uluwatu",
   },

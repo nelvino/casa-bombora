@@ -10,7 +10,12 @@ import plans from "@/images/villaImages/2 Levels arwuitectomic plans.png";
 import qrCode from "@/images/QR_Code.jpeg";
 
 export default function TwoLevelsVillaPage() {
-  const images = [groundLevel, levelOne, plans, qrCode];
+  const images = [
+    { src: groundLevel, caption: "Ground level" },
+    { src: levelOne, caption: "Second level" },
+    { src: plans, caption: "Isometric View" },
+    { src: qrCode, caption: "Scan me!" },
+  ];
 
   return (
     <main className="bg-alabaster relative">
@@ -36,16 +41,21 @@ export default function TwoLevelsVillaPage() {
       <section className="pb-10 md:pb-16">
         <Container>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {images.map((src, i) => (
-              <div key={i} className="relative w-full aspect-[4/3] overflow-hidden rounded-lg shadow-md bg-blue-green">
-                <Image
-                  src={src}
-                  alt={`2 Levels Villa image ${i + 1}`}
-                  fill
-                  className="object-contain p-3"
-                  sizes="(min-width: 768px) 50vw, 100vw"
-                  priority={i === 0}
-                />
+            {images.map(({ src, caption }, i) => (
+              <div key={i}>
+                <div className="relative w-full aspect-[4/3] overflow-hidden rounded-lg shadow-md bg-blue-green">
+                  <Image
+                    src={src}
+                    alt={`2 Levels Villa image ${i + 1}`}
+                    fill
+                    className="object-contain p-2 pb-14"
+                    sizes="(min-width: 768px) 50vw, 100vw"
+                    priority={i === 0}
+                  />
+                  {caption && (
+                    <p className="absolute bottom-0 left-0 right-0 text-center text-white text-md md:text-lg">{caption}</p>
+                  )}
+                </div>
               </div>
             ))}
           </div>
