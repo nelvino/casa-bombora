@@ -3,6 +3,7 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import RoiWithCards from "@/components/roi/RoiWithCards";
 
 import mezzanineGround from "@/images/villaImages/mezzanine/Mezzanine-01.webp";
 import mezzaninePlan from "@/images/villaImages/mezzanine/Mezzanine-02.webp";
@@ -57,19 +58,26 @@ export default function MezzanineVillaPage() {
             ))}
           </div>
 
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white rounded-lg p-6 shadow">
-              <h3 className="font-serif text-lg text-gunmetal mb-1">Annual ROI</h3>
-              <p className="text-blue-green font-medium">18%</p>
-            </div>
-            <div className="bg-white rounded-lg p-6 shadow">
-              <h3 className="font-serif text-lg text-gunmetal mb-1">Location</h3>
-              <p className="text-gunmetal/80">Petjatu, Uluwatu</p>
-            </div>
-            <div className="bg-white rounded-lg p-6 shadow">
-              <h3 className="font-serif text-lg text-gunmetal mb-1">Configuration</h3>
-              <p className="text-gunmetal/80">1 Bedroom · 1 Bathroom · Mezzanine · Private Pool</p>
-            </div>
+          {/* ROI Calculator + dynamic cards */}
+          <div className="mt-8">
+            <RoiWithCards
+              investmentMin={120_000}
+              investmentMax={140_000}
+              defaultInvestment={130_000}
+              rateMin={150}
+              rateMax={300}
+              defaultRate={220}
+              occupancyMin={65}
+              occupancyMax={90}
+              defaultOccupancy={75}
+              managementFeeDefault={20}
+              managementFeeMin={15}
+              managementFeeMax={25}
+              taxPercent={10}
+              currency="USD"
+              location="Petjatu, Uluwatu"
+              configuration="1 Bedroom · 1 Bathroom · Mezzanine · Private Pool"
+            />
           </div>
 
           <div className="mt-10 flex justify-center">
