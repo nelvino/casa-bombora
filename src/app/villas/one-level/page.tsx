@@ -71,6 +71,7 @@ export default function OneLevelVillaPage() {
               currency="USD"
               location="Petjatu, Uluwatu"
               configuration="1 Bedroom · 1 Bathroom · Private Pool"
+              leaseYears={25}
             />
           </div>
 

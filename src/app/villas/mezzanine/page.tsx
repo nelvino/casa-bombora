@@ -77,6 +77,7 @@ export default function MezzanineVillaPage() {
               currency="USD"
               location="Petjatu, Uluwatu"
               configuration="1 Bedroom · 1 Bathroom · Mezzanine · Private Pool"
+              leaseYears={25}
             />
           </div>
 

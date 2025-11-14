@@ -93,6 +93,7 @@ export default function TwoLevelsVillaPage() {
               currency="USD"
               location="Petjatu, Uluwatu"
               configuration="2 Bedrooms · 2 Bathrooms · Terrace · Private Pool"
+              leaseYears={25}
             />
           </div>
 
