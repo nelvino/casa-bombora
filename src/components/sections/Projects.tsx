@@ -8,7 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import villa1Level from "@/images/villa-1-level.jpeg";
 import villa2Levels from "@/images/villa-2.png";
-import villaMezzanine from "@/images/MazzanineFacade.jpeg";
+import villaMezzanine from "@/images/villaImages/mezzanine/renders/Backyard_Mezzanine.jpg";
 
 const projects = [
   {

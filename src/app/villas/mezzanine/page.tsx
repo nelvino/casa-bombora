@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import RoiWithCards from "@/components/roi/RoiWithCards";
+import MezzanineRenders from "@/components/gallery/MezzanineRenders";
 
 import mezzanineGround from "@/images/villaImages/mezzanine/Mezzanine-01.webp";
 import mezzaninePlan from "@/images/villaImages/mezzanine/Mezzanine-02.webp";
@@ -36,7 +37,7 @@ export default function MezzanineVillaPage() {
         </Container>
       </section>
 
-      <section className="pb-10 md:pb-16">
+      <section className="pb-2 md:pb-3">
         <Container>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {images.map(({ src, caption }, i) => (
@@ -80,13 +81,17 @@ export default function MezzanineVillaPage() {
               leaseYears={25}
             />
           </div>
-
-          <div className="mt-10 flex justify-center">
-            <Link href="/#contact">
-              <Button size="lg">Register Interest</Button>
-            </Link>
-          </div>
         </Container>
+      </section>
+      <section className="pb-4 md:pb-5">
+        <Container>
+          <MezzanineRenders />
+        </Container>
+        <div className="mt-10 flex justify-center">
+          <Link href="/#contact">
+            <Button size="lg">Register Interest</Button>
+          </Link>
+        </div>
       </section>
     </main>
   );
