@@ -81,8 +81,8 @@ export default function TwoLevelsVillaPage() {
               investmentMax={170_000}
               defaultInvestment={160_000}
               rateMin={150}
-              rateMax={450}
-              defaultRate={270}
+              rateMax={400}
+              defaultRate={230}
               occupancyMin={65}
               occupancyMax={90}
               defaultOccupancy={75}

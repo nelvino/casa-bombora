@@ -65,9 +65,9 @@ export default function MezzanineVillaPage() {
               investmentMin={120_000}
               investmentMax={140_000}
               defaultInvestment={130_000}
-              rateMin={150}
-              rateMax={300}
-              defaultRate={220}
+              rateMin={120}
+              rateMax={280}
+              defaultRate={180}
               occupancyMin={65}
               occupancyMax={90}
               defaultOccupancy={75}

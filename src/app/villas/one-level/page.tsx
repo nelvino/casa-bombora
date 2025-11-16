@@ -58,9 +58,9 @@ export default function OneLevelVillaPage() {
               investmentMin={100_000}
               investmentMax={120_000}
               defaultInvestment={110_000}
-              rateMin={120}
-              rateMax={165}
-              defaultRate={145}
+              rateMin={80}
+              rateMax={250}
+              defaultRate={140}
               occupancyMin={65}
               occupancyMax={90}
               defaultOccupancy={75}
