@@ -169,7 +169,7 @@ export function Introduction() {
           >
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
               {[
-                { stat: "16-20%", label: "Annual ROI" },
+                { stat: "18-28%", label: "Annual ROI" },
                 { stat: "50+", label: "Projects Completed" },
                 { stat: "7+ Years", label: "Experience" },
                 { stat: "24/7", label: "Customer Support" }

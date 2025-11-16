@@ -23,7 +23,7 @@ const dancingScript = Dancing_Script({
 
 export const metadata: Metadata = {
   title: "CASA bombora | Luxury Villa Investment in Uluwatu, Bali",
-  description: "End-to-end luxury villa investment and management solution in Uluwatu, Bali with 16-20% annual ROI. From land lease to property management.",
+  description: "End-to-end luxury villa investment and management solution in Uluwatu, Bali with 18-28% annual ROI. From land lease to property management.",
   keywords: "Bali villa investment, Uluwatu property, luxury villa management, Bali real estate investment, villa construction Bali",
 };
 
