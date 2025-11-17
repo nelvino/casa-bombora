@@ -133,7 +133,7 @@ export default function GalleryLightbox({
           aria-label="Close"
           ref={closeBtnRef}
           onClick={(e) => { e.stopPropagation(); handleClose(); }}
-          className="absolute top-3 right-8 sm:right-12 md:right-20 h-9 w-9 rounded-full bg-white/90 border border-gunmetal/10 text-gunmetal shadow hover:bg-white flex items-center justify-center"
+          className="absolute top-3 right-3 sm:top-4 sm:right-4 md:top-6 md:right-6 h-9 w-9 rounded-full bg-white/90 border border-gunmetal/10 text-gunmetal shadow hover:bg-white flex items-center justify-center"
         >
           <X className="h-5 w-5" />
         </button>

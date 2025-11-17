@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import RoiWithCards from "@/components/roi/RoiWithCards";
+import TwoLevelsRenders from "@/components/gallery/TwoLevelsRenders";
 
 import groundLevel from "@/images/villaImages/2-levels/2 Levels-01.webp";
 import levelOne from "@/images/villaImages/2-levels/2 Levels-02.webp";
@@ -95,6 +96,10 @@ export default function TwoLevelsVillaPage() {
               configuration="2 Bedrooms · 2 Bathrooms · Terrace · Private Pool"
               leaseYears={25}
             />
+          </div>
+
+          <div className="mt-10">
+            <TwoLevelsRenders />
           </div>
 
           <div className="mt-10 flex justify-center">
