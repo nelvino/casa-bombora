@@ -10,6 +10,7 @@ import GalleryLightbox from "./GalleryLightbox";
 // Imports (required for next/image optimization)
 import Backyard from "@/images/villaImages/2-levels/renders/Backyard_2Levels.webp";
 import Bedroom1 from "@/images/villaImages/2-levels/renders/Beedroom1_2Levels.webp";
+import Bedroom2 from "@/images/villaImages/2-levels/renders/Beedroom2_2Levels.webp";
 import Livingroom from "@/images/villaImages/2-levels/renders/Livingroom_2Levels.webp";
 import Terrace from "@/images/villaImages/2-levels/renders/Terrace_2Levels.webp";
 
@@ -17,6 +18,7 @@ const DATA = [
   { src: Backyard, group: "Backyard", alt: "Backyard" },
   { src: Livingroom, group: "Livingroom/Kitchen", alt: "Livingroom/Kitchen" },
   { src: Bedroom1, group: "Bedroom", alt: "Bedroom" },
+  { src: Bedroom2, group: "Bedroom", alt: "Bedroom" },
   { src: Terrace, group: "Terrace", alt: "Terrace" },
 ];
 
