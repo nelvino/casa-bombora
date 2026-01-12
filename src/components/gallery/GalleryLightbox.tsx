@@ -4,6 +4,8 @@ import Image from "next/image";
 import { X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
+import { motion, AnimatePresence } from "framer-motion";
+
 export type LightboxItem = { src: any; alt: string; caption?: string };
 
 export default function GalleryLightbox({
@@ -23,7 +25,7 @@ export default function GalleryLightbox({
   const [tx, setTx] = useState(0);
   const [ty, setTy] = useState(0);
   const dragging = useRef(false);
-  const last = useRef<{x:number;y:number}>({x:0,y:0});
+  const last = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const previouslyFocused = useRef<HTMLElement | null>(null);
 
   // Focus trap + restore
@@ -93,24 +95,70 @@ export default function GalleryLightbox({
     (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
   }
 
+  // Swipe logic
+  const swipeConfidenceThreshold = 10000;
+  const swipePower = (offset: number, velocity: number) => {
+    return Math.abs(offset) * velocity;
+  };
+
   return (
     <div className="fixed inset-0 z-50 bg-gunmetal/80 flex items-center justify-center p-4" onClick={handleClose}>
-      <div ref={containerRef} className="relative w-full max-w-5xl aspect-[16/10]" onWheel={onWheel} onDoubleClick={(e)=>{e.stopPropagation(); toggleZoom();}}>
-        <Image
-          src={items[index].src}
-          alt={items[index].alt}
-          fill
-          className="object-contain"
-          placeholder="blur"
-          quality={90}
-          style={{ transform: `translate(${tx}px, ${ty}px) scale(${scale})`, transition: dragging.current ? "none" : "transform 120ms ease" }}
-          onPointerDown={(e)=>{e.stopPropagation(); onPointerDown(e);}}
-          onPointerMove={onPointerMove}
-          onPointerUp={onPointerUp}
-          onPointerCancel={onPointerUp}
-        />
+      <div
+        ref={containerRef}
+        className="relative w-full max-w-5xl aspect-[16/10]"
+        onWheel={onWheel}
+        onDoubleClick={(e) => { e.stopPropagation(); toggleZoom(); }}
+      >
+        <AnimatePresence initial={false} mode="popLayout">
+          <motion.div
+            key={index}
+            className="absolute inset-0"
+            initial={{ x: 300, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -300, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            drag={scale === 1 ? "x" : false}
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={1}
+            onDragEnd={(e, { offset, velocity }) => {
+              const swipe = swipePower(offset.x, velocity.x);
+              if (swipe < -swipeConfidenceThreshold) {
+                if (index < items.length - 1) onChange(index + 1);
+              } else if (swipe > swipeConfidenceThreshold) {
+                if (index > 0) onChange(index - 1);
+              }
+            }}
+            style={{
+              touchAction: scale === 1 ? "pan-y" : "none",
+              cursor: scale === 1 ? "grab" : "default"
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Image
+              src={items[index].src}
+              alt={items[index].alt}
+              fill
+              className="object-contain"
+              placeholder="blur"
+              quality={90}
+              style={{
+                transform: `translate(${tx}px, ${ty}px) scale(${scale})`,
+                transition: dragging.current ? "none" : "transform 120ms ease",
+                pointerEvents: scale > 1 ? "auto" : "none" // Allow pointer events on image only when zoomed for panning
+              }}
+              draggable={false}
+              onPointerDown={(e) => {
+                if (scale > 1) { e.stopPropagation(); onPointerDown(e); }
+              }}
+              onPointerMove={onPointerMove}
+              onPointerUp={onPointerUp}
+              onPointerCancel={onPointerUp}
+            />
+          </motion.div>
+        </AnimatePresence>
+
         {items[index].caption && (
-          <div className="absolute left-3 bottom-3 text-sm px-2.5 py-1 rounded bg-gunmetal/70 text-white">
+          <div className="absolute left-3 bottom-3 text-sm px-2.5 py-1 rounded bg-gunmetal/70 text-white z-10">
             {items[index].caption}
           </div>
         )}
@@ -118,14 +166,14 @@ export default function GalleryLightbox({
         <button
           aria-label="Previous image"
           onClick={(e) => { e.stopPropagation(); onChange(Math.max(0, index - 1)); }}
-          className="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 h-10 w-10 items-center justify-center rounded-full bg-white/90 shadow border border-gunmetal/10 hover:bg-white"
+          className="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 h-10 w-10 items-center justify-center rounded-full bg-white/90 shadow border border-gunmetal/10 hover:bg-white z-20"
         >
           ‹
         </button>
         <button
           aria-label="Next image"
           onClick={(e) => { e.stopPropagation(); onChange(Math.min(items.length - 1, index + 1)); }}
-          className="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 items-center justify-center rounded-full bg-white/90 shadow border border-gunmetal/10 hover:bg-white"
+          className="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 items-center justify-center rounded-full bg-white/90 shadow border border-gunmetal/10 hover:bg-white z-20"
         >
           ›
         </button>
@@ -133,7 +181,7 @@ export default function GalleryLightbox({
           aria-label="Close"
           ref={closeBtnRef}
           onClick={(e) => { e.stopPropagation(); handleClose(); }}
-          className="absolute top-3 right-3 sm:top-4 sm:right-4 md:top-6 md:right-6 h-9 w-9 rounded-full bg-white/90 border border-gunmetal/10 text-gunmetal shadow hover:bg-white flex items-center justify-center"
+          className="absolute top-3 right-3 sm:top-4 sm:right-4 md:top-6 md:right-6 h-9 w-9 rounded-full bg-white/90 border border-gunmetal/10 text-gunmetal shadow hover:bg-white flex items-center justify-center z-20"
         >
           <X className="h-5 w-5" />
         </button>

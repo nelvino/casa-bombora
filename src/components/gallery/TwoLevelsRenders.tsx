@@ -9,6 +9,7 @@ import GalleryLightbox from "./GalleryLightbox";
 
 // Imports (required for next/image optimization)
 import Backyard from "@/images/villaImages/2-levels/renders/Backyard_2Levels.webp";
+import Backyard2 from "@/images/villaImages/2-levels/renders/Villa-2-levels-pool.jpeg";
 import Bedroom1 from "@/images/villaImages/2-levels/renders/Beedroom1_2Levels.webp";
 import Bedroom2 from "@/images/villaImages/2-levels/renders/Beedroom2_2Levels.webp";
 import Livingroom from "@/images/villaImages/2-levels/renders/Livingroom_2Levels.webp";
@@ -16,6 +17,7 @@ import Terrace from "@/images/villaImages/2-levels/renders/Terrace_2Levels.webp"
 
 const DATA = [
   { src: Backyard, group: "Backyard", alt: "Backyard" },
+  { src: Backyard2, group: "Backyard", alt: "Backyard" },
   { src: Livingroom, group: "Livingroom/Kitchen", alt: "Livingroom/Kitchen" },
   { src: Bedroom1, group: "Bedroom", alt: "Bedroom" },
   { src: Bedroom2, group: "Bedroom", alt: "Bedroom" },
@@ -45,18 +47,18 @@ export default function TwoLevelsRenders({ className }: { className?: string }) 
       const savedMode = localStorage.getItem("two_levels_gallery_mode") as GalleryMode | null;
       if (savedTab && (TABS as readonly string[]).includes(savedTab)) setTab(savedTab as Tab);
       if (savedMode === "Carousel" || savedMode === "Grid") setMode(savedMode);
-    } catch {}
+    } catch { }
   }, []);
   // Persist preferences
   useEffect(() => {
     try {
       localStorage.setItem("two_levels_gallery_tab", tab);
-    } catch {}
+    } catch { }
   }, [tab]);
   useEffect(() => {
     try {
       localStorage.setItem("two_levels_gallery_mode", mode);
-    } catch {}
+    } catch { }
   }, [mode]);
 
   return (

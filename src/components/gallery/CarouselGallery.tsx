@@ -16,6 +16,9 @@ export default function CarouselGallery({
   const ref = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
   const [itemsPerView, setItemsPerView] = useState(1);
+  const isDown = useRef(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
 
   const scrollTo = useCallback((i: number) => {
     const el = ref.current;
@@ -63,12 +66,45 @@ export default function CarouselGallery({
     return () => window.removeEventListener("keydown", onKey);
   }, [prev, next]);
 
+  // Mouse drag handlers
+  const onMouseDown = (e: React.MouseEvent) => {
+    const slider = ref.current;
+    if (!slider) return;
+    isDown.current = true;
+    slider.classList.add('active'); // Optional: for cursor grabbing style if you add css
+    startX.current = e.pageX - slider.offsetLeft;
+    scrollLeft.current = slider.scrollLeft;
+  };
+
+  const onMouseLeave = () => {
+    isDown.current = false;
+  };
+
+  const onMouseUp = () => {
+    isDown.current = false;
+  };
+
+  const onMouseMove = (e: React.MouseEvent) => {
+    if (!isDown.current) return;
+    e.preventDefault();
+    const slider = ref.current;
+    if (!slider) return;
+    const x = e.pageX - slider.offsetLeft;
+    const walk = (x - startX.current) * 2; // scroll-fast
+    slider.scrollLeft = scrollLeft.current - walk;
+  };
+
   return (
     <div className={className}>
       <div className="relative">
         <div
           ref={ref}
-          className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-px-4 pb-2"
+          className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-px-4 pb-2 cursor-grab active:cursor-grabbing no-scrollbar"
+          style={{ scrollBehavior: 'smooth' }}
+          onMouseDown={onMouseDown}
+          onMouseLeave={onMouseLeave}
+          onMouseUp={onMouseUp}
+          onMouseMove={onMouseMove}
           onScroll={(e) => {
             const el = e.currentTarget;
             const childWidth = (el.children[0] as HTMLElement)?.clientWidth || el.clientWidth;
@@ -81,14 +117,17 @@ export default function CarouselGallery({
             <button
               key={i}
               className="snap-center shrink-0 relative w-[80vw] md:w-[48%] lg:w-[36%] aspect-[4/3] rounded-lg overflow-hidden bg-gunmetal/5"
-              onClick={() => onItemClick(i)}
+              onClick={(e) => {
+                // Prevent click if dragged significantly (optional refinement, but simple click is fine for now)
+                onItemClick(i)
+              }}
             >
               <Image
                 src={it.src}
                 alt={it.alt}
                 fill
                 sizes="(min-width:1024px) 36vw, (min-width:768px) 48vw, 80vw"
-                className="object-cover"
+                className="object-cover pointer-events-none" // prevent image drag
                 placeholder="blur"
                 quality={80}
               />
