@@ -55,18 +55,11 @@ export function Hero() {
 
   return (
     <section id="hero" className="min-h-screen flex items-center pt-32 pb-24 md:py-0 relative overflow-hidden">
-      {/* Hero SVG Background - positioned absolutely */}
-      <div className="absolute inset-0 -z-20">
-        {isMounted && (
-          <>
-            <div 
-              className="absolute inset-0 bg-no-repeat bg-cover bg-center"
-              style={{ backgroundImage: "url('/images/backgrounds/Hero_bg.svg')" }}
-            ></div>
-            <div className="absolute inset-0 "></div>
-          </>
-        )}
-      </div>
+      {/* Hero SVG Background - rendered unconditionally for instant SSR paint */}
+      <div
+        className="absolute inset-0 -z-20 bg-no-repeat bg-cover bg-center"
+        style={{ backgroundImage: "url('/images/backgrounds/Hero_bg.svg')" }}
+      />
       
       {/* Decorative background elements (none to keep background fully crisp) */}
       <div className="absolute inset-0 -z-10" />
@@ -117,23 +110,21 @@ export function Hero() {
                       key="logo"
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      transition={{ 
-                        duration: 1.2, 
+                      transition={{
+                        duration: 1.2,
                         ease: [0.25, 0.1, 0.25, 1.0],
                         delay: 0.2
                       }}
+                      className="filter drop-shadow-[0_40px_80px_rgba(28,35,44,0.55)] drop-shadow-[0_10px_20px_rgba(28,35,44,0.35)]"
                     >
-                      {/* Main Logo with strong custom shadow (WebP via next/image) */}
-                      <div className="relative z-10 filter drop-shadow-[0_40px_80px_rgba(28,35,44,0.55)] drop-shadow-[0_10px_20px_rgba(28,35,44,0.35)]">
-                        <Image
-                          src={heroLogoWebp}
-                          alt="Casa Bombora Logo"
-                          priority
-                          loading="eager"
-                          sizes="400px"
-                          style={{ width: logoSize, height: "auto", opacity: 0.7 }}
-                        />
-                      </div>
+                      <Image
+                        src={heroLogoWebp}
+                        alt="Casa Bombora Logo"
+                        priority
+                        loading="eager"
+                        sizes="400px"
+                        style={{ width: logoSize, height: "auto", opacity: 0.7 }}
+                      />
                     </motion.div>
                   )}
                 </AnimatePresence>
