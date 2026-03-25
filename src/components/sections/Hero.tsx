@@ -129,7 +129,8 @@ export function Hero() {
                           src={heroLogoWebp}
                           alt="Casa Bombora Logo"
                           priority
-                          sizes="100vw"
+                          loading="eager"
+                          sizes="400px"
                           style={{ width: logoSize, height: "auto", opacity: 0.7 }}
                         />
                       </div>

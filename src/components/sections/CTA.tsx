@@ -4,10 +4,32 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { motion } from "framer-motion";
 import { useScrollAnimation, fadeInUpVariants } from "@/hooks/useScrollAnimation";
+import { useMemo } from "react";
+
+// Deterministic pseudo-random generator for consistent server/client rendering
+function seededRandom(seed: number): number {
+  const x = Math.sin(seed * 9999) * 10000;
+  return x - Math.floor(x);
+}
+
+// Round to 2 decimal places to avoid floating point precision mismatches
+function rnd(val: number): number {
+  return Math.round(val * 100) / 100;
+}
 
 export function CTA() {
   const headingAnimation = useScrollAnimation();
   const ctaAnimation = useScrollAnimation();
+
+  // Pre-compute deterministic particle positions to avoid hydration mismatch
+  const particles = useMemo(() => {
+    return Array.from({ length: 20 }, (_, i) => ({
+      top: `${rnd(seededRandom(i * 2) * 100)}%`,
+      left: `${rnd(seededRandom(i * 2 + 1) * 100)}%`,
+      delay: rnd(seededRandom(i) * 5),
+      duration: rnd(3 + seededRandom(i + 1) * 3),
+    }));
+  }, []);
 
   return (
     <section className="py-8 md:py-20 bg-gunmetal text-alabaster relative overflow-hidden">
@@ -45,13 +67,13 @@ export function CTA() {
         
         {/* Subtle particle effect */}
         <div className="absolute inset-0">
-          {Array.from({ length: 20 }).map((_, index) => (
+          {particles.map((particle, index) => (
             <motion.div
               key={index}
               className="absolute w-1 h-1 rounded-full bg-alabaster/20"
               style={{
-                top: `${Math.random() * 100}%`,
-                left: `${Math.random() * 100}%`,
+                top: particle.top,
+                left: particle.left,
               }}
               animate={{
                 opacity: [0, 0.8, 0],
@@ -59,9 +81,9 @@ export function CTA() {
                 y: [-20, 0],
               }}
               transition={{
-                duration: 3 + Math.random() * 3,
+                duration: particle.duration,
                 repeat: Infinity,
-                delay: Math.random() * 5,
+                delay: particle.delay,
                 ease: "easeInOut",
               }}
             />

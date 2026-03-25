@@ -140,7 +140,9 @@ export default function GalleryLightbox({
               fill
               className="object-contain"
               placeholder="blur"
-              quality={90}
+              quality={85}
+              sizes="90vw"
+              priority
               style={{
                 transform: `translate(${tx}px, ${ty}px) scale(${scale})`,
                 transition: dragging.current ? "none" : "transform 120ms ease",

@@ -4,6 +4,28 @@ import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils/cn";
 
+// Preload adjacent images for smoother carousel navigation
+function usePreloadAdjacentImages(items: { src: any; alt: string }[], currentIndex: number) {
+  const preloaded = useRef<Set<string>>(new Set());
+  
+  useEffect(() => {
+    // Preload next and previous images
+    const indicesToPreload = [
+      (currentIndex + 1) % items.length,
+      (currentIndex - 1 + items.length) % items.length,
+    ];
+    
+    indicesToPreload.forEach((idx) => {
+      const src = items[idx]?.src;
+      if (src && !preloaded.current.has(src.src || src)) {
+        const img = new window.Image();
+        img.src = src.src || src;
+        preloaded.current.add(src.src || src);
+      }
+    });
+  }, [currentIndex, items]);
+}
+
 export default function CarouselGallery({
   items,
   onItemClick,
@@ -19,6 +41,9 @@ export default function CarouselGallery({
   const isDown = useRef(false);
   const startX = useRef(0);
   const scrollLeft = useRef(0);
+
+  // Preload adjacent images for instant navigation
+  usePreloadAdjacentImages(items, index);
 
   const scrollTo = useCallback((i: number) => {
     const el = ref.current;
@@ -127,9 +152,10 @@ export default function CarouselGallery({
                 alt={it.alt}
                 fill
                 sizes="(min-width:1024px) 36vw, (min-width:768px) 48vw, 80vw"
-                className="object-cover pointer-events-none" // prevent image drag
+                className="object-cover pointer-events-none"
                 placeholder="blur"
-                quality={80}
+                quality={75}
+                priority={i <= 2}
               />
             </button>
           ))}
