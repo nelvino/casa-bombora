@@ -156,6 +156,7 @@ export default function CarouselGallery({
                 placeholder="blur"
                 quality={75}
                 priority={i <= 2}
+                decoding="async"
               />
             </button>
           ))}
