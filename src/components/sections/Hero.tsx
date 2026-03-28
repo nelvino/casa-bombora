@@ -115,7 +115,6 @@ export function Hero() {
                         ease: [0.25, 0.1, 0.25, 1.0],
                         delay: 0.2
                       }}
-                      className="filter drop-shadow-[0_40px_80px_rgba(28,35,44,0.55)] drop-shadow-[0_10px_20px_rgba(28,35,44,0.35)]"
                     >
                       <Image
                         src={heroLogoWebp}
