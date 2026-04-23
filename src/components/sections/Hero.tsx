@@ -55,10 +55,9 @@ export function Hero() {
 
   return (
     <section id="hero" className="min-h-screen flex items-center pt-32 pb-24 md:py-0 relative overflow-hidden">
-      {/* Hero SVG Background - rendered unconditionally for instant SSR paint */}
+      {/* Hero background - rendered unconditionally for instant SSR paint */}
       <div
-        className="absolute inset-0 -z-20 bg-no-repeat bg-cover bg-center"
-        style={{ backgroundImage: "url('/images/backgrounds/Hero_bg.svg')" }}
+        className="absolute inset-0 -z-20 hero-bg"
       />
       
       {/* Decorative background elements (none to keep background fully crisp) */}

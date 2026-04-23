@@ -142,7 +142,8 @@ export default function GalleryLightbox({
               placeholder="blur"
               quality={85}
               sizes="90vw"
-              priority
+              priority={false}
+              loading="eager"
               style={{
                 transform: `translate(${tx}px, ${ty}px) scale(${scale})`,
                 transition: dragging.current ? "none" : "transform 120ms ease",

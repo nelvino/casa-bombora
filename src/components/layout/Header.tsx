@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { cn } from "@/lib/utils/cn";
 import {
@@ -355,11 +356,15 @@ export function Header() {
                     animate={prefersReducedMotion ? { y: 0, opacity: 1, rotate: 0 } : { y: 0, opacity: 1, rotate: [0, -10, 8, -6, 3, 0] }}
                     transition={{ duration: prefersReducedMotion ? 0.4 : 1.8, ease: [0.25, 0.1, 0.25, 1.0] }}
                   >
-                    <img
+                    <Image
                       src="/images/Monkey.png"
                       alt="Hanging monkey"
+                      width={64}
+                      height={64}
                       className="h-16 w-auto select-none pointer-events-none"
                       draggable={false}
+                      loading="lazy"
+                      unoptimized
                     />
                   </motion.div>
                 </div>

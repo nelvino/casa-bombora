@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "images:webp": "node scripts/convert-png-to-webp.mjs",
+    "images:variants": "node scripts/generate-webp-variants.mjs"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.0",

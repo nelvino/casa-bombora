@@ -4,6 +4,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import svgUrl from "./CasaLogoWhiteBorderShadow.svg";
+import Image from "next/image";
 
 export function CasaLogoWhiteBorderShadow({
   size = 120,
@@ -18,13 +19,14 @@ export function CasaLogoWhiteBorderShadow({
 }) {
   const url = (src ?? (svgUrl as unknown as string)) as string;
   return (
-    <img
+    <Image
       src={url}
       alt={alt}
       width={size}
       height={size}
       className={className}
       draggable={false}
+      unoptimized
     />
   );
 }

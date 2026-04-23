@@ -35,7 +35,20 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <head>
-        <link rel="preload" href="/images/backgrounds/Hero_bg.svg" as="image" type="image/svg+xml" />
+        <link
+          rel="preload"
+          href="/images/backgrounds/Hero_bg.mobile.webp"
+          as="image"
+          type="image/webp"
+          media="(max-width: 768px)"
+        />
+        <link
+          rel="preload"
+          href="/images/backgrounds/Hero_bg.desktop.webp"
+          as="image"
+          type="image/webp"
+          media="(min-width: 769px)"
+        />
       </head>
       <body
         className={`${inter.variable} ${playfairDisplay.variable} ${dancingScript.variable}`}

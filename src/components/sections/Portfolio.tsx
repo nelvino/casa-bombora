@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 
 const ReactPageFlip = dynamic(() => import("react-pageflip").then(m => m.default), { ssr: false });
 const PageFlipAny: any = ReactPageFlip as unknown as any;
@@ -191,8 +192,17 @@ export function Portfolio() {
                 >
                   {images.map((src, idx) => (
                     <div key={idx} className="bg-white">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={src} alt={`Portfolio page ${idx + 1}`} className="block w-full h-auto" />
+                      <div className="relative w-full h-full">
+                        <Image
+                          src={src}
+                          alt={`Portfolio page ${idx + 1}`}
+                          fill
+                          className="object-contain"
+                          sizes="(max-width: 1000px) 100vw, 1000px"
+                          unoptimized
+                          loading="lazy"
+                        />
+                      </div>
                     </div>
                   ))}
                 </PageFlipAny>

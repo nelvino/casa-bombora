@@ -7,8 +7,8 @@ import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import villa1Level from "@/images/villa-1-level.jpeg";
-import villa2Levels from "@/images/villa-2.png";
-import villaMezzanine from "@/images/villaImages/mezzanine/renders/Backyard_Mezzanine.jpg";
+import villa2Levels from "@/images/villa-2.webp";
+import villaMezzanine from "@/images/villaImages/mezzanine/renders/front-facade.w1280.webp";
 
 const projects = [
   {
@@ -73,7 +73,6 @@ export function Projects() {
                   fill
                   className="object-cover"
                   sizes="(min-width: 768px) 33vw, 100vw"
-                  priority={index === 0}
                 />
               </div>
               <div className="p-6 flex flex-col flex-1">

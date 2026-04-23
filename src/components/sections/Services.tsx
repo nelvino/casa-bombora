@@ -5,12 +5,12 @@ import { Button } from "@/components/ui/Button";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useScrollAnimation, fadeInUpVariants, staggerChildrenVariants } from "@/hooks/useScrollAnimation";
-import landAcquisitionLogo from "@/images/logos/land_acquisition.png";
-import legalServicesLogo from "@/images/logos/legal_services.png";
-import architectureDesignLogo from "@/images/logos/architecture_design.png";
-import constructionLogo from "@/images/logos/construction.png";
-import interiorDesignLogo from "@/images/logos/interior_design.png";
-import propertyManagementLogo from "@/images/logos/property_management.png";
+import landAcquisitionLogo from "@/images/logos/land_acquisition.webp";
+import legalServicesLogo from "@/images/logos/legal_services.webp";
+import architectureDesignLogo from "@/images/logos/architecture_design.webp";
+import constructionLogo from "@/images/logos/construction.webp";
+import interiorDesignLogo from "@/images/logos/interior_design.webp";
+import propertyManagementLogo from "@/images/logos/property_management.webp";
 
 const services = [
   {

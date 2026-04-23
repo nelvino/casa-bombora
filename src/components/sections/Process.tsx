@@ -6,10 +6,10 @@ import { CheckCircle } from "lucide-react";
 import { useScrollAnimation, fadeInUpVariants } from "@/hooks/useScrollAnimation";
 import Image from "next/image";
 import sketch1 from "@/images/sketch-1.jpg";
-import sketch3 from "@/images/sketch-3.png";
-import phase1Img from "@/images/phase-1.png";
-import phase3Img from "@/images/phase-3.png";
-import phase4Img from "@/images/phase-4.png";
+import sketch3 from "@/images/sketch-3.webp";
+import phase1Img from "@/images/phase-1.webp";
+import phase3Img from "@/images/phase-3.webp";
+import phase4Img from "@/images/phase-4.webp";
 
 const phases = [
   {

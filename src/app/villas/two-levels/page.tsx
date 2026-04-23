@@ -8,7 +8,7 @@ import TwoLevelsRenders from "@/components/gallery/TwoLevelsRenders";
 
 import groundLevel from "@/images/villaImages/2-levels/2 Levels-01.webp";
 import levelOne from "@/images/villaImages/2-levels/2 Levels-02.webp";
-import plans from "@/images/villaImages/2 Levels arwuitectomic plans.png";
+import plans from "@/images/villaImages/2 Levels arwuitectomic plans.webp";
 import qrCode from "@/images/QR_Code.jpeg";
 
 export default function TwoLevelsVillaPage() {
@@ -52,7 +52,6 @@ export default function TwoLevelsVillaPage() {
                     fill
                     className="object-contain p-2 pb-14"
                     sizes="(min-width: 768px) 50vw, 100vw"
-                    priority={i === 0}
                   />
                   {caption && (
                     <p className="absolute bottom-0 left-0 right-0 text-center text-white text-md md:text-lg">{caption}</p>
