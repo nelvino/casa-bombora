@@ -70,8 +70,9 @@ STRIPE_WEBHOOK_SECRET=
 NEXT_PUBLIC_BASE_URL=https://stay.casabombora.com
 ADMIN_USERNAME=
 ADMIN_PASSWORD=
-ADMIN_SESSION_SECRET=       # long random string; use node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-SITE_LIVE=true              # set to false in production to show a coming-soon page
+ADMIN_SESSION_SECRET=       
+SITE_LIVE=true=           
+# set to false in production to show a coming-soon page
 ```
 
 ### Coming-soon mode
