@@ -1,0 +1,105 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  UNPAID
+  PAID
+  REFUNDED
+}
+
+enum HoldStatus {
+  ACTIVE
+  RELEASED
+  CONVERTED
+}
+
+model Villa {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  name          String
+  tagline       String?
+  description   String?
+  location      String?
+  bedrooms      Int
+  bathrooms     Int
+  maxGuests     Int
+  pricePerNight Int      // USD cents
+  image         String   @default("")
+  isActive      Boolean  @default(true)
+  bookings      Booking[]
+  holds         Hold[]
+  blockedDates  BlockedDate[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("villas")
+}
+
+model Booking {
+  id              String        @id @default(cuid())
+  villaId         String
+  villa           Villa         @relation(fields: [villaId], references: [id])
+  checkIn         DateTime      @db.Date
+  checkOut        DateTime      @db.Date
+  guestEmail      String
+  guestName       String
+  totalAmount     Int           // cents
+  status          BookingStatus @default(PENDING)
+  paymentStatus   PaymentStatus @default(UNPAID)
+  paymentIntentId String?
+  promoCodeId     String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@map("bookings")
+}
+
+model Hold {
+  id        String     @id @default(cuid())
+  villaId   String
+  villa     Villa      @relation(fields: [villaId], references: [id])
+  checkIn   DateTime   @db.Date
+  checkOut  DateTime   @db.Date
+  token     String     @unique
+  expiresAt DateTime
+  status    HoldStatus @default(ACTIVE)
+
+  @@map("holds")
+}
+
+model BlockedDate {
+  id         String   @id @default(cuid())
+  villaId    String
+  villa      Villa    @relation(fields: [villaId], references: [id])
+  date       DateTime @db.Date
+  source     String
+  externalId String?
+
+  @@map("blocked_dates")
+}
+
+model PromoCode {
+  id              String    @id @default(cuid())
+  code            String    @unique
+  discountPercent Int
+  validFrom       DateTime?
+  validTo         DateTime?
+  maxUses         Int?
+  usedCount       Int       @default(0)
+  isActive        Boolean   @default(true)
+
+  @@map("promo_codes")
+}

@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --gunmetal: 29 38 50;
+  --blue-green: 0 156 188;
+  --lion: 191 152 128;
+  --brown: 153 74 24;
+  --alabaster: 238 234 224;
+  --moss: 148 150 101;
+}
+
+@layer base {
+  body {
+    @apply bg-alabaster text-gunmetal antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-serif;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl lg:text-5xl;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl;
+  }
+
+  h4 {
+    @apply text-xl md:text-2xl;
+  }
+
+  p {
+    @apply font-sans text-base leading-relaxed mb-4;
+  }
+
+  a {
+    @apply text-blue-green hover:text-blue-green/80 transition-colors duration-200;
+  }
+}
