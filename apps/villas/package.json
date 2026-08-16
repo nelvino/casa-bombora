@@ -3,27 +3,37 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start",
-    "postinstall": "npx prisma generate"
+    "postinstall": "npx prisma generate",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:ci": "npx tsc --noEmit && vitest run && next build"
   },
   "dependencies": {
-    "next": "14.2.5",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
+    "@prisma/client": "5.13.0",
     "@types/node": "^20.12.0",
     "@types/react": "^18.3.0",
     "@types/react-dom": "^18.3.0",
-    "typescript": "5.4.5",
-    "tailwindcss": "3.4.4",
     "autoprefixer": "^10.4.0",
+    "clsx": "^2.1.0",
+    "date-fns": "3.6.0",
+    "iron-session": "^8.0.4",
+    "next": "14.2.5",
     "postcss": "^8.4.0",
     "prisma": "5.13.0",
-    "@prisma/client": "5.13.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
     "stripe": "15.0.0",
-    "date-fns": "3.6.0",
-    "clsx": "^2.1.0",
-    "tailwind-merge": "^2.3.0"
+    "tailwind-merge": "^2.3.0",
+    "tailwindcss": "3.4.4",
+    "typescript": "5.4.5",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^2.0.0",
+    "vitest": "^2.0.0"
   }
 }
