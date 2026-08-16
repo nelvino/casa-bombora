@@ -1,15 +1,30 @@
 import Image from "next/image";
+import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import RoiWithCards from "@/components/roi/RoiWithCards";
 import TwoLevelsRenders from "@/components/gallery/TwoLevelsRenders";
+import { ProductJsonLd } from "@/components/seo/ProductJsonLd";
 
 import groundLevel from "@/images/villaImages/2-levels/2 Levels-01.webp";
 import levelOne from "@/images/villaImages/2-levels/2 Levels-02.webp";
 import plans from "@/images/villaImages/2 Levels arwuitectomic plans.webp";
 import qrCode from "@/images/QR_Code.jpeg";
+
+export const metadata: Metadata = {
+  title: "2 Levels Villa",
+  description:
+    "Invest in a 2 bedroom, 2 level luxury villa in Uluwatu, Bali. Terrace, private pool and resort-style living with strong rental ROI.",
+  openGraph: {
+    title: "2 Levels Villa | Casa Bombora",
+    description:
+      "Invest in a 2 bedroom, 2 level luxury villa in Uluwatu, Bali. Terrace, private pool and resort-style living.",
+    images: ["/images/backgrounds/Hero_bg.desktop.webp"],
+  },
+  alternates: { canonical: "/villas/two-levels" },
+};
 
 export default function TwoLevelsVillaPage() {
   const images = [
@@ -21,6 +36,12 @@ export default function TwoLevelsVillaPage() {
 
   return (
     <main className="bg-alabaster relative">
+      <ProductJsonLd
+        name="2 Levels Villa"
+        description="Elegant 2 bedroom, 2 level villa with terrace, soaking bath and private pool in Uluwatu, Bali."
+        image="https://casabombora.com/images/backgrounds/Hero_bg.desktop.webp"
+        url="https://casabombora.com/villas/two-levels"
+      />
       <section className="py-10 md:py-16">
         <Container className="text-center">
           <div className="text-left mb-4 md:mb-6">
@@ -48,7 +69,7 @@ export default function TwoLevelsVillaPage() {
                 <div className="relative w-full aspect-[4/3] overflow-hidden rounded-lg shadow-md bg-blue-green">
                   <Image
                     src={src}
-                    alt={`2 Levels Villa image ${i + 1}`}
+                    alt={`${caption} view of the 2 Levels Villa in Uluwatu, Bali`}
                     fill
                     className="object-contain p-2 pb-14"
                     sizes="(min-width: 768px) 50vw, 100vw"

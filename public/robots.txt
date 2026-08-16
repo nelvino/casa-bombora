@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /profit
+Disallow: /thank-you
 
 Sitemap: https://casabombora.com/sitemap.xml

@@ -195,7 +195,7 @@ export function Portfolio() {
                       <div className="relative w-full h-full">
                         <Image
                           src={src}
-                          alt={`Portfolio page ${idx + 1}`}
+                          alt={`Page ${idx + 1} of the Casa Bombora portfolio`}
                           fill
                           className="object-contain"
                           sizes="(max-width: 1000px) 100vw, 1000px"

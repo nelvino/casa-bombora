@@ -65,17 +65,7 @@ export function Hero() {
       
       <Container>
         <div className="flex flex-col items-center justify-center">
-          {/* Static placeholder shown during server-side rendering */}
-          {!isMounted && (
-            <div className="relative">
-              <div className="w-[300px] h-[225px] bg-lion/20 rounded-full animate-pulse"></div>
-              <div className="mt-12 h-6 bg-gunmetal/10 rounded w-64 mx-auto animate-pulse"></div>
-            </div>
-          )}
-          
-          {/* Dynamic logo and content only rendered on client side */}
-          {isMounted && (
-            <>
+          <>
               {/* First block: Logo or text based on state - with fixed height */}
               <div style={{ height: logoSize * 0.75 }} className="w-full flex items-center justify-center">
                 <AnimatePresence mode="wait">
@@ -90,7 +80,7 @@ export function Hero() {
                         ease: [0.25, 0.1, 0.25, 1.0]
                       }}
                     >
-                      <motion.h1 
+                      <motion.p
                         className="font-serif text-5xl md:text-7xl font-medium text-center"
                         animate={{ y: [5, 0, 5] }}
                         transition={{ 
@@ -102,7 +92,7 @@ export function Hero() {
                       >
                         <span className="text-lion">CASA</span>{" "}
                         <span className="text-blue-green">bombora</span>
-                      </motion.h1>
+                      </motion.p>
                     </motion.div>
                   ) : (
                     <motion.div
@@ -135,7 +125,7 @@ export function Hero() {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8 }}
               >
-                <motion.p 
+                <motion.h1 
                   className="text-2xl md:text-5xl text-white text-center font-serif drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -145,11 +135,22 @@ export function Hero() {
                     ease: [0.25, 0.1, 0.25, 1.0]
                   }}
                 >
-                  Luxury Villa Investment in Uluwatu, Bali
+                  Invest in Your Dream Villa in Uluwatu, Bali
+                </motion.h1>
+                <motion.p 
+                  className="mt-3 text-lg md:text-2xl text-white/90 text-center font-sans"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ 
+                    duration: 1, 
+                    delay: 1.0,
+                    ease: [0.25, 0.1, 0.25, 1.0]
+                  }}
+                >
+                  End-to-end land, build & management. 18–28% annual ROI.
                 </motion.p>
               </motion.div>
             </>
-          )}
         </div>
       </Container>
       

@@ -1,17 +1,38 @@
 import Image from "next/image";
+import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import RoiWithCards from "@/components/roi/RoiWithCards";
+import { ProductJsonLd } from "@/components/seo/ProductJsonLd";
 
 import oneLevelPng from "@/images/villaImages/1-level/1 Level-01.webp";
+
+export const metadata: Metadata = {
+  title: "1 Level Villa",
+  description:
+    "Invest in a 1 level, 1 bedroom luxury villa in Uluwatu, Bali. Compact design, private pool and strong rental ROI with Casa Bombora.",
+  openGraph: {
+    title: "1 Level Villa | Casa Bombora",
+    description:
+      "Invest in a 1 level, 1 bedroom luxury villa in Uluwatu, Bali. Compact design, private pool and strong rental ROI.",
+    images: ["/images/backgrounds/Hero_bg.desktop.webp"],
+  },
+  alternates: { canonical: "/villas/one-level" },
+};
 
 export default function OneLevelVillaPage() {
   const images = [{ src: oneLevelPng, caption: "Ground level" }];
 
   return (
     <main className="bg-alabaster relative">
+      <ProductJsonLd
+        name="1 Level Villa"
+        description="Thoughtfully designed 1-level, 1-bedroom villa with a private backyard pool in Uluwatu, Bali."
+        image="https://casabombora.com/images/backgrounds/Hero_bg.desktop.webp"
+        url="https://casabombora.com/villas/one-level"
+      />
       <section className="py-10 md:py-16">
         <Container className="text-center">
           <div className="text-left mb-4 md:mb-6">
@@ -39,7 +60,7 @@ export default function OneLevelVillaPage() {
               <div key={i} className="relative w-full aspect-[4/3] overflow-hidden rounded-lg shadow-md bg-blue-green">
                 <Image
                   src={src}
-                  alt={`1 Level Villa image ${i + 1}`}
+                  alt={`${caption} view of the 1 Level Villa in Uluwatu, Bali`}
                   fill
                   className="object-contain p-2 pb-14"
                   sizes="(min-width: 768px) 50vw, 100vw"

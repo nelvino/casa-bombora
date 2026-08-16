@@ -40,10 +40,10 @@ export const smoothScrollTo = (
  */
 export const createSmoothScrollHandler = (offset = 80) => {
   return (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
     const href = e.currentTarget.getAttribute("href");
     if (!href?.startsWith("#")) return;
-    
+
+    e.preventDefault();
     const targetId = href.substring(1);
     smoothScrollTo(targetId, offset);
 

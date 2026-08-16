@@ -1,13 +1,28 @@
 import Image from "next/image";
+import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import RoiWithCards from "@/components/roi/RoiWithCards";
 import MezzanineRenders from "@/components/gallery/MezzanineRenders";
+import { ProductJsonLd } from "@/components/seo/ProductJsonLd";
 
 import mezzanineGround from "@/images/villaImages/mezzanine/Mezzanine-01.webp";
 import mezzaninePlan from "@/images/villaImages/mezzanine/Mezzanine-02.webp";
+
+export const metadata: Metadata = {
+  title: "Mezzanine Villa",
+  description:
+    "Invest in a mezzanine villa in Uluwatu, Bali. 1 bedroom, mezzanine floor, private pool and outdoor bath designed for high rental returns.",
+  openGraph: {
+    title: "Mezzanine Villa | Casa Bombora",
+    description:
+      "Invest in a mezzanine villa in Uluwatu, Bali. 1 bedroom, mezzanine floor, private pool and outdoor bath.",
+    images: ["/images/backgrounds/Hero_bg.desktop.webp"],
+  },
+  alternates: { canonical: "/villas/mezzanine" },
+};
 
 export default function MezzanineVillaPage() {
   const images = [
@@ -17,6 +32,12 @@ export default function MezzanineVillaPage() {
 
   return (
     <main className="bg-alabaster relative">
+      <ProductJsonLd
+        name="Mezzanine Villa"
+        description="Compact mezzanine villa with bedroom upstairs, open living below and a private pool in Uluwatu, Bali."
+        image="https://casabombora.com/images/backgrounds/Hero_bg.desktop.webp"
+        url="https://casabombora.com/villas/mezzanine"
+      />
       <section className="py-10 md:py-16">
         <Container className="text-center">
           <div className="text-left mb-4 md:mb-6">
@@ -45,7 +66,7 @@ export default function MezzanineVillaPage() {
                 <div className="relative w-full aspect-[4/3] overflow-hidden rounded-lg shadow-md bg-blue-green">
                   <Image
                     src={src}
-                    alt={`Mezzanine Villa image ${i + 1}`}
+                    alt={`${caption} view of the Mezzanine Villa in Uluwatu, Bali`}
                     fill
                     className="object-contain p-2 pb-14"
                     sizes="(min-width: 768px) 50vw, 100vw"
