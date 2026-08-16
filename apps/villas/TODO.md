@@ -71,7 +71,14 @@ NEXT_PUBLIC_BASE_URL=https://stay.casabombora.com
 ADMIN_USERNAME=
 ADMIN_PASSWORD=
 ADMIN_SESSION_SECRET=       # long random string; use node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+SITE_LIVE=true              # set to false in production to show a coming-soon page
 ```
+
+### Coming-soon mode
+
+- Controlled by the `SITE_LIVE` environment variable.
+- Set `SITE_LIVE=false` in Netlify to show the branded coming-soon page to public visitors.
+- Leave it `true` or unset during development and build.
 
 ## 5. What is missing / roadmap
 
