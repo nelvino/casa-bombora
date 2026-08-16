@@ -61,6 +61,10 @@ npm start
 - [Framer Motion](https://www.framer.com/motion/) - Animation library
 - [Lucide React](https://lucide.dev/) - Icon library
 
+## Villas Booking Microsite
+
+The repo also contains `apps/villas`, a separate Next.js booking site deployed at `https://stay.casabombora.com`. It handles villa availability, holds, Stripe/demo payments, and an admin dashboard. See `apps/villas/TODO.md` for details.
+
 ## License
 
 All Rights Reserved - Casa Bombora

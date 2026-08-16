@@ -14,8 +14,8 @@ A living document for the `apps/villas` booking microsite. Update it after each 
 - **Framework:** Next.js 14 App Router
 - **Styling:** Tailwind CSS + custom color tokens (`gunmetal`, `blue-green`, `lion`, `alabaster`, etc.)
 - **Database:** Supabase PostgreSQL + Prisma ORM
-- **Auth:** Temporary `iron-session` admin login; planned migration to Supabase Auth (Google provider) with roles
-- **Payments:** Stripe test mode + demo fallback provider
+- **Auth:** Temporary `iron-session` admin login (`ADMIN_USERNAME`, `ADMIN_PASSWORD`, `ADMIN_SESSION_SECRET`); planned migration to Supabase Auth (Google provider) with roles
+- **Payments:** Stripe + demo fallback provider (set `STRIPE_SECRET_KEY` for real Stripe, leave it empty for demo)
 - **Tests:** Vitest
 - **Hosting:** Netlify (separate site from the main `casabombora.com` site)
 
@@ -31,6 +31,7 @@ A living document for the `apps/villas` booking microsite. Update it after each 
 - Villa detail pages with hero image, gallery, amenities, house rules, FAQ, JSON-LD structured data
 - SEO: metadata, Open Graph, sitemap, robots.txt
 - Admin dashboard with summary cards, bookings/holds tables, and actions: confirm, cancel, mark paid, release hold
+- Live deploy on Netlify at `https://stay.casabombora.com` with `[[plugins]]` Next.js runtime
 - Admin login form backed by encrypted `iron-session` cookie
 - Header and footer with mobile hamburger menu
 - Responsive design aligned with the Casa Bombora brand
@@ -63,15 +64,13 @@ A living document for the `apps/villas` booking microsite. Update it after each 
 ```env
 DATABASE_URL=
 DIRECT_URL=
-NEXT_PUBLIC_SUPABASE_URL=
-SUPABASE_SERVICE_ROLE_KEY=
 STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
 NEXT_PUBLIC_BASE_URL=https://stay.casabombora.com
 ADMIN_USERNAME=
 ADMIN_PASSWORD=
-ADMIN_SESSION_SECRET=       
-SITE_LIVE=true=           
+ADMIN_SESSION_SECRET=
+SITE_LIVE=true
 # set to false in production to show a coming-soon page
 ```
 
@@ -85,8 +84,8 @@ SITE_LIVE=true=
 
 ### Phase 1 — Production hardening (do first)
 
-- [ ] Deploy `stay.casabombora.com` on Netlify and configure DNS / CNAME.
-- [ ] Set all production environment variables in Netlify.
+- [x] Deploy `stay.casabombora.com` on Netlify and configure DNS / CNAME.
+- [~] Set all production environment variables in Netlify (missing: `ADMIN_SESSION_SECRET` and live Stripe keys if needed).
 - [ ] Switch Stripe from test mode to live mode and test a real payment.
 - [ ] Verify webhook endpoint and payment success flow in production.
 - [ ] Replace the temporary `iron-session` admin login with **Supabase Auth + Google** and role-based access.
