@@ -3,9 +3,7 @@ import { convertHoldToBooking } from '@/lib/booking/db'
 import { getPaymentProvider } from '@/lib/payments'
 
 export async function POST(req: Request) {
-  const isDemo =
-    !process.env.STRIPE_SECRET_KEY ||
-    process.env.STRIPE_SECRET_KEY === 'sk_test_placeholder'
+  const isDemo = !process.env.STRIPE_SECRET_KEY
 
   if (isDemo) {
     return Response.json({ ok: true })

@@ -4,7 +4,7 @@ import { stripeProvider } from './stripe'
 
 export function getPaymentProvider(): PaymentProvider {
   const secretKey = process.env.STRIPE_SECRET_KEY
-  if (secretKey && secretKey !== 'sk_test_placeholder') {
+  if (secretKey) {
     return stripeProvider
   }
   return demoProvider

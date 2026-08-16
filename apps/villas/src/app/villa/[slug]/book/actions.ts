@@ -208,9 +208,7 @@ export async function createPaymentSession(
   const baseUrl =
     process.env.NEXT_PUBLIC_BASE_URL ?? 'http://localhost:3001'
 
-  const isDemo =
-    !process.env.STRIPE_SECRET_KEY ||
-    process.env.STRIPE_SECRET_KEY === 'sk_test_placeholder'
+  const isDemo = !process.env.STRIPE_SECRET_KEY
 
   const successUrl = isDemo
     ? `${baseUrl}/villa/${slug}/book/demo-pay?token=${encodeURIComponent(token)}`

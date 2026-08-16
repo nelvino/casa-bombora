@@ -4,10 +4,7 @@ import type { PaymentProvider } from './types'
 const secretKey = process.env.STRIPE_SECRET_KEY
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
 
-export const stripe =
-  secretKey && secretKey !== 'sk_test_placeholder'
-    ? new Stripe(secretKey)
-    : null
+export const stripe = secretKey ? new Stripe(secretKey) : null
 
 export const stripeProvider: PaymentProvider = {
   async createSession({
