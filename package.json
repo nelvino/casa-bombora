@@ -23,7 +23,8 @@
     "react-pageflip": "^2.0.3",
     "react-pdf": "^10.2.0",
     "sharp": "^0.34.4",
-    "tailwind-merge": "^1.14.0"
+    "tailwind-merge": "^1.14.0",
+    "yet-another-react-lightbox": "^3.32.2"
   },
   "devDependencies": {
     "@types/node": "^20.8.4",

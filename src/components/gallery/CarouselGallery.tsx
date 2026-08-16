@@ -3,13 +3,23 @@
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils/cn";
+import type { VillaRenderItem } from "./VillaGallery";
+
+const DRAG_CLICK_THRESHOLD = 6; // px of movement before a mouse drag suppresses the click-to-open
+const GAP_PX = 16; // gap-4
+
+function getStep(root: HTMLElement): number {
+  const first = root.children[0] as HTMLElement | undefined;
+  const childWidth = first?.clientWidth || root.clientWidth;
+  return childWidth + GAP_PX;
+}
 
 export default function CarouselGallery({
   items,
   onItemClick,
   className,
 }: {
-  items: { src: any; thumbSrc?: any; alt: string }[];
+  items: readonly VillaRenderItem[];
   onItemClick: (index: number) => void;
   className?: string;
 }) {
@@ -17,8 +27,10 @@ export default function CarouselGallery({
   const [index, setIndex] = useState(0);
   const [itemsPerView, setItemsPerView] = useState(1);
   const isDown = useRef(false);
+  const draggedDistance = useRef(0);
   const startX = useRef(0);
   const scrollLeft = useRef(0);
+  const scrollRaf = useRef<number | null>(null);
 
   const scrollTo = useCallback((i: number) => {
     const el = ref.current;
@@ -42,10 +54,7 @@ export default function CarouselGallery({
     function measure() {
       const root = ref.current;
       if (!root) return;
-      const first = root.children[0] as HTMLElement | undefined;
-      const gap = 16; // gap-4
-      const childW = first?.clientWidth || root.clientWidth;
-      const per = Math.max(1, Math.floor((root.clientWidth + gap) / (childW + gap)));
+      const per = Math.max(1, Math.floor((root.clientWidth + GAP_PX) / getStep(root)));
       setItemsPerView(per);
     }
     measure();
@@ -66,12 +75,19 @@ export default function CarouselGallery({
     return () => window.removeEventListener("keydown", onKey);
   }, [prev, next]);
 
-  // Mouse drag handlers
+  // Cancel any in-flight scroll-index rAF on unmount only (not on every prev/next identity change)
+  useEffect(() => {
+    return () => {
+      if (scrollRaf.current !== null) cancelAnimationFrame(scrollRaf.current);
+    };
+  }, []);
+
+  // Mouse drag handlers (desktop drag-to-scroll; touch swipe is native scroll-snap)
   const onMouseDown = (e: React.MouseEvent) => {
     const slider = ref.current;
     if (!slider) return;
     isDown.current = true;
-    slider.classList.add('active'); // Optional: for cursor grabbing style if you add css
+    draggedDistance.current = 0;
     startX.current = e.pageX - slider.offsetLeft;
     scrollLeft.current = slider.scrollLeft;
   };
@@ -91,6 +107,7 @@ export default function CarouselGallery({
     if (!slider) return;
     const x = e.pageX - slider.offsetLeft;
     const walk = (x - startX.current) * 2; // scroll-fast
+    draggedDistance.current = Math.abs(walk);
     slider.scrollLeft = scrollLeft.current - walk;
   };
 
@@ -106,20 +123,22 @@ export default function CarouselGallery({
           onMouseUp={onMouseUp}
           onMouseMove={onMouseMove}
           onScroll={(e) => {
+            if (scrollRaf.current !== null) return;
             const el = e.currentTarget;
-            const childWidth = (el.children[0] as HTMLElement)?.clientWidth || el.clientWidth;
-            const step = childWidth + 16; // gap-4
-            const firstVisible = Math.round(el.scrollLeft / step);
-            setIndex(Math.max(0, Math.min(items.length - 1, firstVisible)));
+            scrollRaf.current = requestAnimationFrame(() => {
+              scrollRaf.current = null;
+              const firstVisible = Math.round(el.scrollLeft / getStep(el));
+              setIndex(Math.max(0, Math.min(items.length - 1, firstVisible)));
+            });
           }}
         >
           {items.map((it, i) => (
             <button
               key={i}
               className="snap-center shrink-0 relative w-[80vw] md:w-[48%] lg:w-[36%] aspect-[4/3] rounded-lg overflow-hidden bg-gunmetal/5"
-              onClick={(e) => {
-                // Prevent click if dragged significantly (optional refinement, but simple click is fine for now)
-                onItemClick(i)
+              onClick={() => {
+                if (draggedDistance.current > DRAG_CLICK_THRESHOLD) return;
+                onItemClick(i);
               }}
             >
               <Image
@@ -131,6 +150,8 @@ export default function CarouselGallery({
                 placeholder="blur"
                 quality={75}
                 decoding="async"
+                priority={i === 0}
+                loading={i === 0 ? "eager" : "lazy"}
               />
             </button>
           ))}
