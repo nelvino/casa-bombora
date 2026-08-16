@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { BlogPost } from "@/lib/data/blog";
@@ -48,6 +49,30 @@ export function ArticleLayout({ post, children }: ArticleLayoutProps) {
           __html: JSON.stringify(articleSchema).replace(/</g, "\\u003c"),
         }}
       />
+
+      <div className="mb-8">
+        <Link
+          href="/blog"
+          className="group inline-flex items-center gap-2 text-sm font-medium text-gunmetal/70 transition-colors hover:text-blue-green"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="transition-transform group-hover:-translate-x-0.5"
+            aria-hidden="true"
+          >
+            <path d="m15 18-6-6 6-6" />
+          </svg>
+          Back to all insights
+        </Link>
+      </div>
 
       <header className="mb-12 text-center">
         <span className="inline-block rounded-full bg-blue-green/10 px-3 py-1 text-xs font-medium uppercase tracking-wider text-blue-green">

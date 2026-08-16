@@ -12,6 +12,30 @@ export const metadata: Metadata = {
 export default function BlogPage() {
   return (
     <Container size="default" className="py-16 md:py-24">
+      <div className="mb-8">
+        <Link
+          href="/"
+          className="group inline-flex items-center gap-2 text-sm font-medium text-gunmetal/70 transition-colors hover:text-blue-green"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="transition-transform group-hover:-translate-x-0.5"
+            aria-hidden="true"
+          >
+            <path d="m15 18-6-6 6-6" />
+          </svg>
+          Back to Casa Bombora
+        </Link>
+      </div>
+
       <header className="mb-12 text-center">
         <h1 className="font-serif text-4xl text-gunmetal md:text-5xl">
           Bali Villa Investment Insights
