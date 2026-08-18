@@ -2,7 +2,7 @@
 
 import { Container } from "@/components/ui/Container";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useState, useEffect } from "react";
 // import { CasaLogoWhite } from "@/components/icons/CasaLogoWhite";
 import heroLogoWebp from "@/components/icons/CasaLogoWhiteShadowWithBorder.webp";
@@ -40,18 +40,26 @@ export function Hero() {
   
   // Get responsive logo size
   const logoSize = useResponsiveSize();
-  
+
+  // Respect prefers-reduced-motion
+  const shouldReduce = useReducedMotion();
+
   // Only render the dynamic content after component has mounted on client
   useEffect(() => {
     setIsMounted(true);
-    
+
+    if (shouldReduce) {
+      setShowTextFirst(false);
+      return;
+    }
+
     // Set a timeout to transition from text to logo after a delay
     const timer = setTimeout(() => {
       setShowTextFirst(false);
-    }, 2500); // 2.5 seconds delay before showing the logo
-    
+    }, 1200); // snappier 1.2s delay before showing the logo
+
     return () => clearTimeout(timer);
-  }, []);
+  }, [shouldReduce]);
 
   return (
     <section id="hero" className="min-h-screen flex items-center pt-32 pb-24 md:py-0 relative overflow-hidden">

@@ -2,7 +2,7 @@
 
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -36,12 +36,13 @@ const projects = [
 
 export function Projects() {
   const slugs = ["/villas/one-level", "/villas/mezzanine", "/villas/two-levels"];
+  const shouldReduce = useReducedMotion();
   return (
     <section id="projects" className="py-8 md:py-20 bg-alabaster">
       <Container>
         <div className="text-center max-w-3xl mx-auto mb-16">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={shouldReduce ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
@@ -59,19 +60,19 @@ export function Projects() {
           {projects.map((project, index) => (
             <motion.div
               key={project.title}
-              initial={{ opacity: 0, y: 30 }}
+              initial={shouldReduce ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-white rounded-lg overflow-hidden shadow-md group flex flex-col h-full"
+              className="bg-white rounded-lg overflow-hidden shadow-md group flex flex-col h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
             >
               <div className="relative h-64 overflow-hidden">
-                <div className="absolute inset-0 bg-gunmetal/30 z-10" />
+                <div className="absolute inset-0 bg-gunmetal/30 z-10 group-hover:bg-gunmetal/10 transition-colors duration-300" />
                 <Image
                   src={project.imageSrc}
                   alt={project.title}
                   fill
-                  className="object-cover"
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
                   sizes="(min-width: 768px) 33vw, 100vw"
                 />
               </div>

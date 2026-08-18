@@ -83,7 +83,7 @@ export function FAQ() {
       <FaqJsonLd />
       <Container>
         <div className="mx-auto max-w-3xl text-center">
-          <h2 className="font-serif text-3xl text-gunmetal md:text-4xl">
+          <h2 className="font-serif text-3xl text-gunmetal md:text-4xl lg:text-5xl">
             Frequently Asked{" "}
             <span className="text-blue-green">Questions</span>
           </h2>

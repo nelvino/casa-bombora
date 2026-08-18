@@ -44,7 +44,7 @@ export function Header() {
   useEffect(() => {
     const handleScroll = () => {
       // Update isScrolled state based on scroll position
-      if (window.scrollY > 10) {
+      if (window.scrollY > 80) {
         setIsScrolled(true);
       } else {
         setIsScrolled(false);
@@ -140,16 +140,20 @@ export function Header() {
     <>
       <motion.header
         className={cn(
-          "fixed top-0 left-0 right-0 z-[100]",
-          "h-16 md:py-6 lg:py-7 transition-colors duration-300", // Fixed height on mobile, padding on md/lg
-          isScrolled ? "bg-alabaster/90 backdrop-blur-sm shadow-sm" : "bg-transparent"
+          "fixed top-0 left-0 right-0 z-[100] transition-[height] duration-300",
+          isScrolled ? "h-24 bg-transparent" : "h-16 md:h-20 bg-transparent"
         )}
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1.0] }}
       >
         <Container className="h-full">
-          <div className="flex items-center justify-between h-full">
+          <div className={cn(
+            "w-full relative flex items-center justify-between",
+            isScrolled
+              ? "max-w-5xl mx-auto mt-8 mb-auto h-14 rounded-full bg-white/70 backdrop-blur-xl backdrop-saturate-150 border border-white/20 shadow-lg px-4 md:px-6"
+              : "h-full"
+          )}>
             {/* Left section - text logo */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -180,10 +184,10 @@ export function Header() {
             <AnimatePresence>
               {pastHeroSection && (
                 <motion.div
-                  className="absolute left-1/2 transform -translate-x-1/2 flex items-center justify-center z-10"
-                  initial={{ opacity: 0, y: -20, scale: 0.8 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -10, scale: 0.9 }}
+                  className="absolute left-1/2 top-1/2 flex items-center justify-center z-10"
+                  initial={{ opacity: 0, scale: 0.8, x: '-50%', y: '-50%' }}
+                  animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
+                  exit={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
                   transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1.0] }}
                 >
                   <Link href="/" className="block relative">
@@ -194,15 +198,15 @@ export function Header() {
                       transition={{ duration: 0.3 }}
                     >
                       <CasaLogo
-                        size={isScrolled ? 42 : 48}
+                        size={isScrolled ? 40 : 48}
                         color="#009CBC"
-                        className="transition-all duration-300 relative z-10"
+                        className="transition-all duration-300 relative z-10 block mx-auto"
                       />
                       <motion.div
                         className="absolute -inset-2 bg-alabaster/60 rounded-full -z-10"
                         animate={{
                           scale: logoHovered ? 1.15 : 1,
-                          opacity: logoHovered || isScrolled ? 0.8 : 0
+                          opacity: logoHovered ? 0.8 : 0
                         }}
                         initial={{ opacity: 0, scale: 0.8 }}
                         transition={{ duration: 0.3 }}

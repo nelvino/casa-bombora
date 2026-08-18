@@ -61,7 +61,7 @@ export function Process() {
   const timelineAnimation = useScrollAnimation({ threshold: 0.1 });
 
   return (
-    <section id="process" className="pt-8 !pb-20 md:py-20 bg-white relative overflow-hidden">
+    <section id="process" className="pt-8 !pb-20 md:py-20 bg-white relative">
       {/* Background Pattern */}
       <motion.div 
         className="absolute inset-0 opacity-[0.03] pointer-events-none -z-10"
@@ -137,7 +137,7 @@ export function Process() {
               >
                 {/* Phase number */}
                 <motion.div 
-                  className="flex-none z-10"
+                  className="flex-none z-10 md:sticky md:top-28 md:self-start"
                   variants={{
                     hidden: { scale: 0.8, opacity: 0 },
                     visible: { 

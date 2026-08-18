@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useAnimation } from "framer-motion";
+import { useAnimation, useReducedMotion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 
 interface UseScrollAnimationProps {
@@ -18,12 +18,15 @@ export function useScrollAnimation({
     threshold,
     triggerOnce,
   });
+  const shouldReduce = useReducedMotion();
 
   useEffect(() => {
-    if (inView) {
+    if (shouldReduce) {
+      controls.set("visible");
+    } else if (inView) {
       controls.start("visible");
     }
-  }, [controls, inView]);
+  }, [controls, inView, shouldReduce]);
 
   return { ref, controls, inView };
 }
