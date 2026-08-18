@@ -1,11 +1,13 @@
 'use client'
 
 import {
+  addDays,
   addMonths,
   eachDayOfInterval,
   endOfMonth,
   endOfWeek,
   format,
+  isAfter,
   isBefore,
   isSameDay,
   isSameMonth,
@@ -30,6 +32,7 @@ interface BookingCalendarProps {
   checkIn?: string
   checkOut?: string
   months?: number
+  onDatesChange?: (dates: { checkIn?: string; checkOut?: string }) => void
 }
 
 const weekDays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
@@ -40,12 +43,45 @@ export function BookingCalendar({
   checkIn,
   checkOut,
   months = 2,
+  onDatesChange,
 }: BookingCalendarProps) {
   const today = startOfToday()
   const checkInDate = parseDate(checkIn)
   const checkOutDate = parseDate(checkOut)
 
   const unavailable = new Set([...blockedDates, ...holdDates])
+
+  const handleDayClick = (day: Date) => {
+    if (!onDatesChange) return
+    const iso = toDateString(day)
+
+    if (!checkInDate) {
+      onDatesChange({ checkIn: iso, checkOut: '' })
+      return
+    }
+
+    if (checkOutDate || isBefore(day, checkInDate)) {
+      onDatesChange({ checkIn: iso, checkOut: '' })
+      return
+    }
+
+    if (isSameDay(day, checkInDate)) {
+      onDatesChange({ checkIn: '', checkOut: '' })
+      return
+    }
+
+    const nights = eachDayOfInterval({
+      start: checkInDate,
+      end: addDays(day, -1),
+    })
+
+    if (nights.some((d) => unavailable.has(toDateString(d)))) {
+      onDatesChange({ checkIn: iso, checkOut: '' })
+      return
+    }
+
+    onDatesChange({ checkIn: toDateString(checkInDate), checkOut: iso })
+  }
 
   const monthStarts = Array.from({ length: months }, (_, i) =>
     startOfMonth(addMonths(today, i))
@@ -88,6 +124,7 @@ export function BookingCalendar({
                     type="button"
                     disabled={!isCurrentMonth || isUnavailable}
                     aria-label={format(day, 'yyyy-MM-dd')}
+                    onClick={() => handleDayClick(day)}
                     className={
                       'flex aspect-square items-center justify-center rounded-md text-sm font-medium transition-colors ' +
                       (!isCurrentMonth

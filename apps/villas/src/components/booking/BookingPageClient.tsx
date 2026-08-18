@@ -126,6 +126,10 @@ export default function BookingPageClient({ slug, success, token }: BookingPageC
               holdDates={holdDates}
               checkIn={checkIn}
               checkOut={checkOut}
+              onDatesChange={({ checkIn: inDate, checkOut: outDate }) => {
+                setCheckIn(inDate ?? '')
+                setCheckOut(outDate ?? '')
+              }}
             />
           </div>
 
