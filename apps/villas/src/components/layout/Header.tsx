@@ -58,6 +58,7 @@ function CloseIcon({ className }: { className?: string }) {
 
 export function Header({ isAdmin }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false)
+  const isScrolled = true
 
   useEffect(() => {
     if (menuOpen) {
@@ -82,12 +83,27 @@ export function Header({ isAdmin }: HeaderProps) {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-gunmetal/10 bg-alabaster/90 backdrop-blur-sm">
+      <header
+        className={cn(
+          'fixed left-0 right-0 top-0 z-50 transition-[height] duration-300',
+          isScrolled ? 'h-24' : 'h-16',
+        )}
+      >
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-          <nav className="flex items-center justify-between py-4">
+          <nav
+            className={cn(
+              'mx-auto flex w-full items-center justify-between px-4 transition-all duration-300',
+              isScrolled
+                ? 'mt-6 h-14 max-w-5xl rounded-full border border-white/20 bg-white/70 px-4 shadow-lg backdrop-blur-xl backdrop-saturate-150'
+                : 'h-16',
+            )}
+          >
             <Link
               href="/"
-              className="group flex items-baseline gap-2 font-serif text-2xl text-gunmetal"
+              className={cn(
+                'group flex items-baseline gap-2 truncate font-serif text-lg transition-colors md:text-xl lg:text-2xl',
+                isScrolled ? 'text-gunmetal' : 'text-alabaster',
+              )}
             >
               <span className="font-semibold">Casa Bombora</span>
               <span className="text-blue-green transition-colors group-hover:text-blue-green/80">
@@ -96,12 +112,22 @@ export function Header({ isAdmin }: HeaderProps) {
             </Link>
 
             {/* Desktop nav */}
-            <ul className="hidden items-center gap-6 text-sm font-medium text-gunmetal/80 md:flex">
+            <ul
+              className={cn(
+                'hidden items-center gap-6 text-sm font-medium md:flex',
+                isScrolled ? 'text-gunmetal/80' : 'text-alabaster/90',
+              )}
+            >
               {navLinks.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="transition-colors hover:text-blue-green"
+                    className={cn(
+                      'transition-colors',
+                      isScrolled
+                        ? 'hover:text-blue-green'
+                        : 'hover:text-blue-green',
+                    )}
                   >
                     {link.name}
                   </Link>
@@ -124,7 +150,10 @@ export function Header({ isAdmin }: HeaderProps) {
               type="button"
               onClick={() => setMenuOpen(!menuOpen)}
               aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-              className="relative p-2 text-gunmetal md:hidden"
+              className={cn(
+                'relative p-2 md:hidden',
+                isScrolled ? 'text-gunmetal' : 'text-alabaster',
+              )}
             >
               <div
                 className={cn(

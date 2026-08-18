@@ -56,7 +56,7 @@ export default async function AdminPage() {
       : 0
 
   return (
-    <Container size="large" className="py-10 md:py-16">
+    <Container size="large" className="pt-28 pb-10 md:pt-32 md:pb-16">
       <div className="mb-2 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="mb-2 text-gunmetal">Admin</h1>

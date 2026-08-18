@@ -4,7 +4,7 @@ import { Container } from '@/components/ui/Container'
 export default function ComingSoonPage() {
   return (
     <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center bg-gunmetal text-alabaster">
-      <Container size="large" className="py-20 text-center">
+      <Container size="large" className="pt-32 pb-20 text-center">
         <p className="mb-4 font-serif text-lg text-lion">Casa Bombora Villas</p>
         <h1 className="mb-6 max-w-3xl text-alabaster">
           Something beautiful is on its way

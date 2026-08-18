@@ -21,23 +21,32 @@ const reasons = [
 
 export function WhyBookDirect() {
   return (
-    <section className="bg-alabaster py-16 md:py-24">
+    <section className="bg-gunmetal py-20 text-alabaster md:py-28">
       <Container>
-        <div className="mb-10 text-center">
-          <h2 className="mb-3 text-gunmetal">Why book direct?</h2>
-          <p className="mx-auto max-w-2xl text-gunmetal/70">
+        <div className="mb-14 text-center">
+          <p className="mb-3 font-sans text-sm uppercase tracking-widest text-blue-green opacity-0 animate-fade-up">
+            Why us
+          </p>
+          <h2 className="mb-4 opacity-0 animate-fade-up" style={{ animationDelay: '0.1s' }}>
+            Why book direct?
+          </h2>
+          <p className="mx-auto max-w-2xl text-alabaster/70 opacity-0 animate-fade-up" style={{ animationDelay: '0.2s' }}>
             Skip the noise of the big platforms. Booking here is simpler, faster, and fully supported.
           </p>
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {reasons.map((reason) => (
+          {reasons.map((reason, index) => (
             <div
               key={reason.title}
-              className="rounded-lg border border-gunmetal/10 bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
+              className="group rounded-2xl border border-alabaster/10 bg-white/5 p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:bg-white/10 opacity-0 animate-fade-up"
+              style={{ animationDelay: `${0.3 + index * 0.1}s` }}
             >
-              <h3 className="mb-2 font-serif text-lg text-gunmetal">{reason.title}</h3>
-              <p className="mb-0 text-sm leading-relaxed text-gunmetal/70">{reason.body}</p>
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-blue-green/20 font-serif text-lg text-blue-green transition-transform duration-300 group-hover:scale-110">
+                {String(index + 1).padStart(2, '0')}
+              </div>
+              <h3 className="mb-2 font-serif text-lg text-alabaster">{reason.title}</h3>
+              <p className="mb-0 text-sm leading-relaxed text-alabaster/70">{reason.body}</p>
             </div>
           ))}
         </div>

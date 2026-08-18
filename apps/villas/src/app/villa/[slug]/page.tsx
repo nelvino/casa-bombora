@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import Image from 'next/image'
 import Link from 'next/link'
 import { VILLAS } from '@/lib/data/villas'
 import { Container } from '@/components/ui/Container'
@@ -118,43 +117,52 @@ export default function VillaPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Container size="large" className="py-10 md:py-16">
+      <Container size="large" className="pt-28 pb-10 md:pt-32 md:pb-16">
         <div className="mb-8">
           <BackLink href="/" label="Villas" />
         </div>
 
-        <div className="grid gap-10 lg:grid-cols-[1fr,380px]">
-          <article className="space-y-10">
+        <div className="grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[minmax(0,1fr),380px]">
+          <div className="order-1 min-w-0 space-y-6 lg:order-1">
             <header>
               <p className="mb-1 font-serif text-lion">{villa.location}</p>
-              <h1 className="mb-2 text-gunmetal">{villa.name}</h1>
-              <p className="font-sans text-xl text-blue-green">{villa.tagline}</p>
+              <h1 className="mb-2 text-3xl text-gunmetal md:text-4xl">{villa.name}</h1>
+              <p className="font-sans text-lg text-blue-green md:text-xl">{villa.tagline}</p>
             </header>
 
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-gunmetal/5">
-              {villa.image ? (
-                <Image
-                  src={villa.image}
-                    alt={villa.name}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 1024px) 100vw, 66vw"
-                    unoptimized={villa.image.startsWith('http')}
-                  />
-              ) : (
-                <div className="flex h-full w-full items-center justify-center bg-lion/20">
-                  <span className="rounded-full bg-white/70 px-3 py-1 text-xs font-medium uppercase tracking-wide text-gunmetal/70">
-                    Photo coming soon
-                  </span>
-                </div>
-              )}
+            <Gallery images={[villa.image, ...villa.galleryImages]} alt={villa.name} />
+          </div>
+
+          <aside className="order-2 h-fit min-w-0 lg:sticky lg:top-32">
+            <div className="rounded-2xl border border-gunmetal/10 bg-white p-5 shadow-lg sm:p-6">
+              <p className="mb-1 font-serif text-lion">{villa.location}</p>
+              <h2 className="mb-3 text-xl text-gunmetal sm:text-2xl">{villa.name}</h2>
+
+              <div className="mb-5 flex flex-wrap gap-2">
+                <Badge>{villa.bedrooms} bedrooms</Badge>
+                <Badge>{villa.bathrooms} bathrooms</Badge>
+                <Badge>Up to {villa.maxGuests} guests</Badge>
+              </div>
+
+              <p className="mb-5 font-serif text-2xl text-gunmetal sm:text-3xl">
+                {formatCents(villa.pricePerNight)}{' '}
+                <span className="text-sm font-sans text-gunmetal/60 sm:text-base">/ night</span>
+              </p>
+
+              <Button asChild size="lg" className="w-full rounded-full bg-blue-green text-alabaster transition-transform duration-200 hover:scale-[1.02]">
+                <Link href={`/villa/${villa.slug}/book`}>Book now</Link>
+              </Button>
+
+              <p className="mt-4 text-center text-xs text-gunmetal/50">
+                Best price guaranteed. No hidden fees.
+              </p>
             </div>
+          </aside>
 
-            <Gallery images={villa.galleryImages} alt={villa.name} />
-
+          <div className="order-3 min-w-0 space-y-8 lg:col-span-1">
             <section>
               <h2 className="mb-4 font-serif text-2xl text-gunmetal">About this villa</h2>
-              <p className="mb-0 text-gunmetal/80 leading-relaxed">{villa.description}</p>
+              <p className="mb-0 leading-relaxed text-gunmetal/80">{villa.description}</p>
             </section>
 
             <section>
@@ -201,33 +209,7 @@ export default function VillaPage({ params }: Props) {
                 ))}
               </div>
             </section>
-          </article>
-
-          <aside className="h-fit lg:sticky lg:top-8">
-            <div className="rounded-2xl border border-gunmetal/10 bg-white p-6 shadow-sm">
-              <p className="mb-1 font-serif text-lion">{villa.location}</p>
-              <h2 className="mb-4 text-2xl text-gunmetal">{villa.name}</h2>
-
-              <div className="mb-6 flex flex-wrap gap-2">
-                <Badge>{villa.bedrooms} bedrooms</Badge>
-                <Badge>{villa.bathrooms} bathrooms</Badge>
-                <Badge>Up to {villa.maxGuests} guests</Badge>
-              </div>
-
-              <p className="mb-6 font-serif text-3xl text-gunmetal">
-                {formatCents(villa.pricePerNight)}{' '}
-                <span className="text-base font-sans text-gunmetal/60">/ night</span>
-              </p>
-
-              <Button asChild size="lg" className="w-full">
-                <Link href={`/villa/${villa.slug}/book`}>Book now</Link>
-              </Button>
-
-              <p className="mt-4 text-center text-xs text-gunmetal/50">
-                Best price guaranteed. No hidden fees.
-              </p>
-            </div>
-          </aside>
+          </div>
         </div>
       </Container>
     </>

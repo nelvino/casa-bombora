@@ -78,7 +78,7 @@ export default function DemoPayPage({
   params: { slug: string }
 }) {
   return (
-    <Container size="large" className="py-16">
+    <Container size="large" className="pt-32 pb-16">
       <h1 className="mb-8 text-gunmetal">Demo payment</h1>
       <Suspense
         fallback={<p className="text-gunmetal/60">Loading payment form...</p>}

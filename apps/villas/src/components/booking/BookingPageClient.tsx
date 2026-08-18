@@ -96,14 +96,14 @@ export default function BookingPageClient({ slug, success, token }: BookingPageC
   if (!villa) notFound()
 
   return (
-    <Container size="large" className="py-10 md:py-16">
+    <Container size="large" className="pt-28 pb-10 md:pt-32 md:pb-16">
       <div className="mb-6">
         <BackLink href={`/villa/${slug}`} label="Villa details" />
       </div>
 
       <div className="mb-8">
         <p className="mb-1 font-serif text-lion">{villa.location}</p>
-        <h1 className="mb-2 text-gunmetal">{villa.name}</h1>
+        <h1 className="mb-2 text-3xl text-gunmetal md:text-4xl">{villa.name}</h1>
         <p className="font-sans text-lg text-gunmetal/70">
           From {formatCents(villa.pricePerNight)} / night
         </p>
@@ -117,8 +117,8 @@ export default function BookingPageClient({ slug, success, token }: BookingPageC
         </div>
       )}
 
-      <div className="grid gap-10 lg:grid-cols-[1fr,420px]">
-        <section className="space-y-8">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[minmax(0,1fr),420px]">
+        <section className="order-2 min-w-0 space-y-8 lg:order-1">
           <div className="rounded-xl border border-gunmetal/10 bg-white p-4 shadow-sm md:p-6">
             <h2 className="mb-4 font-serif text-2xl text-gunmetal">Availability</h2>
             <BookingCalendar
@@ -161,13 +161,13 @@ export default function BookingPageClient({ slug, success, token }: BookingPageC
           )}
         </section>
 
-        <section className="lg:sticky lg:top-8 h-fit space-y-6">
+        <section className="order-1 h-fit min-w-0 space-y-6 lg:order-2 lg:sticky lg:top-32">
           <form action={holdAction} className="rounded-xl border border-gunmetal/10 bg-white p-6 shadow-sm">
             <input type="hidden" name="slug" value={slug} />
 
             <h2 className="mb-5 font-serif text-2xl text-gunmetal">Book your stay</h2>
 
-            <div className="mb-4 grid grid-cols-2 gap-4">
+            <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
               <label className="block text-sm text-gunmetal/80">
                 Check in
                 <input

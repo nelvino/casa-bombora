@@ -48,6 +48,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/',
   },
+  icons: {
+    icon: '/favicon.ico',
+  },
 }
 
 export default async function RootLayout({
