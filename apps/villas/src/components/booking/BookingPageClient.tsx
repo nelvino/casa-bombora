@@ -118,7 +118,7 @@ export default function BookingPageClient({ slug, success, token }: BookingPageC
       )}
 
       <div className="grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[minmax(0,1fr),420px]">
-        <section className="order-2 min-w-0 space-y-8 lg:order-1">
+        <section className="min-w-0 space-y-8">
           <div className="rounded-xl border border-gunmetal/10 bg-white p-4 shadow-sm md:p-6">
             <h2 className="mb-4 font-serif text-2xl text-gunmetal">Availability</h2>
             <BookingCalendar
@@ -161,7 +161,7 @@ export default function BookingPageClient({ slug, success, token }: BookingPageC
           )}
         </section>
 
-        <section className="order-1 h-fit min-w-0 space-y-6 lg:order-2 lg:sticky lg:top-32">
+        <section className="h-fit min-w-0 space-y-6 lg:sticky lg:top-32">
           <form action={holdAction} className="rounded-xl border border-gunmetal/10 bg-white p-6 shadow-sm">
             <input type="hidden" name="slug" value={slug} />
 

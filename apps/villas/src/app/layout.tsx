@@ -58,7 +58,8 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const admin = await isAdmin()
+  const siteLive = process.env.SITE_LIVE !== 'false'
+  const admin = siteLive ? await isAdmin() : false
 
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
