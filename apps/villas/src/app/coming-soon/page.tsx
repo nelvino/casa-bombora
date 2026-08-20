@@ -21,7 +21,7 @@ export default function ComingSoonPage() {
             Email us
           </Link>
           <Link
-            href="https://wa.me/61415164208"
+            href="https://api.whatsapp.com/send?phone=61415164208"
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-lg border border-alabaster/30 px-8 py-3 font-sans font-medium text-alabaster transition-colors hover:bg-alabaster/10"

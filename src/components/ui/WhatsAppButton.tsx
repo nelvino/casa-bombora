@@ -17,7 +17,7 @@ export function WhatsAppButton() {
   }, []);
 
   const href =
-    "https://wa.me/61415164208?text=Hi%20Casa%20Bombora%2C%20I%27d%20like%20to%20learn%20more%20about%20investing%20in%20a%20villa.";
+    "https://api.whatsapp.com/send?phone=61415164208&text=Hi%20Casa%20Bombora%2C%20I%27d%20like%20to%20learn%20more%20about%20investing%20in%20a%20villa.";
 
   return (
     <AnimatePresence>
