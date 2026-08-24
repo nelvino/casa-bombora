@@ -3,10 +3,10 @@ import { Container } from '@/components/ui/Container'
 
 export default function ComingSoonPage() {
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center bg-gunmetal text-alabaster">
-      <Container size="large" className="pt-32 pb-20 text-center">
+    <div className="flex min-h-[calc(100vh-6rem)] flex-col items-center justify-center bg-gunmetal px-4 text-alabaster">
+      <Container size="large" className="py-12 text-center sm:py-16">
         <p className="mb-4 font-serif text-lg text-lion">Casa Bombora Villas</p>
-        <h1 className="mb-6 max-w-3xl text-alabaster">
+        <h1 className="mx-auto mb-6 max-w-3xl text-alabaster">
           Something beautiful is on its way
         </h1>
         <p className="mx-auto mb-10 max-w-xl text-lg text-alabaster/80">
