@@ -1,14 +1,19 @@
 import type { Metadata } from 'next'
-import { Inter, Playfair_Display } from 'next/font/google'
+import localFont from 'next/font/local'
 import './globals.css'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { CurrencyProvider } from '@/components/currency/CurrencyProvider'
 import { isAdmin } from '@/lib/auth/session'
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
-const playfair = Playfair_Display({
-  subsets: ['latin'],
+// Self-hosted variable fonts — next/font/google fetches from Google at build
+// time, which makes deploys depend on fonts.gstatic.com being reachable.
+const inter = localFont({
+  src: './fonts/InterVariable.woff2',
+  variable: '--font-inter',
+})
+const playfair = localFont({
+  src: './fonts/PlayfairVariable.woff2',
   variable: '--font-playfair-display',
 })
 
