@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
+import { blurFor } from '@/lib/data/image-blur'
 
 function ChevronLeft({ className }: { className?: string }) {
   return (
@@ -137,9 +138,10 @@ export function Gallery({ images, alt }: GalleryProps) {
             alt={`${alt} hero`}
             fill
             priority
+            placeholder="blur"
+            blurDataURL={blurFor(mainImage)}
             className="object-cover transition-transform duration-700 group-hover:scale-105"
             sizes="(max-width: 1024px) 100vw, 66vw"
-            unoptimized={mainImage.startsWith('http')}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-gunmetal/30 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
           <span className="absolute bottom-4 right-4 rounded-full bg-alabaster/90 px-3 py-1.5 text-xs font-medium text-gunmetal opacity-0 shadow-sm transition-opacity group-hover:opacity-100">
@@ -183,9 +185,10 @@ export function Gallery({ images, alt }: GalleryProps) {
                     src={src}
                     alt={`${alt} photo ${index + 1}`}
                     fill
+                    placeholder="blur"
+                    blurDataURL={blurFor(src)}
                     className="object-cover transition-transform duration-500 group-hover:scale-110"
                     sizes="(max-width: 640px) 40vw, 25vw"
-                    unoptimized={src.startsWith('http')}
                   />
                 </button>
               ))}
@@ -241,7 +244,6 @@ export function Gallery({ images, alt }: GalleryProps) {
               className="object-contain transition-transform duration-500"
               style={{ transform: isZoomed ? 'scale(1.35)' : 'scale(1)' }}
               sizes="(max-width: 1280px) 100vw, 80vw"
-              unoptimized={images[activeIndex].startsWith('http')}
             />
           </div>
 
