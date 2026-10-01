@@ -12,6 +12,11 @@ describe('VILLAS data', () => {
     expect(VILLAS).toHaveLength(2)
   })
 
+  it('prices all villas identically', () => {
+    const prices = new Set(VILLAS.map((v) => v.pricePerNight))
+    expect(prices.size).toBe(1)
+  })
+
   it('has unique slugs', () => {
     const slugs = VILLAS.map((v) => v.slug)
     expect(new Set(slugs).size).toBe(slugs.length)
