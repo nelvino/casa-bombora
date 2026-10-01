@@ -15,7 +15,8 @@ A living document for the `apps/villas` booking microsite. Update it after each 
 - **Styling:** Tailwind CSS + custom color tokens (`gunmetal`, `blue-green`, `lion`, `alabaster`, etc.)
 - **Database:** Supabase PostgreSQL + Prisma ORM
 - **Auth:** Temporary `iron-session` admin login (`ADMIN_USERNAME`, `ADMIN_PASSWORD`, `ADMIN_SESSION_SECRET`); planned migration to Supabase Auth (Google provider) with roles
-- **Payments:** Stripe + demo fallback provider (set `STRIPE_SECRET_KEY` for real Stripe, leave it empty for demo)
+- **Payments:** Pluggable providers — Xendit (IDR invoices, preferred for the PT PMA), Stripe, and a demo fallback. `PAYMENT_PROVIDER` env picks one explicitly; otherwise auto-detects from which keys are set (Xendit > Stripe > demo). `PAYMENTS_ENABLED=true` turns the online "Pay now" step on; when off, guests get an email/WhatsApp enquiry flow with a 72-hour hold.
+- **Currency:** All prices are stored and charged in **IDR** (Indonesian law requires local-currency pricing). The UI shows IDR as the primary price with an approximate USD/AUD conversion via a header switcher (live rates from frankfurter.app with static fallbacks).
 - **Tests:** Vitest
 - **Hosting:** Netlify (separate site from the main `casabombora.com` site)
 
@@ -33,9 +34,13 @@ A living document for the `apps/villas` booking microsite. Update it after each 
 - Admin dashboard with summary cards, bookings/holds tables, and actions: confirm, cancel, mark paid, release hold
 - Live deploy on Netlify at `https://stay.casabombora.com` with `[[plugins]]` Next.js runtime
 - Admin login form backed by encrypted `iron-session` cookie
-- Header and footer with mobile hamburger menu
+- Header and footer with mobile hamburger menu (scroll-aware transparent → pill nav)
 - Responsive design aligned with the Casa Bombora brand
-- Images: Mezzanine renders are used as a temporary swappable photo set for both villas
+- Images: Mezzanine renders are used as a temporary swappable photo set for both villas (byte-identical files for now)
+- Image optimization: Next.js image optimization enabled (Netlify Image CDN), WebP recompressed, blur placeholders
+- Scroll-triggered reveal animations (IntersectionObserver), testimonials + Uluwatu location sections, availability hint on villa cards
+- Booking availability checks confirmed/pending `Booking` records (not just holds + blocked dates)
+- Request-to-book mode via `PAYMENTS_ENABLED` env var (enquiry flow + 72h holds when off)
 - `npm run test:ci` runs type check, tests, and production build in one command
 
 ## 4. How the app works today
@@ -43,12 +48,12 @@ A living document for the `apps/villas` booking microsite. Update it after each 
 ### Guest booking flow
 
 1. Guest browses the home page and clicks a villa.
-2. Villa detail page shows photos, description, and a sticky “Book now” card.
+2. Villa detail page shows photos, description, and a sticky “Book now” card (plus a sticky mobile book bar and a WhatsApp contact link).
 3. Booking page shows a calendar, date pickers, guest info, and promo code.
-4. Guest clicks **Hold dates**. A 15-minute hold is created in the database and the calendar updates.
-5. Guest clicks **Pay now**:
-   - If `STRIPE_SECRET_KEY` is a real key, they go to Stripe Checkout.
-   - Otherwise, they use the demo payment page.
+4. Guest clicks **Hold dates** (labelled “Request these dates” when payments are off). A hold is created in the database and the calendar updates.
+5. Next step depends on `PAYMENTS_ENABLED`:
+   - `PAYMENTS_ENABLED=true`: guest clicks **Pay now** → Stripe Checkout if `STRIPE_SECRET_KEY` is a real key, otherwise the demo payment page. Hold lasts 15 minutes.
+   - `PAYMENTS_ENABLED` unset/false (current live mode): guest is shown a **contact enquiry** panel with prefilled email (`info@casabombora.com`) and WhatsApp buttons containing villa, dates, total, guest details, and hold reference. Hold lasts **72 hours** so the team can confirm and arrange payment manually. The hold still appears in the admin dashboard.
 6. On successful payment, the hold is converted into a booking with status `PENDING`.
 
 ### Admin flow
@@ -72,6 +77,14 @@ ADMIN_PASSWORD=
 ADMIN_SESSION_SECRET=
 SITE_LIVE=true
 # set to false in production to show a coming-soon page
+PAYMENTS_ENABLED=false
+# set to true once live payment keys are configured; when false the booking
+# flow shows a contact-enquiry step (email + WhatsApp) instead of Pay now
+PAYMENT_PROVIDER=
+# optional: 'xendit' | 'stripe' | 'demo'. When unset, auto-detects:
+# XENDIT_SECRET_KEY → Xendit, STRIPE_SECRET_KEY → Stripe, neither → demo
+XENDIT_SECRET_KEY=
+XENDIT_CALLBACK_TOKEN=
 ```
 
 ### Coming-soon mode
@@ -86,7 +99,9 @@ SITE_LIVE=true
 
 - [x] Deploy `stay.casabombora.com` on Netlify and configure DNS / CNAME.
 - [~] Set all production environment variables in Netlify (missing: `ADMIN_SESSION_SECRET` and live Stripe keys if needed).
-- [ ] Switch Stripe from test mode to live mode and test a real payment.
+- [ ] Create a Xendit account for PT PMA Casa Bombora (docs needed: NIB, corporate NPWP, Akta Pendirian + SK Kemenkumham, director ID, Permata bank account in the company name). Verification ~14 working days.
+- [ ] Set `XENDIT_SECRET_KEY`, `XENDIT_CALLBACK_TOKEN`, and `PAYMENTS_ENABLED=true` in Netlify; register the webhook URL `https://stay.casabombora.com/api/webhooks/payment` in the Xendit dashboard.
+- [ ] (Optional later) Stripe Indonesia is invite-only ("Preview") — keep `stripe.ts` for when/if that opens up.
 - [ ] Verify webhook endpoint and payment success flow in production.
 - [ ] Replace the temporary `iron-session` admin login with **Supabase Auth + Google** and role-based access.
 - [ ] Replace temporary Mezzanine photos with real Villa Teduh and Villa Langit photos.
