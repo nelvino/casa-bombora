@@ -8,7 +8,7 @@ export interface Villa {
   bedrooms: number
   bathrooms: number
   maxGuests: number
-  pricePerNight: number
+  pricePerNight: number // IDR rupiah (canonical; guests are billed in IDR)
   image: string
   galleryImages: string[]
   amenities: string[]
@@ -18,30 +18,33 @@ export const VILLAS: Villa[] = [
   {
     slug: 'villa-teduh',
     name: 'Villa Teduh',
-    tagline: 'A cool, shaded retreat from the Bali heat',
+    tagline: 'A cool, shaded retreat in quiet Uluwatu',
     shortDescription:
-      'A light-filled one-bedroom villa with private pool, garden views, and modern Balinese design.',
+      'A light-filled one-bedroom loft villa with private pool, outdoor stone bath, and open-plan living.',
     description:
-      'Villa Teduh offers an open-plan living space, king-size suite, fully equipped kitchen, and a private terrace overlooking the Bukit Peninsula. Perfect for couples seeking a cool, private escape from the heat of Bali in Uluwatu.',
-    location: 'Uluwatu, Bali',
+      'Villa Teduh pairs a soaring mezzanine bedroom with an open-plan living room and kitchen that flows straight onto your private pool deck. Rinse off the beach in the outdoor stone bath, then cool down in air-conditioned comfort. Set on a peaceful lane in Pecatu, it is made for couples who want a calm base minutes from Uluwatu\u2019s surf breaks and clifftop sunsets.',
+    location: 'Pecatu, Uluwatu, Bali',
     bedrooms: 1,
     bathrooms: 1,
     maxGuests: 2,
-    pricePerNight: 18000,
+    pricePerNight: 2900000,
     image: '/images/villa-teduh/hero.webp',
     galleryImages: [
+      '/images/villa-teduh/facade.webp',
+      '/images/villa-teduh/pool-aerial.webp',
       '/images/villa-teduh/living.webp',
+      '/images/villa-teduh/bedroom-mezzanine.webp',
       '/images/villa-teduh/bedroom.webp',
       '/images/villa-teduh/bathroom.webp',
       '/images/villa-teduh/terrace.webp',
     ],
     amenities: [
       'Private pool',
-      'Garden views',
-      'King-size bed',
+      'Outdoor stone bath',
+      'Mezzanine king bedroom',
+      'Open living & kitchen',
       'Air conditioning',
-      'Kitchenette',
-      'Wi-Fi',
+      'Fast Wi-Fi',
       'Daily cleaning',
       'Free parking',
     ],
@@ -49,30 +52,33 @@ export const VILLAS: Villa[] = [
   {
     slug: 'villa-langit',
     name: 'Villa Langit',
-    tagline: 'Open, airy living beneath the Bali sky',
+    tagline: 'Open, airy living on a quiet Uluwatu lane',
     shortDescription:
-      'A spacious two-bedroom villa with private pool, tropical garden, and an open, airy feel.',
+      'A spacious one-bedroom villa with private pool, outdoor stone bath, and an airy mezzanine lounge.',
     description:
-      'Villa Langit features two elegant bedrooms, ensuite bathrooms, an airy mezzanine lounge, and a private plunge pool. Set in a quiet corner of Uluwatu, it is ideal for friends or families looking for an open, island-feeling Bali escape.',
-    location: 'Uluwatu, Bali',
-    bedrooms: 2,
-    bathrooms: 2,
-    maxGuests: 4,
-    pricePerNight: 26000,
+      'Villa Langit pairs a soaring mezzanine bedroom with an airy open-plan living room and kitchen that opens onto your private pool. An outdoor stone bath sits in the garden for slow evenings. On a peaceful lane in Pecatu, it suits couples who want space, sky, and easy drives to every Uluwatu beach.',
+    location: 'Pecatu, Uluwatu, Bali',
+    bedrooms: 1,
+    bathrooms: 1,
+    maxGuests: 2,
+    pricePerNight: 2900000,
     image: '/images/villa-langit/hero.webp',
     galleryImages: [
+      '/images/villa-langit/facade.webp',
+      '/images/villa-langit/pool-aerial.webp',
       '/images/villa-langit/living.webp',
+      '/images/villa-langit/bedroom-mezzanine.webp',
       '/images/villa-langit/bedroom.webp',
       '/images/villa-langit/bathroom.webp',
       '/images/villa-langit/terrace.webp',
     ],
     amenities: [
       'Private pool',
-      'Two bedrooms',
-      'Tropical garden',
+      'Outdoor stone bath',
+      'Mezzanine king bedroom',
+      'Open living & kitchen',
       'Air conditioning',
-      'Full kitchen',
-      'Wi-Fi',
+      'Fast Wi-Fi',
       'Daily cleaning',
       'Free parking',
     ],
