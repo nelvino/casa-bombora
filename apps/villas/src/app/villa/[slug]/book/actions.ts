@@ -225,7 +225,8 @@ export async function createBookingHold(
   }
 
   // Fire notification emails — sendEmail never throws, and a mail outage must
-  // never break a booking.
+  // never break a booking. Sent in parallel; on serverless the awaited
+  // Promise.all guarantees delivery before the function exits.
   const emailData = {
     guestName: guestName ?? 'Guest',
     guestEmail: guestEmail ?? '',
@@ -236,10 +237,12 @@ export async function createBookingHold(
     totalIdr: total,
     reference: token,
   }
-  if (guestEmail) {
-    await sendEmail({ to: guestEmail, ...bookingRequestGuest(emailData) })
-  }
-  await sendEmail({ to: adminEmail(), ...bookingRequestAdmin(emailData) })
+  await Promise.all([
+    guestEmail
+      ? sendEmail({ to: guestEmail, ...bookingRequestGuest(emailData) })
+      : Promise.resolve(false),
+    sendEmail({ to: adminEmail(), ...bookingRequestAdmin(emailData) }),
+  ])
 
   revalidatePath(`/villa/${slug}/book`)
 

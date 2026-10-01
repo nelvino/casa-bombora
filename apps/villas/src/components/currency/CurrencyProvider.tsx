@@ -32,7 +32,7 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
     async function loadRates() {
       try {
         const res = await fetch(
-          'https://api.frankfurter.app/latest?from=IDR&to=USD,AUD'
+          'https://api.frankfurter.dev/v1/latest?base=IDR&symbols=USD,AUD'
         )
         const data = await res.json()
         const usd = data?.rates?.USD

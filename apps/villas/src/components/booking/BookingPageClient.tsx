@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback, useMemo } from 'react'
+import { useEffect, useRef, useState, useCallback, useMemo } from 'react'
 import { useFormState, useFormStatus } from 'react-dom'
 import { notFound } from 'next/navigation'
 import { addDays, addMonths, differenceInCalendarDays, format, parseISO } from 'date-fns'
@@ -26,15 +26,17 @@ function formatInputDate(d: Date) {
 
 function SubmitButton({
   children,
+  pendingLabel = 'Working…',
   disabled,
 }: {
   children: React.ReactNode
+  pendingLabel?: string
   disabled?: boolean
 }) {
   const { pending } = useFormStatus()
   return (
     <Button type="submit" disabled={pending || disabled}>
-      {children}
+      {pending ? pendingLabel : children}
     </Button>
   )
 }
@@ -69,6 +71,18 @@ export default function BookingPageClient({ slug, success, token, paymentsEnable
     ok: false,
     error: '',
   })
+
+  // When the hold lands, scroll the confirmation into view — otherwise the
+  // success state sits below the fold and the action feels like it did nothing.
+  const confirmationRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (holdState.ok) {
+      confirmationRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+    }
+  }, [holdState.ok])
 
   const loadAvailability = useCallback(async () => {
     const from = formatInputDate(new Date())
@@ -284,7 +298,11 @@ export default function BookingPageClient({ slug, success, token, paymentsEnable
               />
             </label>
 
-            <SubmitButton>
+            <SubmitButton
+              pendingLabel={
+                paymentsEnabled ? 'Checking availability…' : 'Sending request…'
+              }
+            >
               {paymentsEnabled
                 ? 'Check availability / Hold dates'
                 : 'Request these dates'}
@@ -296,14 +314,29 @@ export default function BookingPageClient({ slug, success, token, paymentsEnable
           </form>
 
           {holdState.ok && (
-            <div className="rounded-xl border border-lion bg-white p-6 shadow-sm">
+            <div
+              ref={confirmationRef}
+              className="scroll-mt-28 rounded-xl border border-blue-green/40 bg-white p-6 shadow-md"
+            >
               <div className="mb-4">
+                <p className="mb-1 flex items-center gap-2 font-serif text-xl text-blue-green">
+                  <span aria-hidden>✓</span>
+                  {paymentsEnabled
+                    ? 'Dates held — complete your payment'
+                    : 'Request received — your dates are on hold'}
+                </p>
                 <p className="mb-2 font-serif text-xl text-gunmetal">
                   {holdState.nights ?? 0} nights &middot; Total{' '}
                   <Price amountIdr={holdState.totalIdr ?? 0} />
                 </p>
                 {(holdState.discountPercent ?? 0) > 0 && (
                   <Badge variant="blue">Promo applied: {holdState.discountPercent}% off</Badge>
+                )}
+                {!paymentsEnabled && (
+                  <p className="mt-2 text-sm text-gunmetal/70">
+                    We emailed you a confirmation — now send us the enquiry so we
+                    can lock in your stay:
+                  </p>
                 )}
               </div>
 
@@ -315,7 +348,9 @@ export default function BookingPageClient({ slug, success, token, paymentsEnable
                     <input type="hidden" name="amount" value={holdState.totalIdr ?? 0} />
                     <input type="hidden" name="guestName" value={holdState.guestName || guestName} />
                     <input type="hidden" name="guestEmail" value={holdState.guestEmail || guestEmail} />
-                    <SubmitButton>Pay now</SubmitButton>
+                    <SubmitButton pendingLabel="Redirecting to checkout…">
+                      Pay now
+                    </SubmitButton>
                   </form>
 
                   {paymentState.error && (
