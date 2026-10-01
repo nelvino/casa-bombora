@@ -3,6 +3,7 @@ import { Inter, Playfair_Display } from 'next/font/google'
 import './globals.css'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { CurrencyProvider } from '@/components/currency/CurrencyProvider'
 import { isAdmin } from '@/lib/auth/session'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
@@ -65,9 +66,11 @@ export default async function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <body className="flex min-h-screen flex-col font-sans">
-        <Header isAdmin={admin} />
-        <main className="flex-1">{children}</main>
-        <Footer isAdmin={admin} />
+        <CurrencyProvider>
+          <Header isAdmin={admin} />
+          <main className="flex-1">{children}</main>
+          <Footer isAdmin={admin} />
+        </CurrencyProvider>
       </body>
     </html>
   )

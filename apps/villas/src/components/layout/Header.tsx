@@ -2,11 +2,13 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils/cn'
+import { CurrencySwitcher } from '@/components/currency/CurrencySwitcher'
 
 const navLinks = [
-  { name: 'Villas', href: '/#villas' },
   { name: 'Home', href: '/' },
+  { name: 'Villas', href: '/#villas' },
 ]
 
 interface HeaderProps {
@@ -58,7 +60,20 @@ function CloseIcon({ className }: { className?: string }) {
 
 export function Header({ isAdmin }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false)
-  const isScrolled = true
+  const pathname = usePathname()
+  const hasDarkHero = pathname === '/'
+  const [isScrolled, setIsScrolled] = useState(!hasDarkHero)
+
+  useEffect(() => {
+    if (!hasDarkHero) {
+      setIsScrolled(true)
+      return
+    }
+    const onScroll = () => setIsScrolled(window.scrollY > 24)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [hasDarkHero])
 
   useEffect(() => {
     if (menuOpen) {
@@ -143,6 +158,9 @@ export function Header({ isAdmin }: HeaderProps) {
                   </Link>
                 </li>
               )}
+              <li className="hidden lg:block">
+                <CurrencySwitcher dark={!isScrolled} />
+              </li>
             </ul>
 
             {/* Mobile menu button */}
@@ -230,10 +248,11 @@ export function Header({ isAdmin }: HeaderProps) {
             )}
           </nav>
 
-          <div className="mt-auto">
+          <div className="mt-auto flex items-center justify-between gap-3">
             <p className="text-sm text-gunmetal/60">
               Book private villas in Uluwatu, Bali.
             </p>
+            <CurrencySwitcher />
           </div>
         </div>
       </aside>

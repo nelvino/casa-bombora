@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Container } from '@/components/ui/Container'
+import { CONTACT_EMAIL, whatsappLink } from '@/lib/site'
 
 export default function ComingSoonPage() {
   return (
@@ -15,13 +16,15 @@ export default function ComingSoonPage() {
         </p>
         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
           <Link
-            href="mailto:info@casabombora.com"
+            href={`mailto:${CONTACT_EMAIL}`}
             className="rounded-lg bg-blue-green px-8 py-3 font-sans font-medium text-alabaster transition-colors hover:bg-blue-green/90"
           >
             Email us
           </Link>
           <Link
-            href="https://api.whatsapp.com/send?phone=61415164208"
+            href={whatsappLink(
+              'Hi Casa Bombora! I would like to enquire about a stay at Villa Teduh or Villa Langit.'
+            )}
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-lg border border-alabaster/30 px-8 py-3 font-sans font-medium text-alabaster transition-colors hover:bg-alabaster/10"
