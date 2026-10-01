@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { VILLAS } from '@/lib/data/villas'
+import { paymentsEnabled } from '@/lib/payments'
 import BookingPageClient from '@/components/booking/BookingPageClient'
 
 interface Props {
@@ -50,6 +51,7 @@ export default function BookPage({ params, searchParams }: Props) {
       slug={params.slug}
       success={searchParams.success}
       token={searchParams.token}
+      paymentsEnabled={paymentsEnabled()}
     />
   )
 }

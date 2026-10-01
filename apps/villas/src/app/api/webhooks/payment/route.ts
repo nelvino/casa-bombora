@@ -1,22 +1,31 @@
 import { headers } from 'next/headers'
 import { convertHoldToBooking } from '@/lib/booking/db'
-import { getPaymentProvider } from '@/lib/payments'
+import { stripeProvider } from '@/lib/payments/stripe'
+import { xenditProvider } from '@/lib/payments/xendit'
 
 export async function POST(req: Request) {
-  const isDemo = !process.env.STRIPE_SECRET_KEY
-
-  if (isDemo) {
-    return Response.json({ ok: true })
-  }
-
   const payload = await req.text()
-  const signature = headers().get('stripe-signature') ?? ''
-  const provider = getPaymentProvider()
+  const hdrs = headers()
+  const callbackToken = hdrs.get('x-callback-token')
+  const stripeSignature = hdrs.get('stripe-signature')
 
-  const result = await provider.verifyWebhook(payload, signature)
+  // Route by the signature header each provider sends.
+  const result = callbackToken
+    ? await xenditProvider.verifyWebhook(payload, callbackToken)
+    : stripeSignature
+      ? await stripeProvider.verifyWebhook(payload, stripeSignature)
+      : // No signature headers: only acknowledge in demo mode (no provider keys).
+        !process.env.XENDIT_SECRET_KEY && !process.env.STRIPE_SECRET_KEY
+        ? { bookingId: 'demo', status: 'paid' }
+        : null
 
   if (!result || result.status !== 'paid') {
     return new Response('Invalid webhook payload', { status: 400 })
+  }
+
+  // Demo-mode acknowledgement path — no real hold to convert.
+  if (result.bookingId === 'demo') {
+    return Response.json({ ok: true })
   }
 
   try {

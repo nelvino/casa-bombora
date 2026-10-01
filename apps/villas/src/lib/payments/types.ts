@@ -19,11 +19,12 @@ export interface WebhookVerificationResult {
 }
 
 export interface PaymentProvider {
+  // amountIdr is the canonical charge in whole Indonesian rupiah. Providers
+  // that can't charge IDR convert for display/charging on their side.
   createSession(options: {
     villa: PaymentProviderVilla
     booking: PaymentProviderBooking
-    amount: number
-    currency: string
+    amountIdr: number
     successUrl: string
     cancelUrl: string
   }): Promise<{ sessionId: string; url: string }>

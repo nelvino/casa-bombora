@@ -1,5 +1,6 @@
 import Stripe from 'stripe'
 import type { PaymentProvider } from './types'
+import { FALLBACK_IDR_RATES } from '@/lib/currency'
 
 const secretKey = process.env.STRIPE_SECRET_KEY
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
@@ -10,8 +11,7 @@ export const stripeProvider: PaymentProvider = {
   async createSession({
     villa,
     booking,
-    amount,
-    currency,
+    amountIdr,
     successUrl,
     cancelUrl,
   }) {
@@ -19,13 +19,18 @@ export const stripeProvider: PaymentProvider = {
       throw new Error('Stripe is not configured')
     }
 
+    // Stripe accounts outside Indonesia can't charge IDR, so the IDR total is
+    // converted to approximate USD cents. Once a Stripe Indonesia account is
+    // available, charge 'idr' with unit_amount = amountIdr * 100 (sen).
+    const unitAmount = Math.round((amountIdr / FALLBACK_IDR_RATES.USD) * 100)
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
         {
           price_data: {
-            currency,
-            unit_amount: amount,
+            currency: 'usd',
+            unit_amount: unitAmount,
             product_data: {
               name: villa.name,
             },
@@ -34,7 +39,7 @@ export const stripeProvider: PaymentProvider = {
         },
       ],
       mode: 'payment',
-      client_reference_id: booking.id,
+      client_reference_id: booking.token ?? booking.id,
       success_url: successUrl,
       cancel_url: cancelUrl,
       metadata: {

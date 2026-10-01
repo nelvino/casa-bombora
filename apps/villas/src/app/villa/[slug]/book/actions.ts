@@ -16,10 +16,17 @@ import {
   createHold,
   validatePromoCode,
   getActiveHolds,
+  getBookedDates,
   convertHoldToBooking,
 } from '@/lib/booking/db'
 import { generateNights } from '@/lib/booking/availability'
-import { getPaymentProvider } from '@/lib/payments'
+import { getPaymentProvider, paymentsEnabled } from '@/lib/payments'
+import { demoProvider } from '@/lib/payments/demo'
+import { sendEmail, adminEmail } from '@/lib/email/send'
+import { bookingRequestGuest, bookingRequestAdmin } from '@/lib/email/templates'
+
+const HOLD_MINUTES = 15
+const ENQUIRY_HOLD_MINUTES = 72 * 60
 
 const dateString = z.coerce.date().refine((d) => !isNaN(d.getTime()), {
   message: 'Invalid date',
@@ -58,8 +65,9 @@ async function getOrCreateVillaBySlug(slug: string) {
     where: { slug },
   })
 
+  const fallback = VILLAS.find((v) => v.slug === slug)
+
   if (!villa) {
-    const fallback = VILLAS.find((v) => v.slug === slug)
     if (!fallback) return null
 
     villa = await prisma.villa.create({
@@ -74,6 +82,13 @@ async function getOrCreateVillaBySlug(slug: string) {
         maxGuests: fallback.maxGuests,
         pricePerNight: fallback.pricePerNight,
       },
+    })
+  } else if (fallback && villa.pricePerNight !== fallback.pricePerNight) {
+    // VILLAS is the source of truth for nightly rates (IDR); keep the DB row
+    // in sync so booking totals reflect current pricing.
+    villa = await prisma.villa.update({
+      where: { id: villa.id },
+      data: { pricePerNight: fallback.pricePerNight },
     })
   }
 
@@ -111,19 +126,33 @@ export async function getAvailability(
     return { ok: false, error: 'Villa not found', blockedDates: [] as string[] }
   }
 
-  const villa = dbVilla ?? fallback!
+  // Static VILLAS data is canonical for display fields (name, price, location).
+  const villa = fallback ?? dbVilla!
   const blocked = (dbVilla?.blockedDates ?? []).map((b) =>
     format(b.date, 'yyyy-MM-dd')
   )
 
-  const holds = dbVilla
-    ? await getActiveHolds(dbVilla.id, fromDate, toDate)
-    : []
+  const [holds, bookings] = dbVilla
+    ? await Promise.all([
+        getActiveHolds(dbVilla.id, fromDate, toDate),
+        getBookedDates(dbVilla.id, fromDate, toDate),
+      ])
+    : [[], []]
+
   const holdDates = holds
     .flatMap((h) => generateNights(h.checkIn, h.checkOut))
     .map((d) => format(d, 'yyyy-MM-dd'))
 
-  return { ok: true, villa, blockedDates: blocked, holdDates }
+  const bookedDates = bookings
+    .flatMap((b) => generateNights(b.checkIn, b.checkOut))
+    .map((d) => format(d, 'yyyy-MM-dd'))
+
+  return {
+    ok: true,
+    villa,
+    blockedDates: [...blocked, ...bookedDates],
+    holdDates,
+  }
 }
 
 export async function createBookingHold(
@@ -143,39 +172,81 @@ export async function createBookingHold(
     return { ok: false, error: 'Check-out must be after check-in' }
   }
 
-  const villa = await getOrCreateVillaBySlug(slug)
-  if (!villa) {
-    return { ok: false, error: 'Villa not found' }
+  let token: string
+  let nights: number
+  let total: number
+  let discountPercent = 0
+  let villaName = ''
+
+  try {
+    const villa = await getOrCreateVillaBySlug(slug)
+    if (!villa) {
+      return { ok: false, error: 'Villa not found' }
+    }
+    villaName = villa.name
+
+    const available = await isDateRangeAvailableForVilla(
+      villa.id,
+      checkIn,
+      checkOut
+    )
+    if (!available) {
+      return { ok: false, error: 'Selected dates are not available' }
+    }
+
+    const promo = promoCode ? await validatePromoCode(promoCode) : null
+    discountPercent = promo?.discountPercent ?? 0
+
+    nights = nightsBetween(checkIn, checkOut)
+    total = calculateTotal(nights, villa.pricePerNight, discountPercent).total
+
+    token = randomUUID()
+    const expiresAt = addMinutes(
+      new Date(),
+      paymentsEnabled() ? HOLD_MINUTES : ENQUIRY_HOLD_MINUTES
+    )
+
+    await createHold({
+      villaId: villa.id,
+      checkIn,
+      checkOut,
+      token,
+      expiresAt,
+      guestName,
+      guestEmail,
+    })
+  } catch (error) {
+    console.error('[booking] hold creation failed:', error)
+    return {
+      ok: false,
+      error:
+        'Something went wrong on our side. Please try again in a moment, or email us at info@casabombora.com.',
+    }
   }
 
-  const available = await isDateRangeAvailableForVilla(villa.id, checkIn, checkOut)
-  if (!available) {
-    return { ok: false, error: 'Selected dates are not available' }
+  // Fire notification emails — sendEmail never throws, and a mail outage must
+  // never break a booking.
+  const emailData = {
+    guestName: guestName ?? 'Guest',
+    guestEmail: guestEmail ?? '',
+    villaName,
+    checkIn: format(checkIn, 'yyyy-MM-dd'),
+    checkOut: format(checkOut, 'yyyy-MM-dd'),
+    nights,
+    totalIdr: total,
+    reference: token,
   }
-
-  const promo = promoCode ? await validatePromoCode(promoCode) : null
-  const discountPercent = promo?.discountPercent ?? 0
-
-  const nights = nightsBetween(checkIn, checkOut)
-  const { total } = calculateTotal(nights, villa.pricePerNight, discountPercent)
-
-  const token = randomUUID()
-  const expiresAt = addMinutes(new Date(), 15)
-
-  await createHold({
-    villaId: villa.id,
-    checkIn,
-    checkOut,
-    token,
-    expiresAt,
-  })
+  if (guestEmail) {
+    await sendEmail({ to: guestEmail, ...bookingRequestGuest(emailData) })
+  }
+  await sendEmail({ to: adminEmail(), ...bookingRequestAdmin(emailData) })
 
   revalidatePath(`/villa/${slug}/book`)
 
   return {
     ok: true,
     token,
-    totalCents: total,
+    totalIdr: total,
     nights,
     discountPercent,
     guestName: guestName ?? '',
@@ -187,6 +258,10 @@ export async function createPaymentSession(
   prevState: unknown,
   formData: FormData
 ) {
+  if (!paymentsEnabled()) {
+    return { ok: false, error: 'Online payments are currently unavailable' }
+  }
+
   const raw = Object.fromEntries(formData)
   const parsed = paymentSchema.safeParse(raw)
 
@@ -196,10 +271,20 @@ export async function createPaymentSession(
 
   const { slug, token, amount, guestName, guestEmail } = parsed.data
 
-  const hold = await prisma.hold.findUnique({
-    where: { token },
-    include: { villa: true },
-  })
+  let hold
+  try {
+    hold = await prisma.hold.findUnique({
+      where: { token },
+      include: { villa: true },
+    })
+  } catch (error) {
+    console.error('[payment] hold lookup failed:', error)
+    return {
+      ok: false,
+      error:
+        'Something went wrong on our side. Please try again in a moment, or email us at info@casabombora.com.',
+    }
+  }
 
   if (!hold || hold.status !== 'ACTIVE' || hold.expiresAt < new Date()) {
     return { ok: false, error: 'Hold has expired or is invalid' }
@@ -208,7 +293,8 @@ export async function createPaymentSession(
   const baseUrl =
     process.env.NEXT_PUBLIC_BASE_URL ?? 'http://localhost:3001'
 
-  const isDemo = !process.env.STRIPE_SECRET_KEY
+  const provider = getPaymentProvider()
+  const isDemo = provider === demoProvider
 
   const successUrl = isDemo
     ? `${baseUrl}/villa/${slug}/book/demo-pay?token=${encodeURIComponent(token)}`
@@ -218,20 +304,28 @@ export async function createPaymentSession(
     token
   )}`
 
-  const provider = getPaymentProvider()
-  const { url } = await provider.createSession({
-    villa: { name: hold.villa.name, slug },
-    booking: {
-      id: hold.id,
-      token,
-      guestName,
-      guestEmail,
-    },
-    amount,
-    currency: 'usd',
-    successUrl,
-    cancelUrl,
-  })
+  let url: string
+  try {
+    ;({ url } = await provider.createSession({
+      villa: { name: hold.villa.name, slug },
+      booking: {
+        id: hold.id,
+        token,
+        guestName,
+        guestEmail,
+      },
+      amountIdr: amount,
+      successUrl,
+      cancelUrl,
+    }))
+  } catch (error) {
+    console.error('[payment] session creation failed:', error)
+    return {
+      ok: false,
+      error:
+        "We couldn't start the secure checkout. Your dates are still held — please try again, or contact us if it keeps failing.",
+    }
+  }
 
   redirect(url)
 }

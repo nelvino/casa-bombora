@@ -16,14 +16,9 @@ import { Button } from '@/components/ui/Button'
 import { Container } from '@/components/ui/Container'
 import { Badge } from '@/components/ui/Badge'
 import { BackLink } from '@/components/ui/BackLink'
-
-function formatCents(cents: number) {
-  return (cents / 100).toLocaleString('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0,
-  })
-}
+import { CONTACT_EMAIL, whatsappLink } from '@/lib/site'
+import { formatIdr } from '@/lib/currency'
+import { Price } from '@/components/currency/Price'
 
 function formatInputDate(d: Date) {
   return format(d, 'yyyy-MM-dd')
@@ -48,13 +43,15 @@ interface BookingPageClientProps {
   slug: string
   success?: string
   token?: string
+  paymentsEnabled?: boolean
 }
 
-export default function BookingPageClient({ slug, success, token }: BookingPageClientProps) {
+export default function BookingPageClient({ slug, success, token, paymentsEnabled = false }: BookingPageClientProps) {
   const villaFromList = VILLAS.find((v) => v.slug === slug)
   const [villa, setVilla] = useState<Villa | undefined>(villaFromList)
   const [blockedDates, setBlockedDates] = useState<string[]>([])
   const [holdDates, setHoldDates] = useState<string[]>([])
+  const [availabilityError, setAvailabilityError] = useState(false)
 
   const [checkIn, setCheckIn] = useState<string>(formatInputDate(addMonths(new Date(), 1)))
   const [checkOut, setCheckOut] = useState<string>(
@@ -76,11 +73,18 @@ export default function BookingPageClient({ slug, success, token }: BookingPageC
   const loadAvailability = useCallback(async () => {
     const from = formatInputDate(new Date())
     const to = formatInputDate(addMonths(new Date(), 2))
-    const result = await getAvailability(slug, from, to)
-    if (result.ok && result.villa) {
-      setVilla(result.villa as Villa)
-      setBlockedDates(result.blockedDates)
-      setHoldDates(result.holdDates ?? [])
+    try {
+      const result = await getAvailability(slug, from, to)
+      if (result.ok && result.villa) {
+        setVilla(result.villa as Villa)
+        setBlockedDates(result.blockedDates)
+        setHoldDates(result.holdDates ?? [])
+        setAvailabilityError(false)
+      } else {
+        setAvailabilityError(true)
+      }
+    } catch {
+      setAvailabilityError(true)
     }
   }, [slug])
 
@@ -92,6 +96,36 @@ export default function BookingPageClient({ slug, success, token }: BookingPageC
     if (!checkIn || !checkOut) return 0
     return Math.max(0, differenceInCalendarDays(parseISO(checkOut), parseISO(checkIn)))
   }, [checkIn, checkOut])
+
+  const holdMinutes = paymentsEnabled ? 15 : 72 * 60
+  const holdLabel =
+    holdMinutes >= 60
+      ? `${Math.round(holdMinutes / 60)}-hour hold`
+      : `${holdMinutes}-minute hold`
+
+  const enquiryMessage = useMemo(() => {
+    if (!villa || !holdState.ok) return ''
+    const lines = [
+      `Hi Casa Bombora team,`,
+      ``,
+      `I'd like to book ${villa.name} in Uluwatu.`,
+      ``,
+      `Check-in: ${checkIn}`,
+      `Check-out: ${checkOut}`,
+      `Nights: ${holdState.nights ?? 0}`,
+      `Estimated total: ${formatIdr(holdState.totalIdr ?? 0)}`,
+      `Name: ${holdState.guestName || guestName}`,
+      `Email: ${holdState.guestEmail || guestEmail}`,
+      `Enquiry ref: ${holdState.token ?? ''}`,
+      ``,
+      `Thanks!`,
+    ]
+    return lines.join('\n')
+  }, [villa, holdState, checkIn, checkOut, guestName, guestEmail])
+
+  const enquiryMailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
+    `Booking enquiry — ${villa?.name ?? ''} (${checkIn} → ${checkOut})`
+  )}&body=${encodeURIComponent(enquiryMessage)}`
 
   if (!villa) notFound()
 
@@ -105,7 +139,7 @@ export default function BookingPageClient({ slug, success, token }: BookingPageC
         <p className="mb-1 font-serif text-lion">{villa.location}</p>
         <h1 className="mb-2 text-3xl text-gunmetal md:text-4xl">{villa.name}</h1>
         <p className="font-sans text-lg text-gunmetal/70">
-          From {formatCents(villa.pricePerNight)} / night
+          From <Price amountIdr={villa.pricePerNight} /> / night
         </p>
       </div>
 
@@ -121,6 +155,24 @@ export default function BookingPageClient({ slug, success, token }: BookingPageC
         <section className="min-w-0 space-y-8">
           <div className="rounded-xl border border-gunmetal/10 bg-white p-4 shadow-sm md:p-6">
             <h2 className="mb-4 font-serif text-2xl text-gunmetal">Availability</h2>
+            {availabilityError && (
+              <p className="mb-4 rounded-md bg-amber-50 p-3 text-sm text-amber-800">
+                We couldn&apos;t load live availability — the calendar may not
+                reflect the latest bookings. Please{' '}
+                <a href={`mailto:${CONTACT_EMAIL}`} className="underline">
+                  email us
+                </a>{' '}
+                to double-check your dates, or{' '}
+                <button
+                  type="button"
+                  onClick={loadAvailability}
+                  className="underline"
+                >
+                  try again
+                </button>
+                .
+              </p>
+            )}
             <BookingCalendar
               blockedDates={blockedDates}
               holdDates={holdDates}
@@ -138,11 +190,18 @@ export default function BookingPageClient({ slug, success, token }: BookingPageC
               <h3 className="mb-4 font-serif text-xl text-gunmetal">Price summary</h3>
               <PriceBreakdown
                 nights={holdState.nights ?? 0}
-                pricePerNightCents={villa.pricePerNight}
+                pricePerNightIdr={villa.pricePerNight}
                 discountPercent={holdState.discountPercent ?? 0}
               />
+              <p className="mt-4 text-xs text-gunmetal/60">
+                {holdLabel} — your dates are reserved while{' '}
+                {paymentsEnabled
+                  ? 'you complete payment'
+                  : 'we confirm your enquiry'}
+                .
+              </p>
               {holdState.token && (
-                <p className="mt-4 text-xs text-gunmetal/60">
+                <p className="mt-1 text-xs text-gunmetal/60">
                   Hold reference: <span className="font-mono">{holdState.token}</span>
                 </p>
               )}
@@ -152,7 +211,7 @@ export default function BookingPageClient({ slug, success, token }: BookingPageC
               <h3 className="mb-2 font-serif text-xl text-gunmetal">Price estimate</h3>
               <p className="mb-0 text-gunmetal/70">
                 {estimatedNights > 0
-                  ? `${estimatedNights} nights from ${formatCents(
+                  ? `${estimatedNights} nights from ${formatIdr(
                       estimatedNights * villa.pricePerNight
                     )}`
                   : 'Select your check-in and check-out dates to see a quote.'}
@@ -225,7 +284,11 @@ export default function BookingPageClient({ slug, success, token }: BookingPageC
               />
             </label>
 
-            <SubmitButton>Check availability / Hold dates</SubmitButton>
+            <SubmitButton>
+              {paymentsEnabled
+                ? 'Check availability / Hold dates'
+                : 'Request these dates'}
+            </SubmitButton>
 
             {holdState.error && (
               <p className="mt-4 rounded-md bg-red-50 p-3 text-sm text-red-700">{holdState.error}</p>
@@ -237,36 +300,73 @@ export default function BookingPageClient({ slug, success, token }: BookingPageC
               <div className="mb-4">
                 <p className="mb-2 font-serif text-xl text-gunmetal">
                   {holdState.nights ?? 0} nights &middot; Total{' '}
-                  {formatCents(holdState.totalCents ?? 0)}
+                  <Price amountIdr={holdState.totalIdr ?? 0} />
                 </p>
                 {(holdState.discountPercent ?? 0) > 0 && (
                   <Badge variant="blue">Promo applied: {holdState.discountPercent}% off</Badge>
                 )}
               </div>
 
-              <form action={paymentAction}>
-                <input type="hidden" name="slug" value={slug} />
-                <input type="hidden" name="token" value={holdState.token ?? ''} />
-                <input type="hidden" name="amount" value={holdState.totalCents ?? 0} />
-                <input type="hidden" name="guestName" value={holdState.guestName || guestName} />
-                <input type="hidden" name="guestEmail" value={holdState.guestEmail || guestEmail} />
-                <SubmitButton>Pay now</SubmitButton>
-              </form>
+              {paymentsEnabled ? (
+                <>
+                  <form action={paymentAction}>
+                    <input type="hidden" name="slug" value={slug} />
+                    <input type="hidden" name="token" value={holdState.token ?? ''} />
+                    <input type="hidden" name="amount" value={holdState.totalIdr ?? 0} />
+                    <input type="hidden" name="guestName" value={holdState.guestName || guestName} />
+                    <input type="hidden" name="guestEmail" value={holdState.guestEmail || guestEmail} />
+                    <SubmitButton>Pay now</SubmitButton>
+                  </form>
 
-              {paymentState.error && (
-                <p className="mt-4 rounded-md bg-red-50 p-3 text-sm text-red-700">
-                  {paymentState.error}
-                </p>
+                  {paymentState.error && (
+                    <p className="mt-4 rounded-md bg-red-50 p-3 text-sm text-red-700">
+                      {paymentState.error}
+                    </p>
+                  )}
+                </>
+              ) : (
+                <>
+                  <p className="mb-4 text-sm text-gunmetal/70">
+                    No online payment needed — send us your enquiry and
+                    we&apos;ll confirm your stay and arrange payment directly.
+                  </p>
+                  <div className="flex flex-col gap-3">
+                    <Button asChild className="w-full rounded-full bg-blue-green text-alabaster hover:bg-blue-green/90">
+                      <a href={enquiryMailto}>Email your enquiry</a>
+                    </Button>
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="w-full rounded-full border-gunmetal/20 text-gunmetal hover:border-blue-green hover:text-blue-green"
+                    >
+                      <a
+                        href={whatsappLink(enquiryMessage)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        WhatsApp us instead
+                      </a>
+                    </Button>
+                  </div>
+                  <p className="mt-4 text-center text-xs text-gunmetal/50">
+                    We reply within 24 hours. Your dates stay held in the
+                    meantime.
+                  </p>
+                </>
               )}
             </div>
           )}
 
           <div className="flex flex-wrap gap-3 text-xs text-gunmetal/60">
             <span className="rounded-full bg-gunmetal/5 px-3 py-1.5">
-              15-minute hold while you pay
+              {paymentsEnabled
+                ? '15-minute hold while you pay'
+                : '72-hour hold while we confirm'}
             </span>
             <span className="rounded-full bg-gunmetal/5 px-3 py-1.5">
-              Secure checkout by Stripe
+              {paymentsEnabled
+                ? 'Secure online checkout'
+                : 'No online payment required'}
             </span>
             <span className="rounded-full bg-gunmetal/5 px-3 py-1.5">
               Free cancellation until payment
