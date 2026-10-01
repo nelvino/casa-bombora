@@ -3,6 +3,10 @@ import { cookies } from 'next/headers'
 
 export interface AdminSession {
   isAdmin?: boolean
+  // Brute-force throttle state, stored in the (encrypted, signed) session
+  // cookie so it survives serverless instances and can't be tampered with.
+  loginAttempts?: number
+  loginLockedUntil?: number
 }
 
 const cookieName = 'admin-session'

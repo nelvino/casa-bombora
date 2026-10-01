@@ -9,16 +9,12 @@ import {
   cancelBooking,
   markBookingPaid,
   releaseHold,
+  convertHold,
+  blockDateRange,
+  unblockDate,
 } from './actions'
 import { logoutAdmin } from './login/actions'
-
-function formatCents(cents: number) {
-  return (cents / 100).toLocaleString('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0,
-  })
-}
+import { formatIdr } from '@/lib/currency'
 
 function formatDate(d: Date) {
   return d.toISOString().slice(0, 10)
@@ -35,20 +31,28 @@ export default async function AdminPage() {
     return <LoginForm />
   }
 
-  const [bookings, holds, bookingCount, holdCount] = await Promise.all([
-    prisma.booking.findMany({
-      take: 50,
-      orderBy: { createdAt: 'desc' },
-      include: { villa: true },
-    }),
-    prisma.hold.findMany({
-      take: 50,
-      orderBy: { expiresAt: 'desc' },
-      include: { villa: true },
-    }),
-    prisma.booking.count(),
-    prisma.hold.count(),
-  ])
+  const [bookings, holds, villas, blockedDates, bookingCount, holdCount] =
+    await Promise.all([
+      prisma.booking.findMany({
+        take: 50,
+        orderBy: { createdAt: 'desc' },
+        include: { villa: true },
+      }),
+      prisma.hold.findMany({
+        take: 50,
+        orderBy: { expiresAt: 'desc' },
+        include: { villa: true },
+      }),
+      prisma.villa.findMany({ orderBy: { name: 'asc' } }),
+      prisma.blockedDate.findMany({
+        where: { date: { gte: new Date() } },
+        orderBy: { date: 'asc' },
+        include: { villa: true },
+        take: 200,
+      }),
+      prisma.booking.count(),
+      prisma.hold.count(),
+    ])
 
   const occupancy =
     bookingCount + holdCount > 0
@@ -99,11 +103,16 @@ export default async function AdminPage() {
                   <td className="px-4 py-3">
                     {b.guestName}
                     <br />
-                    <span className="text-xs text-gunmetal/60">{b.guestEmail}</span>
+                    <a
+                      href={`mailto:${b.guestEmail}`}
+                      className="text-xs text-lion underline"
+                    >
+                      {b.guestEmail}
+                    </a>
                   </td>
                   <td className="px-4 py-3">{formatDate(b.checkIn)}</td>
                   <td className="px-4 py-3">{formatDate(b.checkOut)}</td>
-                  <td className="px-4 py-3">{formatCents(b.totalAmount)}</td>
+                  <td className="px-4 py-3">{formatIdr(b.totalAmount)}</td>
                   <td className="px-4 py-3">
                     <Badge variant={bookingStatusVariant(b.status)}>{b.status}</Badge>
                     {b.paymentStatus === 'PAID' && (
@@ -152,8 +161,8 @@ export default async function AdminPage() {
           <table className="w-full text-left text-sm">
             <thead className="bg-gunmetal/5 text-gunmetal/70">
               <tr>
-                <th className="whitespace-nowrap px-4 py-3 font-medium">Token</th>
                 <th className="whitespace-nowrap px-4 py-3 font-medium">Villa</th>
+                <th className="whitespace-nowrap px-4 py-3 font-medium">Guest</th>
                 <th className="whitespace-nowrap px-4 py-3 font-medium">Check in</th>
                 <th className="whitespace-nowrap px-4 py-3 font-medium">Check out</th>
                 <th className="whitespace-nowrap px-4 py-3 font-medium">Expires</th>
@@ -164,8 +173,27 @@ export default async function AdminPage() {
             <tbody className="text-gunmetal divide-y divide-gunmetal/10">
               {holds.map((h) => (
                 <tr key={h.id} className="hover:bg-gunmetal/[0.02]">
-                  <td className="px-4 py-3 font-mono text-xs">{h.token}</td>
-                  <td className="px-4 py-3">{h.villa.name}</td>
+                  <td className="px-4 py-3">
+                    {h.villa.name}
+                    <br />
+                    <span className="font-mono text-xs text-gunmetal/50">
+                      {h.token.slice(0, 8)}…
+                    </span>
+                  </td>
+                  <td className="px-4 py-3">
+                    {h.guestName ?? '—'}
+                    <br />
+                    {h.guestEmail ? (
+                      <a
+                        href={`mailto:${h.guestEmail}`}
+                        className="text-xs text-lion underline"
+                      >
+                        {h.guestEmail}
+                      </a>
+                    ) : (
+                      <span className="text-xs text-gunmetal/40">no email</span>
+                    )}
+                  </td>
                   <td className="px-4 py-3">{formatDate(h.checkIn)}</td>
                   <td className="px-4 py-3">{formatDate(h.checkOut)}</td>
                   <td className="px-4 py-3">{formatDate(h.expiresAt)}</td>
@@ -176,13 +204,126 @@ export default async function AdminPage() {
                   </td>
                   <td className="px-4 py-3">
                     {h.status === 'ACTIVE' && (
-                      <form action={releaseHold}>
-                        <input type="hidden" name="id" value={h.id} />
-                        <Button type="submit" size="sm" variant="ghost">
-                          Release
-                        </Button>
-                      </form>
+                      <div className="flex flex-col gap-2">
+                        <form
+                          action={convertHold}
+                          className="flex flex-wrap items-center gap-1"
+                        >
+                          <input type="hidden" name="id" value={h.id} />
+                          <input
+                            type="text"
+                            name="guestName"
+                            defaultValue={h.guestName ?? ''}
+                            placeholder="Guest name"
+                            required
+                            className="w-28 rounded border border-gunmetal/20 px-2 py-1 text-xs"
+                          />
+                          <input
+                            type="email"
+                            name="guestEmail"
+                            defaultValue={h.guestEmail ?? ''}
+                            placeholder="Guest email"
+                            required
+                            className="w-36 rounded border border-gunmetal/20 px-2 py-1 text-xs"
+                          />
+                          <Button type="submit" size="sm" variant="primary">
+                            Confirm booking
+                          </Button>
+                        </form>
+                        <form action={releaseHold}>
+                          <input type="hidden" name="id" value={h.id} />
+                          <Button type="submit" size="sm" variant="ghost">
+                            Release
+                          </Button>
+                        </form>
+                      </div>
                     )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section className="mt-12">
+        <h2 className="mb-4 text-2xl text-gunmetal">Blocked dates</h2>
+        <div className="mb-6 rounded-xl border border-gunmetal/10 bg-white p-5 shadow-sm">
+          <form
+            action={blockDateRange}
+            className="flex flex-wrap items-end gap-3"
+          >
+            <label className="flex flex-col gap-1 text-xs text-gunmetal/70">
+              Villa
+              <select
+                name="villaId"
+                required
+                className="rounded border border-gunmetal/20 px-2 py-1.5 text-sm"
+              >
+                {villas.map((v) => (
+                  <option key={v.id} value={v.id}>
+                    {v.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="flex flex-col gap-1 text-xs text-gunmetal/70">
+              From
+              <input
+                type="date"
+                name="from"
+                required
+                className="rounded border border-gunmetal/20 px-2 py-1.5 text-sm"
+              />
+            </label>
+            <label className="flex flex-col gap-1 text-xs text-gunmetal/70">
+              To
+              <input
+                type="date"
+                name="to"
+                required
+                className="rounded border border-gunmetal/20 px-2 py-1.5 text-sm"
+              />
+            </label>
+            <Button type="submit" size="sm" variant="primary">
+              Block dates
+            </Button>
+          </form>
+        </div>
+        <div className="overflow-x-auto rounded-xl border border-gunmetal/10 bg-white shadow-sm">
+          <table className="w-full text-left text-sm">
+            <thead className="bg-gunmetal/5 text-gunmetal/70">
+              <tr>
+                <th className="whitespace-nowrap px-4 py-3 font-medium">Villa</th>
+                <th className="whitespace-nowrap px-4 py-3 font-medium">Date</th>
+                <th className="whitespace-nowrap px-4 py-3 font-medium">Source</th>
+                <th className="whitespace-nowrap px-4 py-3 font-medium">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="text-gunmetal divide-y divide-gunmetal/10">
+              {blockedDates.length === 0 && (
+                <tr>
+                  <td className="px-4 py-3 text-gunmetal/50" colSpan={4}>
+                    No upcoming blocked dates.
+                  </td>
+                </tr>
+              )}
+              {blockedDates.map((d) => (
+                <tr key={d.id} className="hover:bg-gunmetal/[0.02]">
+                  <td className="px-4 py-3">{d.villa.name}</td>
+                  <td className="px-4 py-3">{formatDate(d.date)}</td>
+                  <td className="px-4 py-3">
+                    <Badge variant={d.source === 'manual' ? 'lion' : 'blue'}>
+                      {d.source}
+                    </Badge>
+                  </td>
+                  <td className="px-4 py-3">
+                    <form action={unblockDate}>
+                      <input type="hidden" name="id" value={d.id} />
+                      <Button type="submit" size="sm" variant="ghost">
+                        Remove
+                      </Button>
+                    </form>
                   </td>
                 </tr>
               ))}

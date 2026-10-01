@@ -36,7 +36,7 @@ model Villa {
   bedrooms      Int
   bathrooms     Int
   maxGuests     Int
-  pricePerNight Int      // USD cents
+  pricePerNight Int      // IDR rupiah
   image         String   @default("")
   isActive      Boolean  @default(true)
   bookings      Booking[]
@@ -56,7 +56,7 @@ model Booking {
   checkOut        DateTime      @db.Date
   guestEmail      String
   guestName       String
-  totalAmount     Int           // cents
+  totalAmount     Int           // IDR rupiah
   status          BookingStatus @default(PENDING)
   paymentStatus   PaymentStatus @default(UNPAID)
   paymentIntentId String?
@@ -68,14 +68,16 @@ model Booking {
 }
 
 model Hold {
-  id        String     @id @default(cuid())
-  villaId   String
-  villa     Villa      @relation(fields: [villaId], references: [id])
-  checkIn   DateTime   @db.Date
-  checkOut  DateTime   @db.Date
-  token     String     @unique
-  expiresAt DateTime
-  status    HoldStatus @default(ACTIVE)
+  id         String     @id @default(cuid())
+  villaId    String
+  villa      Villa      @relation(fields: [villaId], references: [id])
+  checkIn    DateTime   @db.Date
+  checkOut   DateTime   @db.Date
+  token      String     @unique
+  expiresAt  DateTime
+  status     HoldStatus @default(ACTIVE)
+  guestName  String?
+  guestEmail String?
 
   @@map("holds")
 }
