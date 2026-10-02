@@ -20,9 +20,11 @@ const prisma = vi.hoisted(() => ({
 
 const isAdmin = vi.hoisted(() => vi.fn())
 const revalidatePath = vi.hoisted(() => vi.fn())
+const sendEmail = vi.hoisted(() => vi.fn())
 
 vi.mock('@/lib/prisma', () => ({ prisma }))
 vi.mock('@/lib/auth/session', () => ({ isAdmin }))
+vi.mock('@/lib/email/send', () => ({ sendEmail }))
 vi.mock('next/cache', () => ({ revalidatePath }))
 
 function form(data: Record<string, string>) {
@@ -100,6 +102,62 @@ describe('confirmBooking / cancelBooking / markBookingPaid', () => {
     expect(prisma.booking.update).toHaveBeenCalledWith(
       expect.objectContaining({ data: { paymentStatus: 'PAID' } })
     )
+  })
+})
+
+describe('releaseHold', () => {
+  const holdWithGuest = {
+    id: 'h1',
+    status: 'ACTIVE',
+    guestName: 'Jane',
+    guestEmail: 'jane@example.com',
+    checkIn: new Date('2026-12-01'),
+    checkOut: new Date('2026-12-05'),
+    villa: { name: 'Villa Teduh' },
+  }
+
+  it('releases the hold and emails the guest a decline notice', async () => {
+    prisma.hold.findUnique.mockResolvedValue(holdWithGuest)
+
+    const { releaseHold } = await import('../actions')
+    await releaseHold(form({ id: 'h1' }))
+
+    expect(prisma.hold.update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: 'h1' },
+        data: { status: 'RELEASED' },
+      })
+    )
+    expect(sendEmail).toHaveBeenCalledWith(
+      expect.objectContaining({ to: 'jane@example.com' })
+    )
+  })
+
+  it('does not email when the hold has no guest details', async () => {
+    prisma.hold.findUnique.mockResolvedValue({
+      ...holdWithGuest,
+      guestName: null,
+      guestEmail: null,
+    })
+
+    const { releaseHold } = await import('../actions')
+    await releaseHold(form({ id: 'h1' }))
+
+    expect(prisma.hold.update).toHaveBeenCalled()
+    expect(sendEmail).not.toHaveBeenCalled()
+  })
+
+  it('is a no-op for an already-released or missing hold', async () => {
+    prisma.hold.findUnique.mockResolvedValue({
+      ...holdWithGuest,
+      status: 'RELEASED',
+    })
+
+    const { releaseHold } = await import('../actions')
+    await releaseHold(form({ id: 'h1' }))
+
+    expect(prisma.hold.update).not.toHaveBeenCalled()
+    expect(sendEmail).not.toHaveBeenCalled()
   })
 })
 

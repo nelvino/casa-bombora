@@ -5,6 +5,7 @@ import {
   bookingRequestAdmin,
   bookingConfirmedGuest,
   bookingCancelledGuest,
+  holdDeclinedGuest,
 } from '../templates'
 
 const data = {
@@ -94,6 +95,7 @@ describe('templates', () => {
     ['bookingRequestAdmin', bookingRequestAdmin(data)],
     ['bookingConfirmedGuest', bookingConfirmedGuest(data)],
     ['bookingCancelledGuest', bookingCancelledGuest(data)],
+    ['holdDeclinedGuest', holdDeclinedGuest(data)],
   ])('%s produces a subject and branded html', (_name, tpl) => {
     expect(tpl.subject.length).toBeGreaterThan(5)
     expect(tpl.html).toContain('Casa Bombora')

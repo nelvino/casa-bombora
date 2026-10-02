@@ -10,6 +10,7 @@ import { sendEmail } from '@/lib/email/send'
 import {
   bookingConfirmedGuest,
   bookingCancelledGuest,
+  holdDeclinedGuest,
 } from '@/lib/email/templates'
 
 async function requireAdmin() {
@@ -92,15 +93,38 @@ export async function markBookingPaid(formData: FormData) {
   revalidate()
 }
 
+// Releasing a hold declines the guest's enquiry — if we have their contact
+// details, let them know so they aren't left waiting for a reply.
 export async function releaseHold(formData: FormData) {
   await requireAdmin()
   const id = String(formData.get('id') ?? '')
   if (!id) return
 
+  const hold = await prisma.hold.findUnique({
+    where: { id },
+    include: { villa: true },
+  })
+  if (!hold || hold.status !== HoldStatus.ACTIVE) {
+    revalidate()
+    return
+  }
+
   await prisma.hold.update({
     where: { id },
     data: { status: HoldStatus.RELEASED },
   })
+
+  if (hold.guestEmail) {
+    await sendEmail({
+      to: hold.guestEmail,
+      ...holdDeclinedGuest({
+        guestName: hold.guestName ?? 'there',
+        villaName: hold.villa.name,
+        checkIn: hold.checkIn.toISOString().slice(0, 10),
+        checkOut: hold.checkOut.toISOString().slice(0, 10),
+      }),
+    })
+  }
 
   revalidate()
 }
