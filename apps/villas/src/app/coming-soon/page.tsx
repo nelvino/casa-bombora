@@ -1,6 +1,13 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { Container } from '@/components/ui/Container'
 import { CONTACT_EMAIL, whatsappLink } from '@/lib/site'
+
+// Placeholder page must never be indexed — the site stays dark until launch.
+export const metadata: Metadata = {
+  title: 'Coming soon',
+  robots: { index: false, follow: false },
+}
 
 export default function ComingSoonPage() {
   return (

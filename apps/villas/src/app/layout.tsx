@@ -45,11 +45,20 @@ export const metadata: Metadata = {
     siteName: 'Casa Bombora Villas',
     locale: 'en_US',
     type: 'website',
+    images: [
+      {
+        url: '/images/og-cover.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Casa Bombora Villas — private pool villas in Uluwatu, Bali',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Casa Bombora Villas',
     description: 'Book boutique villas in Uluwatu, Bali.',
+    images: ['/images/og-cover.jpg'],
   },
   alternates: {
     canonical: '/',

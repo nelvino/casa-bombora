@@ -1,30 +1,23 @@
 import { MetadataRoute } from 'next'
+import { VILLAS } from '@/lib/data/villas'
+
+const BASE = 'https://stay.casabombora.com'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
-      url: 'https://stay.casabombora.com',
+      url: BASE,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 1,
     },
-    {
-      url: 'https://stay.casabombora.com/villa/mezzanine-1',
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: 'https://stay.casabombora.com/villa/mezzanine-2',
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: 'https://stay.casabombora.com/admin',
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.3,
-    },
+    ...VILLAS.map(
+      (villa): MetadataRoute.Sitemap[number] => ({
+        url: `${BASE}/villa/${villa.slug}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly',
+        priority: 0.9,
+      })
+    ),
   ]
 }

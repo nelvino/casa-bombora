@@ -24,8 +24,10 @@ export function generateMetadata({ params }: Props): Metadata {
   const villa = VILLAS.find((v) => v.slug === params.slug)
   if (!villa) return { title: 'Villa' }
 
-  const title = villa.name
+  const title = `${villa.name} — Private Pool Villa in Uluwatu`
   const description = `${villa.tagline}. ${villa.shortDescription} Book direct in Uluwatu, Bali.`
+
+  const ogImage = villa.slug === 'villa-langit' ? '/images/og-langit.jpg' : '/images/og-teduh.jpg'
 
   return {
     title,
@@ -37,11 +39,20 @@ export function generateMetadata({ params }: Props): Metadata {
       siteName: 'Casa Bombora Villas',
       locale: 'en_US',
       type: 'website',
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: `${villa.name} — private pool villa in Uluwatu, Bali`,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
+      images: [ogImage],
     },
     alternates: {
       canonical: `/villa/${villa.slug}`,
@@ -85,40 +96,87 @@ export default function VillaPage({ params }: Props) {
   const villa = VILLAS.find((v) => v.slug === params.slug)
   if (!villa) notFound()
 
+  const BASE = 'https://stay.casabombora.com'
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'VacationRental',
     name: villa.name,
     description: villa.description,
-    url: `https://stay.casabombora.com/villa/${villa.slug}`,
+    url: `${BASE}/villa/${villa.slug}`,
+    image: `${BASE}${villa.image}`,
     address: {
       '@type': 'PostalAddress',
-      addressLocality: 'Uluwatu',
+      addressLocality: 'Pecatu, Uluwatu',
       addressRegion: 'Bali',
       addressCountry: 'ID',
     },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: -8.8257,
+      longitude: 115.1077,
+    },
+    checkinTime: '15:00',
+    checkoutTime: '11:00',
     numberOfRooms: villa.bedrooms,
     numberOfBathroomsTotal: villa.bathrooms,
     occupancy: {
       '@type': 'QuantitativeValue',
       value: villa.maxGuests,
     },
+    amenityFeature: villa.amenities.map((a) => ({
+      '@type': 'LocationFeatureSpecification',
+      name: a,
+      value: true,
+    })),
     offers: {
       '@type': 'Offer',
       price: String(villa.pricePerNight),
       priceCurrency: 'IDR',
       priceValidUntil: '2026-12-31',
       availability: 'https://schema.org/InStock',
-      url: `https://stay.casabombora.com/villa/${villa.slug}/book`,
+      url: `${BASE}/villa/${villa.slug}/book`,
     },
+    isPartOf: {
+      '@type': 'LodgingBusiness',
+      name: 'Casa Bombora Villas',
+      url: BASE,
+    },
+  }
+
+  const faqLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+  }
+
+  const breadcrumbLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Villas', item: BASE },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: villa.name,
+        item: `${BASE}/villa/${villa.slug}`,
+      },
+    ],
   }
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      {[jsonLd, faqLd, breadcrumbLd].map((ld, i) => (
+        <script
+          key={i}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }}
+        />
+      ))}
       <Container size="large" className="pt-28 pb-24 md:pt-32 lg:pb-16">
         <div className="mb-8">
           <BackLink href="/" label="Villas" />

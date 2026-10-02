@@ -38,7 +38,7 @@ export function VillaList() {
                     <>
                       <Image
                         src={villa.image}
-                        alt={villa.name}
+                        alt={`${villa.name} — ${villa.tagline}`}
                         fill
                         placeholder="blur"
                         blurDataURL={blurFor(villa.image)}

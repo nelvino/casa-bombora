@@ -15,6 +15,12 @@ import {
 } from './actions'
 import { logoutAdmin } from './login/actions'
 import { formatIdr } from '@/lib/currency'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Admin',
+  robots: { index: false, follow: false },
+}
 
 function formatDate(d: Date) {
   return d.toISOString().slice(0, 10)

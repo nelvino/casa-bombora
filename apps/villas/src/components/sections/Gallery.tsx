@@ -4,6 +4,12 @@ import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { blurFor } from '@/lib/data/image-blur'
 
+// Descriptive alt text from the filename: "bedroom-mezzanine.webp" → "bedroom mezzanine"
+function labelFor(src: string): string {
+  const file = src.split('/').pop() ?? ''
+  return file.replace(/\.[a-z0-9]+$/i, '').replace(/-/g, ' ')
+}
+
 function ChevronLeft({ className }: { className?: string }) {
   return (
     <svg
@@ -135,7 +141,7 @@ export function Gallery({ images, alt }: GalleryProps) {
         >
           <Image
             src={mainImage}
-            alt={`${alt} hero`}
+            alt={`${alt} — ${labelFor(mainImage)}`}
             fill
             priority
             placeholder="blur"
@@ -183,7 +189,7 @@ export function Gallery({ images, alt }: GalleryProps) {
                 >
                   <Image
                     src={src}
-                    alt={`${alt} photo ${index + 1}`}
+                    alt={`${alt} — ${labelFor(src)}`}
                     fill
                     placeholder="blur"
                     blurDataURL={blurFor(src)}
@@ -239,7 +245,7 @@ export function Gallery({ images, alt }: GalleryProps) {
           >
             <Image
               src={images[activeIndex]}
-              alt={`${alt} view ${activeIndex + 1}`}
+              alt={`${alt} — ${labelFor(images[activeIndex])}`}
               fill
               className="object-contain transition-transform duration-500"
               style={{ transform: isZoomed ? 'scale(1.35)' : 'scale(1)' }}

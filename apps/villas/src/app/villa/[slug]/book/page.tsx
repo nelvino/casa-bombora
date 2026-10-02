@@ -18,11 +18,12 @@ export function generateMetadata({ params }: Props): Metadata {
   if (!villa) return { title: 'Book' }
 
   const title = `Book ${villa.name}`
-  const description = `Reserve ${villa.name} in ${villa.location}. Check live availability and pay securely.`
+  const description = `Reserve ${villa.name} in ${villa.location}. Check live availability and send a booking request.`
 
   return {
     title,
     description,
+    robots: { index: false, follow: false },
     openGraph: {
       title,
       description,
