@@ -3,6 +3,9 @@
   publish = ".next"
 
 [build.environment]
+  # These vars are public by design (inlined into client/middleware bundles) —
+  # exempt them from secrets scanning. Anything else flagged is a real leak.
+  SECRETS_SCAN_OMIT_KEYS = "SITE_LIVE,ADMIN_USERNAME,EMAIL_FROM,ADMIN_EMAIL,NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_BASE_URL"
   SECRETS_SCAN_OMIT_PATHS = "**/.next/**,**/node_modules/**,**/.netlify/**"
 
 [[plugins]]
