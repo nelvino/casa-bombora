@@ -59,6 +59,14 @@ export function Footer({ isAdmin }: FooterProps) {
                   Our villas
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/guide"
+                  className="transition-colors hover:text-blue-green"
+                >
+                  Local guides
+                </Link>
+              </li>
               {isAdmin && (
                 <li>
                   <Link

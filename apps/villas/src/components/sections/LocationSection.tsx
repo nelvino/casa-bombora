@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { Container } from '@/components/ui/Container'
 import { Reveal } from '@/components/ui/Reveal'
 import { NEARBY_SPOTS } from '@/lib/data/nearby'
@@ -57,6 +58,12 @@ export function LocationSection() {
                 Quiet residential lane — no through traffic
               </li>
             </ul>
+            <Link
+              href="/guide"
+              className="mt-6 inline-block font-sans text-sm font-medium text-blue-green transition-colors hover:text-blue-green/80"
+            >
+              Read our local guides →
+            </Link>
           </Reveal>
 
           <div className="grid gap-4 sm:grid-cols-2">

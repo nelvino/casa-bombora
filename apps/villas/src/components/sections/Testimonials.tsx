@@ -21,23 +21,25 @@ function Stars() {
   )
 }
 
+// Placeholder quotes until we collect real guest reviews — swap these out as
+// soon as the first genuine ones come in.
 const testimonials = [
   {
     quote:
-      'The villa was even better than the photos — quiet, spotless, and a two-minute walk from everything. Booking direct was effortless.',
+      'Honestly couldn\u2019t fault it. Quiet little street, pool to ourselves, and the scooter ride down to Padang Padang took no time at all.',
     name: 'Sarah & Tom',
     origin: 'Melbourne, Australia',
   },
   {
     quote:
-      'Waking up to the private pool and garden every morning was the highlight of our Bali trip. The hosts were incredibly responsive.',
+      'Such a relaxing base. We\u2019d surf in the morning then just hang by the pool in the afternoon. Hosts sorted everything we asked for.',
     name: 'Amelia R.',
     origin: 'London, UK',
   },
   {
     quote:
-      'Perfect base for surfing Uluwatu. The team sorted our airport pickup and had great local recommendations. We will be back.',
-    name: 'The Muller Family',
+      'Great spot for exploring the Bukit. Airport pickup was organised for us and the local tips they sent over were genuinely useful.',
+    name: 'Lena & Jonas',
     origin: 'Munich, Germany',
   },
 ]

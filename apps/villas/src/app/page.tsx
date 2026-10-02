@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { CONTACT_EMAIL } from '@/lib/site'
+import { CONTACT_EMAIL, WHATSAPP_NUMBER } from '@/lib/site'
 import { Hero } from '@/components/sections/Hero'
 import { VillaList } from '@/components/sections/VillaList'
 import { LocationSection } from '@/components/sections/LocationSection'
@@ -50,6 +50,7 @@ const lodgingLd = {
   url: 'https://stay.casabombora.com',
   image: 'https://stay.casabombora.com/images/og-cover.jpg',
   email: CONTACT_EMAIL,
+  telephone: `+${WHATSAPP_NUMBER}`,
   address: {
     '@type': 'PostalAddress',
     addressLocality: 'Pecatu, Uluwatu',

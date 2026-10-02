@@ -9,6 +9,7 @@ import { CurrencySwitcher } from '@/components/currency/CurrencySwitcher'
 const navLinks = [
   { name: 'Home', href: '/' },
   { name: 'Villas', href: '/#villas' },
+  { name: 'Guides', href: '/guide' },
 ]
 
 interface HeaderProps {
