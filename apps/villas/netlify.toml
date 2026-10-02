@@ -8,6 +8,9 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
+[functions]
+  directory = "netlify/functions"
+
 # Security headers — CSP is intentionally omitted (Next.js inline scripts would
 # need nonces); the rest are safe to apply site-wide.
 [[headers]]

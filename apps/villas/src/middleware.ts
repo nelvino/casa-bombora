@@ -7,7 +7,7 @@ import type { NextRequest } from 'next/server'
 const siteLive = process.env.SITE_LIVE !== 'false'
 
 export const config = {
-  matcher: ['/((?!_next|coming-soon|api/webhooks|.*\\..*).*)'],
+  matcher: ['/((?!_next|coming-soon|api/|.*\\..*).*)'],
 }
 
 export function middleware(req: NextRequest) {
