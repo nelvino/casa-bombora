@@ -13,6 +13,7 @@ import {
   blockDateRange,
   unblockDate,
   createManualBooking,
+  sendTestEmail,
 } from './actions'
 import { logoutAdmin } from './login/actions'
 import { ConfirmButton } from '@/components/admin/ConfirmButton'
@@ -98,11 +99,18 @@ export default async function AdminPage({
           <h1 className="mb-2 text-gunmetal">Admin</h1>
           <p className="text-gunmetal/70">Overview of bookings and active holds.</p>
         </div>
-        <form action={logoutAdmin}>
-          <Button type="submit" variant="secondary" size="sm">
-            Sign out
-          </Button>
-        </form>
+        <div className="flex items-center gap-3">
+          <form action={sendTestEmail}>
+            <Button type="submit" variant="secondary" size="sm">
+              Send test email
+            </Button>
+          </form>
+          <form action={logoutAdmin}>
+            <Button type="submit" variant="secondary" size="sm">
+              Sign out
+            </Button>
+          </form>
+        </div>
       </div>
 
       {searchParams.error && (

@@ -10,7 +10,7 @@ import {
   isDateRangeAvailableForVilla,
 } from '@/lib/booking/db'
 import { generateNights, nightsBetween } from '@/lib/booking/availability'
-import { sendEmail } from '@/lib/email/send'
+import { sendEmail, adminEmail } from '@/lib/email/send'
 import {
   bookingConfirmedGuest,
   bookingCancelledGuest,
@@ -260,4 +260,23 @@ export async function unblockDate(formData: FormData) {
   await prisma.blockedDate.delete({ where: { id } })
 
   revalidate()
+}
+
+export async function sendTestEmail() {
+  await requireAdmin()
+
+  const ok = await sendEmail({
+    to: adminEmail(),
+    subject: 'Casa Bombora — test email',
+    html: `<div style="font-family:Helvetica,Arial,sans-serif">
+      <p>Email delivery is working.</p>
+      <p style="color:#777;font-size:13px">Sent from the admin dashboard at ${new Date().toISOString()}</p>
+    </div>`,
+  })
+
+  redirect(
+    ok
+      ? '/admin?notice=Test+email+sent'
+      : '/admin?error=Email+send+failed+—+check+RESEND_API_KEY+and+function+logs'
+  )
 }

@@ -1,5 +1,6 @@
 import { headers } from 'next/headers'
 import { convertHoldToBooking } from '@/lib/booking/db'
+import { alertAdmin } from '@/lib/email/send'
 import { stripeProvider } from '@/lib/payments/stripe'
 import { xenditProvider } from '@/lib/payments/xendit'
 
@@ -40,6 +41,12 @@ export async function POST(req: Request) {
     return Response.json({ ok: true })
   } catch (error) {
     console.error('Webhook conversion failed', error)
+    // A payment succeeded but the booking was not created — the guest paid and
+    // the hold stays ACTIVE. Alert immediately so this is never missed.
+    await alertAdmin(
+      'Payment received but booking conversion failed',
+      `Hold: ${result.bookingId}\nPayment intent: ${result.paymentIntentId ?? 'n/a'}\nGuest: ${result.guestName ?? 'n/a'} <${result.guestEmail ?? 'n/a'}>\n\nError: ${error instanceof Error ? error.message : String(error)}`
+    )
     return new Response('Conversion failed', { status: 500 })
   }
 }

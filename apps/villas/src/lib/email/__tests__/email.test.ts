@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { sendEmail, adminEmail } from '../send'
+import { sendEmail, adminEmail, alertAdmin } from '../send'
 import {
   bookingRequestGuest,
   bookingRequestAdmin,
@@ -75,6 +75,74 @@ describe('sendEmail', () => {
     vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('offline')))
     const ok = await sendEmail({ to: 'x', subject: 's', html: 'h' })
     expect(ok).toBe(false)
+  })
+
+  it('retries once on a 5xx and succeeds', async () => {
+    vi.stubEnv('RESEND_API_KEY', 're_test')
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(new Response('err', { status: 500 }))
+      .mockResolvedValueOnce(new Response('{"id":"e2"}', { status: 200 }))
+    vi.stubGlobal('fetch', fetchMock)
+
+    const ok = await sendEmail({ to: 'x', subject: 's', html: 'h' })
+    expect(ok).toBe(true)
+    expect(fetchMock).toHaveBeenCalledTimes(2)
+  })
+
+  it('does not retry a permanent 4xx failure', async () => {
+    vi.stubEnv('RESEND_API_KEY', 're_test')
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(new Response('bad key', { status: 401 }))
+    vi.stubGlobal('fetch', fetchMock)
+
+    const ok = await sendEmail({ to: 'x', subject: 's', html: 'h' })
+    expect(ok).toBe(false)
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('alertAdmin', () => {
+  it('emails the admin inbox with an alert subject', async () => {
+    vi.stubEnv('RESEND_API_KEY', 're_test')
+    vi.stubEnv('ADMIN_EMAIL', 'ops@casabombora.com')
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(new Response('{"id":"e3"}', { status: 200 }))
+    vi.stubGlobal('fetch', fetchMock)
+
+    await alertAdmin('Enquiry submission failed', 'Villa: villa-teduh')
+
+    const [, init] = fetchMock.mock.calls[0]
+    const body = JSON.parse(init.body)
+    expect(body.to).toBe('ops@casabombora.com')
+    expect(body.subject).toBe('[Casa Bombora alert] Enquiry submission failed')
+    expect(body.html).toContain('Villa: villa-teduh')
+  })
+
+  it('redacts database URLs and escapes HTML in the detail', async () => {
+    vi.stubEnv('RESEND_API_KEY', 're_test')
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(new Response('{"id":"e4"}', { status: 200 }))
+    vi.stubGlobal('fetch', fetchMock)
+
+    await alertAdmin(
+      'DB error',
+      'connect postgresql://user:secret@host:5432/db failed <script>'
+    )
+
+    const body = JSON.parse(fetchMock.mock.calls[0][1].body)
+    expect(body.html).not.toContain('secret@host')
+    expect(body.html).toContain('[database-url-redacted]')
+    expect(body.html).not.toContain('<script>')
+  })
+
+  it('does not throw when sending fails', async () => {
+    vi.stubEnv('RESEND_API_KEY', 're_test')
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('offline')))
+    await expect(alertAdmin('x', 'y')).resolves.toBeUndefined()
   })
 })
 

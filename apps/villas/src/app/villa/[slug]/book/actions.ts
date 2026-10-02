@@ -22,7 +22,7 @@ import {
 import { generateNights } from '@/lib/booking/availability'
 import { getPaymentProvider, paymentsEnabled } from '@/lib/payments'
 import { demoProvider } from '@/lib/payments/demo'
-import { sendEmail, adminEmail } from '@/lib/email/send'
+import { sendEmail, adminEmail, alertAdmin } from '@/lib/email/send'
 import { bookingRequestGuest, bookingRequestAdmin } from '@/lib/email/templates'
 
 const HOLD_MINUTES = 15
@@ -217,6 +217,12 @@ export async function createBookingHold(
     })
   } catch (error) {
     console.error('[booking] hold creation failed:', error)
+    // The enquiry was NOT saved — alert includes guest details so it can be
+    // recovered manually from the email.
+    await alertAdmin(
+      'Enquiry submission failed',
+      `A booking enquiry could not be saved.\n\nVilla: ${slug}\nDates: ${format(checkIn, 'yyyy-MM-dd')} → ${format(checkOut, 'yyyy-MM-dd')}\nGuest: ${guestName} <${guestEmail}>\n\nError: ${error instanceof Error ? error.message : String(error)}`
+    )
     return {
       ok: false,
       error:
@@ -282,6 +288,10 @@ export async function createPaymentSession(
     })
   } catch (error) {
     console.error('[payment] hold lookup failed:', error)
+    await alertAdmin(
+      'Payment hold lookup failed',
+      `Token: ${token}\nError: ${error instanceof Error ? error.message : String(error)}`
+    )
     return {
       ok: false,
       error:
@@ -323,6 +333,10 @@ export async function createPaymentSession(
     }))
   } catch (error) {
     console.error('[payment] session creation failed:', error)
+    await alertAdmin(
+      'Payment session creation failed',
+      `Hold: ${hold.id} (${token})\nError: ${error instanceof Error ? error.message : String(error)}`
+    )
     return {
       ok: false,
       error:
