@@ -12,8 +12,10 @@ import {
   convertHold,
   blockDateRange,
   unblockDate,
+  createManualBooking,
 } from './actions'
 import { logoutAdmin } from './login/actions'
+import { ConfirmButton } from '@/components/admin/ConfirmButton'
 import { formatIdr } from '@/lib/currency'
 import type { Metadata } from 'next'
 
@@ -30,40 +32,64 @@ function bookingStatusVariant(status: string) {
   return status === 'CONFIRMED' ? 'blue' : 'lion'
 }
 
-export default async function AdminPage() {
+export default async function AdminPage({
+  searchParams,
+}: {
+  searchParams: { error?: string; notice?: string }
+}) {
   const admin = await isAdmin()
 
   if (!admin) {
     return <LoginForm />
   }
 
-  const [bookings, holds, villas, blockedDates, bookingCount, holdCount] =
-    await Promise.all([
-      prisma.booking.findMany({
-        take: 50,
-        orderBy: { createdAt: 'desc' },
-        include: { villa: true },
-      }),
-      prisma.hold.findMany({
-        take: 50,
-        orderBy: { expiresAt: 'desc' },
-        include: { villa: true },
-      }),
-      prisma.villa.findMany({ orderBy: { name: 'asc' } }),
-      prisma.blockedDate.findMany({
-        where: { date: { gte: new Date() } },
-        orderBy: { date: 'asc' },
-        include: { villa: true },
-        take: 200,
-      }),
-      prisma.booking.count(),
-      prisma.hold.count(),
-    ])
+  const now = new Date()
+  const [
+    bookings,
+    holds,
+    villas,
+    blockedDates,
+    upcomingBookingCount,
+    activeEnquiryCount,
+    revenueAgg,
+  ] = await Promise.all([
+    prisma.booking.findMany({
+      take: 50,
+      orderBy: { createdAt: 'desc' },
+      include: { villa: true },
+    }),
+    prisma.hold.findMany({
+      take: 50,
+      orderBy: { expiresAt: 'desc' },
+      include: { villa: true },
+    }),
+    prisma.villa.findMany({ orderBy: { name: 'asc' } }),
+    prisma.blockedDate.findMany({
+      where: { date: { gte: now } },
+      orderBy: { date: 'asc' },
+      include: { villa: true },
+      take: 200,
+    }),
+    prisma.booking.count({
+      where: { status: 'CONFIRMED', checkOut: { gte: now } },
+    }),
+    prisma.hold.count({
+      where: { status: 'ACTIVE', expiresAt: { gt: now } },
+    }),
+    prisma.booking.aggregate({
+      _sum: { totalAmount: true },
+      where: { status: 'CONFIRMED', checkOut: { gte: now } },
+    }),
+  ])
 
-  const occupancy =
-    bookingCount + holdCount > 0
-      ? Math.round((bookingCount / (bookingCount + holdCount)) * 100)
-      : 0
+  // Active, unexpired holds first; then the rest newest-last-expiry first
+  const sortedHolds = [...holds].sort((a, b) => {
+    const aActive = a.status === 'ACTIVE' && a.expiresAt > now ? 0 : 1
+    const bActive = b.status === 'ACTIVE' && b.expiresAt > now ? 0 : 1
+    return aActive - bActive || b.expiresAt.getTime() - a.expiresAt.getTime()
+  })
+
+  const upcomingRevenue = revenueAgg._sum.totalAmount ?? 0
 
   return (
     <Container size="large" className="pt-28 pb-10 md:pt-32 md:pb-16">
@@ -79,11 +105,25 @@ export default async function AdminPage() {
         </form>
       </div>
 
+      {searchParams.error && (
+        <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-800">
+          {searchParams.error}
+        </div>
+      )}
+      {searchParams.notice && (
+        <div className="mb-6 rounded-xl border border-blue-green/30 bg-blue-green/10 px-5 py-4 text-sm text-gunmetal">
+          {searchParams.notice}
+        </div>
+      )}
+
       <div className="mb-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <SummaryCard label="Total bookings" value={bookingCount} />
-        <SummaryCard label="Total holds" value={holdCount} />
-        <SummaryCard label="Conversion rate" value={`${occupancy}%`} />
-        <SummaryCard label="Villas live" value={2} />
+        <SummaryCard label="Upcoming stays" value={upcomingBookingCount} />
+        <SummaryCard label="Active enquiries" value={activeEnquiryCount} />
+        <SummaryCard
+          label="Upcoming revenue"
+          value={formatIdr(upcomingRevenue)}
+        />
+        <SummaryCard label="Villas live" value={villas.length} />
       </div>
 
       <section className="mb-12">
@@ -103,6 +143,13 @@ export default async function AdminPage() {
               </tr>
             </thead>
             <tbody className="text-gunmetal divide-y divide-gunmetal/10">
+              {bookings.length === 0 && (
+                <tr>
+                  <td className="px-4 py-6 text-gunmetal/50" colSpan={8}>
+                    No bookings yet.
+                  </td>
+                </tr>
+              )}
               {bookings.map((b) => (
                 <tr key={b.id} className="hover:bg-gunmetal/[0.02]">
                   <td className="px-4 py-3">{b.villa.name}</td>
@@ -131,9 +178,13 @@ export default async function AdminPage() {
                       {b.status === 'PENDING' && (
                         <form action={confirmBooking}>
                           <input type="hidden" name="id" value={b.id} />
-                          <Button type="submit" size="sm" variant="primary">
+                          <ConfirmButton
+                            size="sm"
+                            variant="primary"
+                            confirmText={`Confirm ${b.guestName}'s booking? They will be emailed a confirmation.`}
+                          >
                             Confirm
-                          </Button>
+                          </ConfirmButton>
                         </form>
                       )}
                       {b.paymentStatus === 'UNPAID' && b.status !== 'CANCELLED' && (
@@ -147,9 +198,13 @@ export default async function AdminPage() {
                       {b.status !== 'CANCELLED' && (
                         <form action={cancelBooking}>
                           <input type="hidden" name="id" value={b.id} />
-                          <Button type="submit" size="sm" variant="ghost">
+                          <ConfirmButton
+                            size="sm"
+                            variant="ghost"
+                            confirmText={`Cancel ${b.guestName}'s booking (${formatDate(b.checkIn)} → ${formatDate(b.checkOut)})? They will be emailed a cancellation notice.`}
+                          >
                             Cancel
-                          </Button>
+                          </ConfirmButton>
                         </form>
                       )}
                     </div>
@@ -177,7 +232,16 @@ export default async function AdminPage() {
               </tr>
             </thead>
             <tbody className="text-gunmetal divide-y divide-gunmetal/10">
-              {holds.map((h) => (
+              {sortedHolds.length === 0 && (
+                <tr>
+                  <td className="px-4 py-6 text-gunmetal/50" colSpan={7}>
+                    No holds yet.
+                  </td>
+                </tr>
+              )}
+              {sortedHolds.map((h) => {
+                const expired = h.status === 'ACTIVE' && h.expiresAt <= now
+                return (
                 <tr key={h.id} className="hover:bg-gunmetal/[0.02]">
                   <td className="px-4 py-3">
                     {h.villa.name}
@@ -204,8 +268,8 @@ export default async function AdminPage() {
                   <td className="px-4 py-3">{formatDate(h.checkOut)}</td>
                   <td className="px-4 py-3">{formatDate(h.expiresAt)}</td>
                   <td className="px-4 py-3">
-                    <Badge variant={h.status === 'ACTIVE' ? 'blue' : 'lion'}>
-                      {h.status}
+                    <Badge variant={h.status === 'ACTIVE' && !expired ? 'blue' : 'lion'}>
+                      {expired ? 'EXPIRED' : h.status}
                     </Badge>
                   </td>
                   <td className="px-4 py-3">
@@ -238,17 +302,99 @@ export default async function AdminPage() {
                         </form>
                         <form action={releaseHold}>
                           <input type="hidden" name="id" value={h.id} />
-                          <Button type="submit" size="sm" variant="ghost">
+                          <ConfirmButton
+                            size="sm"
+                            variant="ghost"
+                            confirmText={
+                              h.guestEmail
+                                ? `Release this hold and email ${h.guestEmail} that the dates aren't available?`
+                                : 'Release this hold?'
+                            }
+                          >
                             Release
-                          </Button>
+                          </ConfirmButton>
                         </form>
                       </div>
                     )}
                   </td>
                 </tr>
-              ))}
+                )
+              })}
             </tbody>
           </table>
+        </div>
+      </section>
+
+      <section className="mt-12">
+        <h2 className="mb-4 text-2xl text-gunmetal">Add manual booking</h2>
+        <p className="mb-4 text-sm text-gunmetal/60">
+          For guests who arrange their stay via WhatsApp or email. Availability
+          is re-checked — overlapping dates are refused. The guest gets a
+          confirmation email.
+        </p>
+        <div className="mb-6 rounded-xl border border-gunmetal/10 bg-white p-5 shadow-sm">
+          <form
+            action={createManualBooking}
+            className="flex flex-wrap items-end gap-3"
+          >
+            <label className="flex flex-col gap-1 text-xs text-gunmetal/70">
+              Villa
+              <select
+                name="villaId"
+                required
+                className="rounded border border-gunmetal/20 px-2 py-1.5 text-sm"
+              >
+                {villas.map((v) => (
+                  <option key={v.id} value={v.id}>
+                    {v.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="flex flex-col gap-1 text-xs text-gunmetal/70">
+              Guest name
+              <input
+                type="text"
+                name="guestName"
+                required
+                className="rounded border border-gunmetal/20 px-2 py-1.5 text-sm"
+              />
+            </label>
+            <label className="flex flex-col gap-1 text-xs text-gunmetal/70">
+              Guest email
+              <input
+                type="email"
+                name="guestEmail"
+                required
+                className="rounded border border-gunmetal/20 px-2 py-1.5 text-sm"
+              />
+            </label>
+            <label className="flex flex-col gap-1 text-xs text-gunmetal/70">
+              Check-in
+              <input
+                type="date"
+                name="checkIn"
+                required
+                className="rounded border border-gunmetal/20 px-2 py-1.5 text-sm"
+              />
+            </label>
+            <label className="flex flex-col gap-1 text-xs text-gunmetal/70">
+              Check-out
+              <input
+                type="date"
+                name="checkOut"
+                required
+                className="rounded border border-gunmetal/20 px-2 py-1.5 text-sm"
+              />
+            </label>
+            <label className="flex items-center gap-2 pb-1 text-sm text-gunmetal/80">
+              <input type="checkbox" name="paid" className="h-4 w-4" />
+              Already paid
+            </label>
+            <Button type="submit" size="sm" variant="primary">
+              Create booking
+            </Button>
+          </form>
         </div>
       </section>
 
@@ -326,9 +472,13 @@ export default async function AdminPage() {
                   <td className="px-4 py-3">
                     <form action={unblockDate}>
                       <input type="hidden" name="id" value={d.id} />
-                      <Button type="submit" size="sm" variant="ghost">
+                      <ConfirmButton
+                        size="sm"
+                        variant="ghost"
+                        confirmText={`Unblock ${formatDate(d.date)} for ${d.villa.name}?`}
+                      >
                         Remove
-                      </Button>
+                      </ConfirmButton>
                     </form>
                   </td>
                 </tr>

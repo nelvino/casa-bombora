@@ -36,8 +36,7 @@ function layout(title: string, bodyHtml: string): string {
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${BRAND.alabaster};padding:32px 16px;">
       <tr><td align="center">
         <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:16px;overflow:hidden;">
-          <tr><td style="background:${BRAND.gunmetal};padding:24px 28px;" align="center">
-            <img src="${BRAND.site}/apple-icon.png" width="40" height="40" alt="Casa Bombora" style="display:block;margin:0 auto 10px;border-radius:10px;" />
+          <tr><td style="background:${BRAND.gunmetal};padding:26px 28px;" align="center">
             <span style="font-family:${BRAND.serif};font-size:20px;letter-spacing:2.5px;color:${BRAND.alabaster};text-transform:uppercase;">Casa Bombora</span><br />
             <span style="font-family:${BRAND.sans};font-size:10px;letter-spacing:3px;color:${BRAND.lion};text-transform:uppercase;">Villas &middot; Uluwatu &middot; Bali</span>
           </td></tr>

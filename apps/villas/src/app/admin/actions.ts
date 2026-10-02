@@ -1,11 +1,15 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 import { BookingStatus, PaymentStatus, HoldStatus } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { isAdmin } from '@/lib/auth/session'
-import { convertHoldToBooking } from '@/lib/booking/db'
-import { generateNights } from '@/lib/booking/availability'
+import {
+  convertHoldToBooking,
+  isDateRangeAvailableForVilla,
+} from '@/lib/booking/db'
+import { generateNights, nightsBetween } from '@/lib/booking/availability'
 import { sendEmail } from '@/lib/email/send'
 import {
   bookingConfirmedGuest,
@@ -142,14 +146,74 @@ export async function convertHold(formData: FormData) {
   const hold = await prisma.hold.findUnique({ where: { id } })
   if (!hold) return
 
-  await convertHoldToBooking(
-    hold.token,
-    { name: guestName, email: guestEmail },
-    undefined,
-    { requireAvailable: true }
-  )
+  try {
+    await convertHoldToBooking(
+      hold.token,
+      { name: guestName, email: guestEmail },
+      undefined,
+      { requireAvailable: true }
+    )
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : 'Conversion failed'
+    redirect(`/admin?error=${encodeURIComponent(msg)}`)
+  }
 
   revalidate()
+}
+
+// Manual booking entry — for guests who book via WhatsApp/email rather than
+// the website form. Creates a CONFIRMED booking after re-checking availability.
+export async function createManualBooking(formData: FormData) {
+  await requireAdmin()
+  const villaId = String(formData.get('villaId') ?? '')
+  const guestName = String(formData.get('guestName') ?? '').trim()
+  const guestEmail = String(formData.get('guestEmail') ?? '').trim()
+  const checkIn = dateInput(formData.get('checkIn'))
+  const checkOut = dateInput(formData.get('checkOut'))
+  const paid = formData.get('paid') === 'on'
+
+  const fail = (msg: string): never =>
+    redirect(`/admin?error=${encodeURIComponent(msg)}`)
+
+  if (!villaId || !guestName || !guestEmail || !checkIn || !checkOut) {
+    fail('Fill in all fields')
+  }
+  if (!(checkOut! > checkIn!)) fail('Check-out must be after check-in')
+
+  const available = await isDateRangeAvailableForVilla(villaId, checkIn!, checkOut!)
+  if (!available) fail('Those dates are not available')
+
+  const villa = await prisma.villa.findUnique({ where: { id: villaId } })
+  if (!villa) fail('Villa not found')
+
+  const nights = nightsBetween(checkIn!, checkOut!)
+  const booking = await prisma.booking.create({
+    data: {
+      villaId,
+      guestName,
+      guestEmail,
+      checkIn: checkIn!,
+      checkOut: checkOut!,
+      totalAmount: nights * villa!.pricePerNight,
+      status: BookingStatus.CONFIRMED,
+      paymentStatus: paid ? PaymentStatus.PAID : PaymentStatus.UNPAID,
+    },
+    include: { villa: true },
+  })
+
+  const tpl = bookingConfirmedGuest({
+    guestName,
+    villaName: villa!.name,
+    checkIn: checkIn!.toISOString().slice(0, 10),
+    checkOut: checkOut!.toISOString().slice(0, 10),
+    nights,
+    totalIdr: booking.totalAmount,
+    reference: booking.id,
+  })
+  await sendEmail({ to: guestEmail, ...tpl })
+
+  revalidate()
+  redirect('/admin?notice=' + encodeURIComponent('Booking created'))
 }
 
 const dateInput = (v: FormDataEntryValue | null) => {
