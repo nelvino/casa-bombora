@@ -169,8 +169,10 @@ SECRETS_SCAN_OMIT_PATHS=.netlify/**,**/node_modules/**,**/.next/**
 
 ### Phase 2 — Post-launch visibility
 
-- [ ] Google Search Console + Bing Webmaster Tools: submit sitemap.
+- [ ] Google Search Console: verify domain + submit sitemap (do alongside Airbnb listing launch).
+- [ ] Bing Webmaster Tools: after GSC is set up, use Bing's "Import from Google Search Console" — one click, no separate verification needed.
 - [ ] Google Business Profile for Casa Bombora Villas (map-pack visibility).
+- [ ] Backlinks: casabombora.com nav/footer "Stay With Us" links added (ship with next root-site deploy). Additional free sources: Bali villa directories, local business listings, travel blogs.
 - [ ] Validate JSON-LD in Google's Rich Results Test.
 - [ ] External uptime monitor (e.g. UptimeRobot free) on `/api/keep-alive` — covers "site or DB down" independent of our stack; Resend itself being down can't email us, so this is the real outage alert.
 - [ ] Add analytics (Plausible / Fathom / GA4).

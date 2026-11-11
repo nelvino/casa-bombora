@@ -44,6 +44,12 @@ export function Footer() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <Link href="https://stay.casabombora.com"
+                  className="text-alabaster/80 hover:text-blue-green transition-colors">
+                  Stay With Us
+                </Link>
+              </li>
             </ul>
           </div>
           
