@@ -13,7 +13,7 @@ export function ImageBreak() {
       <div className="fixed inset-0 -z-10 motion-safe:animate-kenburns">
         <Image
           src={src}
-          alt="The outdoor stone bath lit beside the pool at night"
+          alt="The outdoor plunge bath lit beside the pool at night"
           fill
           sizes="100vw"
           placeholder="blur"
@@ -24,7 +24,7 @@ export function ImageBreak() {
       </div>
       <Reveal className="relative z-10 max-w-3xl px-6 text-center">
         <p className="font-serif text-2xl leading-snug text-alabaster md:text-4xl">
-          Evenings slow down here — warm stone, still water, and the bamboo
+          Evenings slow down here — still water, warm light, and the bamboo
           glowing after dark.
         </p>
       </Reveal>

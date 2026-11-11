@@ -20,9 +20,9 @@ export const VILLAS: Villa[] = [
     name: 'Villa Teduh',
     tagline: 'A cool, shaded retreat in quiet Uluwatu',
     shortDescription:
-      'A light-filled one-bedroom loft villa with private pool, outdoor stone bath, and open-plan living.',
+      'A light-filled one-bedroom loft villa with private pool, outdoor plunge bath, and open-plan living.',
     description:
-      'Villa Teduh pairs a soaring mezzanine bedroom with an open-plan living room and kitchen that flows straight onto your private pool deck. Rinse off the beach in the outdoor stone bath, then cool down in air-conditioned comfort. Set on a peaceful lane in Pecatu, it is made for couples who want a calm base minutes from Uluwatu\u2019s surf breaks and clifftop sunsets.',
+      'Villa Teduh pairs a soaring mezzanine bedroom with an open-plan living room and kitchen that flows straight onto your private pool deck. After the beach, sink into the pool or brave a plunge in the garden bath \u2014 then retreat to air-conditioned comfort. Set on a peaceful lane in Pecatu, it is made for couples who want a calm base minutes from Uluwatu\u2019s surf breaks and clifftop sunsets.',
     location: 'Pecatu, Uluwatu, Bali',
     bedrooms: 1,
     bathrooms: 1,
@@ -44,8 +44,8 @@ export const VILLAS: Villa[] = [
     ],
     amenities: [
       'Private pool',
-      'Outdoor stone bath',
-      'Mezzanine king bedroom',
+      'Outdoor plunge bath',
+      'Mezzanine Queen bedroom',
       'Open living & kitchen',
       'Air conditioning',
       'Fast Wi-Fi',
@@ -58,9 +58,9 @@ export const VILLAS: Villa[] = [
     name: 'Villa Langit',
     tagline: 'Open, airy living on a quiet Uluwatu lane',
     shortDescription:
-      'A spacious one-bedroom villa with private pool, outdoor stone bath, and an airy mezzanine lounge.',
+      'A spacious one-bedroom villa with private pool, outdoor plunge bath, and an airy mezzanine lounge.',
     description:
-      'Villa Langit pairs a soaring mezzanine bedroom with an airy open-plan living room and kitchen that opens onto your private pool. An outdoor stone bath sits in the garden for slow evenings. On a peaceful lane in Pecatu, it suits couples who want space, sky, and easy drives to every Uluwatu beach.',
+      'Villa Langit pairs a soaring mezzanine bedroom with an airy open-plan living room and kitchen that opens onto your private pool. An outdoor plunge bath sits in the garden for slow evenings. On a peaceful lane in Pecatu, it suits couples who want space, relaxation, and easy drives to every Uluwatu beach.',
     location: 'Pecatu, Uluwatu, Bali',
     bedrooms: 1,
     bathrooms: 1,
@@ -87,8 +87,8 @@ export const VILLAS: Villa[] = [
     ],
     amenities: [
       'Private pool',
-      'Outdoor stone bath',
-      'Mezzanine king bedroom',
+      'Outdoor plunge bath',
+      'Mezzanine Queen bedroom',
       'Open living & kitchen',
       'Air conditioning',
       'Fast Wi-Fi',

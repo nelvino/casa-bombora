@@ -19,7 +19,7 @@ const SLIDES = [
   },
   {
     src: '/images/shared/hero-bath.webp',
-    alt: 'Outdoor stone bath lit beside the pool at night',
+    alt: 'Outdoor plunge bath lit beside the pool at night',
   },
 ]
 
