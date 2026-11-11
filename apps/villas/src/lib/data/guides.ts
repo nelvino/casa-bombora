@@ -40,14 +40,14 @@ export const GUIDES: Guide[] = [
         heading: 'When to go',
         paragraphs: [
           'Late afternoon is the classic move: arrive around 4:30\u20135:00 PM, walk the cliff paths while it\u2019s still light, then stay for the kecak fire dance at sunset. The temple grounds open during the day, but the golden light and the dance make early evening the best time.',
-          'Kecak performances run daily around sunset (typically 6:00 PM) in an open-air amphitheatre on the cliff edge. Seats fill up fast in high season — arrive early or ask us to help you get tickets in advance.',
+          'Kecak performances run twice nightly in an open-air amphitheatre on the cliff edge — a 6:00 PM sunset show and a 7:00 PM show. Seats fill up fast in high season — ask us to help you get tickets in advance.',
         ],
       },
       {
         heading: 'Good to know',
         paragraphs: [
           'There\u2019s a small entrance fee at the gate, and sarongs and sashes are provided with entry — shoulders and knees should be covered. The resident monkeys are famous for snatching sunglasses, phones, and hats: keep loose items zipped away and don\u2019t feed them.',
-          'Kecak tickets are sold separately from temple entry — buy them at the gate when you arrive, before the show area fills. Wear shoes you can walk in; the cliff path has uneven steps.',
+          'Kecak tickets are sold separately from temple entry — in high season they can sell out, so book ahead where possible. Wear shoes you can walk in; the cliff path has uneven steps.',
         ],
       },
       {
@@ -163,7 +163,7 @@ export const GUIDES: Guide[] = [
           {
             name: 'The Cashew Tree Collective',
             distance: '~10 min',
-            text: 'Garden café near Bingin famous for healthy bowls and salads — and its long-running Thursday open-mic nights.',
+            text: 'Garden café near Bingin famous for healthy bowls and salads — and its long-running Thursday live-music nights.',
           },
           {
             name: 'Alchemy Uluwatu',
@@ -188,7 +188,7 @@ export const GUIDES: Guide[] = [
           {
             name: 'The Place With No Name',
             distance: '~8 min',
-            text: 'Quirky little spot on Jl. Labuansait doing wood-fired pizza and sharing plates — good low-key dinner option.',
+            text: 'Quirky little spot on Jl. Labuansait doing pescatarian and vegetarian fusion plates, with live music every night — good low-key dinner option.',
           },
         ],
       },
@@ -241,8 +241,8 @@ export const GUIDES: Guide[] = [
           },
           {
             name: 'Ulu Active',
-            distance: '~15 min',
-            text: 'Design-led gym in Ungasan with one of the best recovery rooms on the peninsula — sauna, steam, hot tub and ice baths.',
+            distance: '~10 min',
+            text: 'Design-led gym at ULU Tribe on Jl. Labuansait with one of the best recovery rooms on the peninsula — sauna, steam, hot tub and ice baths.',
           },
         ],
       },
@@ -353,7 +353,7 @@ export const GUIDES: Guide[] = [
           { name: 'Padang Padang Beach', distance: '~6 min', text: 'Closest major beach — swim, surf lessons, warungs.' },
           { name: 'Uluwatu Temple', distance: '~7 min', text: 'Sunset kecak and cliff walks.' },
           { name: 'Suluban Beach & Single Fin', distance: '~9 min', text: 'Surf access and the famous clifftop bar.' },
-          { name: 'Bingin Beach', distance: '~10 min', text: 'Cafés, cliff stairs and a mechanical left.' },
+          { name: 'Bingin Beach', distance: '~10 min', text: 'A mechanical left-hand reef break — the cliff-side scene is rebuilding after 2025\u2019s demolitions.' },
           { name: 'Dreamland Beach', distance: '~15 min', text: 'Beginner-friendly beach break.' },
           { name: 'Uluwatu\u2019s main café strip', distance: '~5\u201310 min', text: 'Jl. Labuansait — most cafés and shops are on or near it.' },
         ],

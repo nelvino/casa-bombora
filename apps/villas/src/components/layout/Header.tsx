@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils/cn'
-import { CurrencySwitcher } from '@/components/currency/CurrencySwitcher'
+// CurrencySwitcher hidden for V1 — prices are not public yet (WhatsApp rates).
 
 const navLinks = [
   { name: 'Home', href: '/' },
@@ -159,9 +159,7 @@ export function Header({ isAdmin }: HeaderProps) {
                   </Link>
                 </li>
               )}
-              <li className="hidden lg:block">
-                <CurrencySwitcher dark={!isScrolled} />
-              </li>
+              <li className="hidden lg:block">{/* CurrencySwitcher — V2 */}</li>
             </ul>
 
             {/* Mobile menu button */}
@@ -253,7 +251,7 @@ export function Header({ isAdmin }: HeaderProps) {
             <p className="text-sm text-gunmetal/60">
               Book private villas in Uluwatu, Bali.
             </p>
-            <CurrencySwitcher />
+            {/* CurrencySwitcher — V2 */}
           </div>
         </div>
       </aside>

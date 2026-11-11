@@ -1,14 +1,12 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import Link from 'next/link'
 import { VILLAS } from '@/lib/data/villas'
-import { whatsappLink } from '@/lib/site'
+import { CONTACT_EMAIL, whatsappLink } from '@/lib/site'
 import { Container } from '@/components/ui/Container'
 import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/Badge'
 import { BackLink } from '@/components/ui/BackLink'
 import { Reveal } from '@/components/ui/Reveal'
-import { Price } from '@/components/currency/Price'
 import { NEARBY_SPOTS } from '@/lib/data/nearby'
 import { Gallery } from '@/components/sections/Gallery'
 
@@ -66,7 +64,7 @@ const houseRules = [
   { term: 'Quiet hours', detail: '10:00 PM – 7:00 AM' },
   { term: 'Smoking', detail: 'Not permitted inside' },
   { term: 'Pets', detail: 'Not allowed' },
-  { term: 'Cancellation', detail: 'Free before payment is completed' },
+  { term: 'Cancellation', detail: 'Flexible — confirm terms when booking' },
 ]
 
 const faq = [
@@ -80,7 +78,7 @@ const faq = [
   },
   {
     q: 'Can I book airport pickup?',
-    a: 'Yes. Add a note after booking or contact us directly and we can arrange a trusted local driver.',
+    a: 'Yes. Mention it when you message us on WhatsApp and we can arrange a trusted local driver.',
   },
   {
     q: 'Is the Wi-Fi good enough for remote work?',
@@ -129,14 +127,8 @@ export default function VillaPage({ params }: Props) {
       name: a,
       value: true,
     })),
-    offers: {
-      '@type': 'Offer',
-      price: String(villa.pricePerNight),
-      priceCurrency: 'IDR',
-      priceValidUntil: '2026-12-31',
-      availability: 'https://schema.org/InStock',
-      url: `${BASE}/villa/${villa.slug}/book`,
-    },
+    // V1: no public rates — guests ask on WhatsApp. Add an Offer back when
+    // prices are published with the booking engine (V2).
     isPartOf: {
       '@type': 'LodgingBusiness',
       name: 'Casa Bombora Villas',
@@ -208,24 +200,26 @@ export default function VillaPage({ params }: Props) {
                 <Badge>Up to {villa.maxGuests} guests</Badge>
               </div>
 
-              <p className="mb-5 font-serif text-2xl text-gunmetal sm:text-3xl">
-                <Price amountIdr={villa.pricePerNight} />{' '}
-                <span className="text-sm font-sans text-gunmetal/60 sm:text-base">/ night</span>
-              </p>
-
               <Button asChild size="lg" className="w-full rounded-full bg-blue-green text-alabaster transition-transform duration-200 hover:scale-[1.02]">
-                <Link href={`/villa/${villa.slug}/book`}>Book now</Link>
+                <a
+                  href={whatsappLink(
+                    `Hi Casa Bombora! I'd like to book ${villa.name} in Uluwatu. My dates are: `
+                  )}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-alabaster"
+                >
+                  Book via WhatsApp
+                </a>
               </Button>
 
               <a
-                href={whatsappLink(
-                  `Hi Casa Bombora! I have a question about ${villa.name} in Uluwatu.`
-                )}
-                target="_blank"
-                rel="noopener noreferrer"
+                href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
+                  `Question about ${villa.name}`
+                )}`}
                 className="mt-3 flex w-full items-center justify-center gap-2 rounded-full border border-gunmetal/15 px-5 py-2.5 font-sans text-sm font-medium text-gunmetal transition-colors hover:border-blue-green hover:text-blue-green"
               >
-                Questions? WhatsApp us
+                Questions? Email us
               </a>
 
               <p className="mt-4 text-center text-xs text-gunmetal/50">
@@ -320,15 +314,26 @@ export default function VillaPage({ params }: Props) {
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
           <div>
             <p className="mb-0 font-serif text-lg leading-tight text-gunmetal">
-              <Price amountIdr={villa.pricePerNight} />
+              {villa.name}
             </p>
-            <p className="mb-0 font-sans text-xs text-gunmetal/60">per night</p>
+            <p className="mb-0 font-sans text-xs text-gunmetal/60">
+              {villa.location}
+            </p>
           </div>
           <Button
             asChild
             className="rounded-full bg-blue-green px-6 text-alabaster hover:bg-blue-green/90"
           >
-            <Link href={`/villa/${villa.slug}/book`}>Book now</Link>
+            <a
+              href={whatsappLink(
+                `Hi Casa Bombora! I'd like to book ${villa.name} in Uluwatu. My dates are: `
+              )}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-alabaster"
+            >
+              Book via WhatsApp
+            </a>
           </Button>
         </div>
       </div>

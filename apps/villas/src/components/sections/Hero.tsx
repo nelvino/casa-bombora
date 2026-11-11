@@ -1,9 +1,8 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import { Container } from '@/components/ui/Container'
 import { Button } from '@/components/ui/Button'
-import { VILLAS } from '@/lib/data/villas'
-import { blurFor } from '@/lib/data/image-blur'
+import { HeroSlideshow } from '@/components/sections/HeroSlideshow'
+import { whatsappLink } from '@/lib/site'
 
 function ChevronDown({ className }: { className?: string }) {
   return (
@@ -26,22 +25,9 @@ function ChevronDown({ className }: { className?: string }) {
 }
 
 export function Hero() {
-  const heroImage = VILLAS[0]?.image ?? ''
-
   return (
     <section className="relative flex min-h-screen items-center overflow-hidden text-alabaster">
-      {heroImage && (
-        <Image
-          src={heroImage}
-          alt="Private pool villa in Uluwatu, Bali"
-          fill
-          priority
-          sizes="100vw"
-          placeholder="blur"
-          blurDataURL={blurFor(heroImage)}
-          className="object-cover"
-        />
-      )}
+      <HeroSlideshow />
 
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-gunmetal/90 via-gunmetal/55 to-gunmetal/20" />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-gunmetal/70 via-transparent to-gunmetal/20" />
@@ -81,7 +67,16 @@ export function Hero() {
               asChild
               className="rounded-full bg-blue-green px-8 py-4 text-alabaster shadow-lg transition-all duration-200 hover:scale-105 hover:bg-blue-green/90"
             >
-              <Link href="#villas">Book your stay</Link>
+              <a
+                href={whatsappLink(
+                  'Hi Casa Bombora! I\'d like to book a villa in Uluwatu. My dates are: '
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-alabaster"
+              >
+                Book via WhatsApp
+              </a>
             </Button>
             <Button
               variant="outline"

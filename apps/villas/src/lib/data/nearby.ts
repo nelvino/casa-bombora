@@ -24,7 +24,7 @@ export const NEARBY_SPOTS: NearbySpot[] = [
   {
     name: 'Bingin Beach',
     distance: '~10 min drive',
-    detail: 'Laid-back surf spot lined with barefoot cafés and warungs.',
+    detail: 'Laid-back surf spot with a mechanical left — the cliff scene is rebuilding after 2025\u2019s demolitions.',
   },
   {
     name: 'Nyang Nyang Beach',

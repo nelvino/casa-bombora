@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { CONTACT_EMAIL, WHATSAPP_NUMBER } from '@/lib/site'
 import { Hero } from '@/components/sections/Hero'
 import { VillaList } from '@/components/sections/VillaList'
+import { Story } from '@/components/sections/Story'
+import { ImageBreak } from '@/components/sections/ImageBreak'
 import { LocationSection } from '@/components/sections/LocationSection'
 import { Testimonials } from '@/components/sections/Testimonials'
 import { WhyBookDirect } from '@/components/sections/WhyBookDirect'
@@ -62,7 +64,7 @@ const lodgingLd = {
     latitude: -8.8257,
     longitude: 115.1077,
   },
-  priceRange: 'IDR 2,900,000/night',
+  // V1: rates shared on enquiry, not published — no priceRange in schema.
 }
 
 export default function HomePage() {
@@ -74,6 +76,8 @@ export default function HomePage() {
       />
       <Hero />
       <VillaList />
+      <Story />
+      <ImageBreak />
       <LocationSection />
       <Testimonials />
       <WhyBookDirect />

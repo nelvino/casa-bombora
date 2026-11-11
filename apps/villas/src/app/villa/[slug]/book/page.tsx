@@ -1,16 +1,13 @@
 import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { VILLAS } from '@/lib/data/villas'
 import { paymentsEnabled } from '@/lib/payments'
+import { BOOKING_ENGINE_LIVE } from '@/lib/site'
 import BookingPageClient from '@/components/booking/BookingPageClient'
 
 interface Props {
   params: { slug: string }
   searchParams: { success?: string; token?: string }
-}
-
-export function generateStaticParams() {
-  return VILLAS.map((villa) => ({ slug: villa.slug }))
 }
 
 export function generateMetadata({ params }: Props): Metadata {
@@ -43,8 +40,13 @@ export function generateMetadata({ params }: Props): Metadata {
   }
 }
 
+// V1: render on demand so the redirect below is a real 307, not a
+// prerendered meta-refresh page.
+export const dynamic = 'force-dynamic'
+
 export default function BookPage({ params, searchParams }: Props) {
   const villa = VILLAS.find((v) => v.slug === params.slug)
+  if (!BOOKING_ENGINE_LIVE) redirect(`/villa/${params.slug}`)
   if (!villa) notFound()
 
   return (

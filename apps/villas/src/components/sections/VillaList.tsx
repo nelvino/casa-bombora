@@ -5,8 +5,6 @@ import { blurFor } from '@/lib/data/image-blur'
 import { Container } from '@/components/ui/Container'
 import { Badge } from '@/components/ui/Badge'
 import { Reveal } from '@/components/ui/Reveal'
-import { AvailabilityHint } from '@/components/booking/AvailabilityHint'
-import { Price } from '@/components/currency/Price'
 import { cn } from '@/lib/utils/cn'
 
 export function VillaList() {
@@ -80,18 +78,9 @@ export function VillaList() {
                     <Badge variant="lion">Up to {villa.maxGuests} guests</Badge>
                   </div>
 
-                  <div className="mt-auto flex items-center justify-between">
-                    <div>
-                      <p className="font-sans text-gunmetal">
-                        <span className="font-medium">
-                          <Price amountIdr={villa.pricePerNight} />
-                        </span>
-                        <span className="text-gunmetal/60"> / night</span>
-                      </p>
-                      <AvailabilityHint slug={villa.slug} />
-                    </div>
+                  <div className="mt-auto flex items-center justify-end">
                     <span className="inline-flex items-center justify-center rounded-full bg-blue-green px-5 py-2.5 font-sans text-sm font-medium text-alabaster transition-transform duration-200 group-hover:scale-105 group-hover:bg-blue-green/90">
-                      View & Book
+                      View villa
                     </span>
                   </div>
                 </div>

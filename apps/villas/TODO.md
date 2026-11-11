@@ -87,16 +87,24 @@ A living document for the `apps/villas` booking microsite. Update it after each 
 
 ## 4. How the app works today
 
-### Guest booking flow
+### Guest flow (V1 — current live mode)
 
 1. Guest browses the home page and clicks a villa.
-2. Villa detail page shows photos, description, and a sticky “Book now” card (plus a sticky mobile book bar and a WhatsApp contact link).
-3. Booking page shows a calendar, date pickers, guest info, and promo code.
-4. Guest clicks **Hold dates** (labelled “Request these dates” when payments are off). A hold is created in the database and the calendar updates.
-5. Next step depends on `PAYMENTS_ENABLED`:
+2. Villa detail page shows the real photo gallery, description, and a sticky
+   "Book via WhatsApp" card (plus a sticky mobile bar). All booking CTAs open
+   WhatsApp with a prefilled message naming the villa.
+3. `/villa/*/book*` is 307-redirected to the villa page by middleware — the
+   booking engine is dormant (`BOOKING_ENGINE_LIVE = false` in `src/lib/site.ts`).
+
+### Booking engine flow (V2 — code shipped, not public)
+
+1. Villa detail page shows photos, description, and a sticky “Book now” card (plus a sticky mobile book bar and a WhatsApp contact link).
+2. Booking page shows a calendar, date pickers, guest info, and promo code.
+3. Guest clicks **Hold dates** (labelled “Request these dates” when payments are off). A hold is created in the database and the calendar updates.
+4. Next step depends on `PAYMENTS_ENABLED`:
    - `PAYMENTS_ENABLED=true`: guest clicks **Pay now** → Xendit/Stripe checkout depending on configured keys, otherwise the demo payment page. Hold lasts 15 minutes.
    - `PAYMENTS_ENABLED` unset/false (current live mode): guest is shown a **contact enquiry** panel with prefilled email (`info@casabombora.com`) and WhatsApp buttons containing villa, dates, total, guest details, and hold reference. Hold lasts **72 hours** so the team can confirm and arrange payment manually. The hold still appears in the admin dashboard.
-6. On successful payment webhook, the hold is converted into a booking with status `PENDING`.
+5. On successful payment webhook, the hold is converted into a booking with status `PENDING`.
 
 ### Admin flow
 
@@ -150,9 +158,9 @@ SECRETS_SCAN_OMIT_PATHS=.netlify/**,**/node_modules/**,**/.next/**
 
 - [x] Deploy `stay.casabombora.com` on Netlify and configure DNS / CNAME.
 - [x] Set all production environment variables in Netlify.
-- [ ] **Replace shared render photos with real Villa Teduh and Villa Langit photos** — current sets are byte-identical renders duplicated across both villas.
+- [x] **Real villa photos** — 30 professional shots processed to optimized WebP (max ~2.4Kpx, q80), split between `villa-teduh/` and `villa-langit/`, OG images regenerated, blur map refreshed via `scripts/process-photos.mjs`. Originals kept locally in `photo-src/` (gitignored, never deployed).
 - [ ] **Replace placeholder testimonials with real guest quotes** — current ones are softened placeholders; do not launch with invented reviews.
-- [ ] **Fact-check the 6 guides before going live** — venues/hours change; verify names, locations, and opening details are still accurate.
+- [x] **Fact-check the guides** — independent review done: all 25+ venues verified operating. 4 fixes applied (Ulu Active is in Pecatu not Ungasan, The Place With No Name is fusion not pizza, Cashew Tree Thursdays are live music not open-mic, Bingin cliff cafés demolished July 2025 in guides + nearby.ts).
 - [ ] Flip `SITE_LIVE=true` in Netlify + trigger a deploy.
 - [ ] Create a Xendit account for PT PMA Casa Bombora (docs needed: NIB, corporate NPWP, Akta Pendirian + SK Kemenkumham, director ID, Permata bank account in the company name). Verification ~14 working days.
 - [ ] Set `XENDIT_SECRET_KEY`, `XENDIT_CALLBACK_TOKEN`, and `PAYMENTS_ENABLED=true` in Netlify; register the webhook URL `https://stay.casabombora.com/api/webhooks/payment` in the Xendit dashboard.
