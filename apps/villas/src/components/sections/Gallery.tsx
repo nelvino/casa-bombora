@@ -96,7 +96,15 @@ const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(mi
 export function Gallery({ images, alt }: GalleryProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
+
+  // Hero carousel state: index + live finger-drag offset + transition toggle
   const [heroIndex, setHeroIndex] = useState(0)
+  const [heroDrag, setHeroDrag] = useState(0)
+  const [heroAnim, setHeroAnim] = useState(true)
+  const heroGesture = useRef({
+    mode: 'idle' as 'idle' | 'pending' | 'drag',
+    x0: 0, y0: 0, t0: 0, dx: 0, moved: false,
+  })
 
   // Lightbox gesture state: scale/pan for pinch-zoom, drag for swipe preview
   const [scale, setScale] = useState(1)
@@ -214,24 +222,68 @@ export function Gallery({ images, alt }: GalleryProps) {
     setGesturing(false)
   }
 
-  // ---- scroll helpers ----
+  // ---- hero carousel: 1:1 finger drag + eased snap (transform-based, not scroll-snap) ----
 
-  const scrollHero = (direction: 'left' | 'right') => {
-    if (!heroRef.current) return
-    const delta = heroRef.current.clientWidth * (direction === 'left' ? -1 : 1)
-    heroRef.current.scrollBy({ left: delta, behavior: 'smooth' })
+  const heroWidth = () => heroRef.current?.clientWidth || 1
+
+  const goTo = (i: number) => {
+    setHeroAnim(true)
+    setHeroDrag(0)
+    setHeroIndex(clamp(i, 0, images.length - 1))
   }
+
+  const onHeroTouchStart = (e: React.TouchEvent) => {
+    const g = heroGesture.current
+    const t = e.touches[0]
+    g.mode = 'pending'
+    g.x0 = t.clientX
+    g.y0 = t.clientY
+    g.t0 = Date.now()
+    g.dx = 0
+    g.moved = false
+    setHeroAnim(false)
+  }
+
+  const onHeroTouchMove = (e: React.TouchEvent) => {
+    const g = heroGesture.current
+    const t = e.touches[0]
+    const dx = t.clientX - g.x0
+    const dy = t.clientY - g.y0
+    if (g.mode === 'pending' && Math.hypot(dx, dy) > 8) {
+      g.mode = Math.abs(dx) > Math.abs(dy) * 1.5 ? 'drag' : 'idle'
+    }
+    if (g.mode === 'drag') {
+      g.dx = dx
+      g.moved = true
+      setHeroDrag(dx)
+    }
+  }
+
+  const onHeroTouchEnd = () => {
+    const g = heroGesture.current
+    if (g.mode === 'drag') {
+      const w = heroWidth()
+      const velocity = Math.abs(g.dx) / Math.max(Date.now() - g.t0, 1)
+      const past = Math.abs(g.dx) > w * 0.18
+      const flick = velocity > 0.35
+      if (g.dx < 0 && (past || flick)) goTo(heroIndex + 1)
+      else if (g.dx > 0 && (past || flick)) goTo(heroIndex - 1)
+      else { setHeroAnim(true); setHeroDrag(0) }
+    }
+    g.mode = 'idle'
+  }
+
+  // Rubber-band resistance when dragging past the first/last slide
+  const heroDragOffset =
+    heroGesture.current.mode === 'drag' &&
+    ((heroIndex === 0 && heroDrag > 0) || (heroIndex === images.length - 1 && heroDrag < 0))
+      ? heroDrag * 0.3
+      : heroDrag
 
   const scrollThumbnails = (direction: 'left' | 'right') => {
     if (!thumbsRef.current) return
     const delta = 280
     thumbsRef.current.scrollBy({ left: direction === 'left' ? -delta : delta, behavior: 'smooth' })
-  }
-
-  const onHeroScroll = () => {
-    const el = heroRef.current
-    if (!el || el.clientWidth === 0) return
-    setHeroIndex(clamp(Math.round(el.scrollLeft / el.clientWidth), 0, images.length - 1))
   }
 
   useEffect(() => {
@@ -259,46 +311,66 @@ export function Gallery({ images, alt }: GalleryProps) {
   return (
     <>
       <div className="space-y-4">
-        {/* Swipeable hero carousel — native scroll-snap on touch, arrows on desktop */}
+        {/* Swipeable hero carousel — finger-following drag + eased snap */}
         <div className="group/hero relative">
           <div
             ref={heroRef}
-            onScroll={onHeroScroll}
-            className="no-scrollbar flex snap-x snap-mandatory overflow-x-auto scroll-smooth rounded-2xl"
+            onTouchStart={onHeroTouchStart}
+            onTouchMove={onHeroTouchMove}
+            onTouchEnd={onHeroTouchEnd}
+            className="overflow-hidden rounded-2xl"
+            style={{ touchAction: 'pan-y' }}
           >
-            {images.map((src, i) => (
-              <button
-                key={src}
-                onClick={() => open(i)}
-                className="group relative aspect-[16/9] w-full flex-none snap-start overflow-hidden bg-gunmetal/5"
-                aria-label={`Open gallery at photo ${i + 1}`}
-              >
-                <Image
-                  src={src}
-                  alt={`${alt} — ${labelFor(src)}`}
-                  fill
-                  priority={i === 0}
-                  placeholder="blur"
-                  blurDataURL={blurFor(src)}
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  sizes="(max-width: 1024px) 100vw, 66vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-gunmetal/30 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-              </button>
-            ))}
+            <div
+              className="flex"
+              style={{
+                width: `${images.length * 100}%`,
+                transform: `translateX(calc(${-heroIndex * (100 / images.length)}% + ${heroDragOffset}px))`,
+                transition: heroAnim ? 'transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1)' : 'none',
+              }}
+            >
+              {images.map((src, i) => (
+                <button
+                  key={src}
+                  onClick={() => {
+                    if (heroGesture.current.moved) {
+                      heroGesture.current.moved = false
+                      return
+                    }
+                    open(i)
+                  }}
+                  className="group relative aspect-[16/9] flex-none overflow-hidden bg-gunmetal/5"
+                  style={{ width: `${100 / images.length}%` }}
+                  aria-label={`Open gallery at photo ${i + 1}`}
+                >
+                  <Image
+                    src={src}
+                    alt={`${alt} — ${labelFor(src)}`}
+                    fill
+                    priority={i === 0}
+                    placeholder="blur"
+                    blurDataURL={blurFor(src)}
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    sizes="(max-width: 1024px) 100vw, 66vw"
+                    draggable={false}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-gunmetal/30 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                </button>
+              ))}
+            </div>
           </div>
 
           {images.length > 1 && (
             <>
               <button
-                onClick={() => scrollHero('left')}
+                onClick={() => goTo(heroIndex - 1)}
                 className="absolute left-3 top-1/2 z-10 hidden -translate-y-1/2 rounded-full bg-white/90 p-2 text-gunmetal shadow-sm transition-opacity hover:bg-white sm:block"
                 aria-label="Previous photo"
               >
                 <ChevronLeft className="h-5 w-5" />
               </button>
               <button
-                onClick={() => scrollHero('right')}
+                onClick={() => goTo(heroIndex + 1)}
                 className="absolute right-3 top-1/2 z-10 hidden -translate-y-1/2 rounded-full bg-white/90 p-2 text-gunmetal shadow-sm transition-opacity hover:bg-white sm:block"
                 aria-label="Next photo"
               >
