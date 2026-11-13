@@ -163,21 +163,17 @@ export function Header() {
               className="flex-1"
             >
               <Link href="/" className="flex items-center group">
-                <motion.span
+                <span
                   className={cn(
-                    "font-serif text-3xl font-semibold hidden md:block",
+                    "font-serif text-3xl font-semibold hidden md:block transition-colors duration-200 group-hover:text-blue-green",
                     isScrolled ? "text-gunmetal" : "text-white"
                   )}
-                  whileHover={{
-                    color: "rgb(0, 156, 188)",
-                    transition: { duration: 0.2 }
-                  }}
                 >
                   C
-                  <span className={isScrolled ? "text-blue-green" : "text-white"}>ASA</span>
+                  <span className={cn("transition-colors duration-200 group-hover:text-blue-green", isScrolled ? "text-blue-green" : "text-white")}>ASA</span>
                   {" "}b
-                  <span className={isScrolled ? "text-blue-green" : "text-white"}>ombora</span>
-                </motion.span>
+                  <span className={cn("transition-colors duration-200 group-hover:text-blue-green", isScrolled ? "text-blue-green" : "text-white")}>ombora</span>
+                </span>
               </Link>
             </motion.div>
 
