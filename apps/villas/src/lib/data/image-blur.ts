@@ -23,9 +23,13 @@ const BLURS: Record<string, string> = {
   'hero-aerial': 'data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAADwAQCdASoQAAsAA4BaJaAC7ACp97Th+AAA/Xg3QfkKEmAU7StYczpTiIEncWDxQvFRiMyDg/DDeildHzYahGHzPk2IRpBwRzNoblPgAAA=',
   'hero-interior': 'data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAAAQAgCdASoQAAsAA4BaJQBOgBusv8PRHweAAP7b6Jle1rmDb0CwwagH/Fp5K/Rdzf3YAeO4n3ha831mRv+8D7UQF0jW4XweSQV6kINrT03Q8qcTSWAAAA==',
   'hero-bath': 'data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAADwAQCdASoQAAsAA4BaJagCdAEPAaAtn6AA/uxL2G2HfQbH6WdV8TO51m6B0hrp8WYcjd//DVavRvKIZDYRpEzk0qV9h00hPYUlB0GmtFRMoAAA',
-  'process-sketch': 'data:image/webp;base64,UklGRkQAAABXRUJQVlA4IDgAAABwAQCdASoQAAwAA4BaJZycAABlYAD+81nt4ZhcL5W3+1XLNiiWv+tOk/9rPvfndm5hmxoYxGQAAA==',
-  'process-render': 'data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAADQAQCdASoQAAsAA4BaJZwAAxPAv5tKAAD+tTRQghJPbSNJZ4xcb3a/PHICr1cbLiFD3SbjoNMU++g2fWAueTqQDukCqdIQUAA=',
-  'process-built': 'data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAABQAgCdASoQAAsAA4BaJQBOgMW+4KyEztr2K0AA/t+mniqTHuMFij9ZGgs+xd0YkrvkAWHrbH0n62fruHR5PcrnKfhKLHreMhXHG7W+XZJy244+b/ONhKGDBKDf1p9ZIAA=',
+  'temple': 'data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAADwAQCdASoQAAsAA4BaJQBOgBbtXaK2XvAA/lXi+9kQFZ7EalrmB5UlSqxs5YzmLrU3LAmOSR1DUHVqQMJyAsXRAXDe3gNxGUMzJGhEeKCHAAAA',
+  'kecak': 'data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAAAQAgCdASoQAAsAA4BaJQBOgCPQIkWE6xgAAPzmGomruI4F/oiGHtm2sInLfWIqy/2lcRrA/tVjVjn11Xb/ysxXcFf/aasi/+Jb77VL9zJvOAAA',
+  'surf': 'data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAADQAQCdASoQAAsAA4BaJaACdACRIi43AAD+5pRDrusbekcMITO/YZbJ58rxwI9Z4qgy/s+xfaH193dRT0UxAYxoLmN5DzGUkuMygwAA',
+  'cafes': 'data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAABQAgCdASoQAAsAA4BaJQBdgCbGEeeXrm2OHAAA9AGAUhdrg1ODTA/dKaHK5qD+KcEKbEe0p2Q5ZnLHNCN+7tc2FOpsutnUvRMhVaw79TXLTyR0AAA=',
+  'wellness': 'data:image/webp;base64,UklGRpIAAABXRUJQVlA4IIYAAADwAwCdASoQABgAPu1iqU2ppaOiMAgBMB2JQBOgAy5XGxtgdLiCgkoAAP6QkNcTthlHnL8OZAnaU8h5lEDjKK3omAS+tASIzeBzy5ehSoAFOqY2XSVPx8WSNVxd6suIbOeBv34voWLf+RWdTJkfQpgeo4FnzAXdFO8WDTlkMPwyplFkIjAAAA==',
+  'nightlife': 'data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAABQAgCdASoQAAwAA4BaJYgCdEf/ggcguXWmvAAA/ienfiUITb8XVd5o5Fw+UCyFI3PnRS9H6u+SVpUt87HETUEgNXvOCMoMZqBu+M6FBg9kg7Rm2tAAAA==',
+  'transport': 'data:image/webp;base64,UklGRm4AAABXRUJQVlA4IGIAAADwAQCdASoQAAsAA4BaJbACdADz9Qua8gAA+VKY0tscNmjcPF+qsFyeMMajQfgo7qj2tyi69dt4XmAJu1DAn9mNgvw4kvnss+/AAJggURn9WWtbTaIkt0+Ei8ApFUg/TGDoAA==',
 }
 
 // Maps an image path like '/images/villa-teduh/hero.webp' to its blur data URL.

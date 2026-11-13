@@ -64,16 +64,20 @@ const OG = {
   'og-langit.jpg': '01854',
 }
 
+// Guide images — CC-licensed sources (see guides.ts imageCredit fields).
+// Sources live in photo-src/guides/<name>.jpg, output to public/images/guides/.
+const GUIDE_STEMS = ['temple', 'kecak', 'surf', 'cafes', 'wellness', 'nightlife', 'transport']
+
 const blurs = {}
 
-async function toWebp(srcFile, destFile, width = 2400) {
+async function toWebp(srcFile, destFile, width = 2400, quality = 80) {
   const img = sharp(srcFile).rotate()
   const meta = await img.metadata()
   const long = Math.max(meta.width, meta.height)
   if (long > width) {
     img.resize(meta.width >= meta.height ? { width } : { height: width })
   }
-  await img.webp({ quality: 80, effort: 5 }).toFile(destFile)
+  await img.webp({ quality, effort: 5 }).toFile(destFile)
 }
 
 async function blurFor(srcFile) {
@@ -87,9 +91,23 @@ for (const [dir, files] of Object.entries(MAP)) {
   for (const [stem, srcN] of Object.entries(files)) {
     const s = src(srcN)
     const dest = path.join(outDir, `${stem}.webp`)
-    await toWebp(s, dest, stem.startsWith('hero') || stem === 'pool-aerial' ? 2560 : 2200)
+    // Heroes render near full-screen — 2400w at q70 keeps them sharp without a heavy payload
+    const isHero = stem.startsWith('hero') || stem === 'pool-aerial'
+    await toWebp(s, dest, isHero ? 2400 : 2200, isHero ? 70 : 80)
     if (!(stem in blurs)) blurs[stem] = await blurFor(s)
     console.log(`${dir}/${stem}.webp <- ${srcN}`)
+  }
+}
+
+{
+  const guideOut = path.join(IMG, 'guides')
+  await mkdir(guideOut, { recursive: true })
+  for (const stem of GUIDE_STEMS) {
+    const s = path.join(SRC, 'guides', `${stem}.jpg`)
+    const dest = path.join(guideOut, `${stem}.webp`)
+    await toWebp(s, dest, 2200)
+    if (!(stem in blurs)) blurs[stem] = await blurFor(s)
+    console.log(`guides/${stem}.webp <- guides/${stem}.jpg`)
   }
 }
 

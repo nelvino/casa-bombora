@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Container } from '@/components/ui/Container'
 import { Reveal } from '@/components/ui/Reveal'
 import { GUIDES } from '@/lib/data/guides'
+import { blurFor } from '@/lib/data/image-blur'
 
 export const metadata: Metadata = {
   title: 'Uluwatu guides — where to surf, eat, and go out',
@@ -31,20 +33,33 @@ export default function GuidesPage() {
           <Reveal key={guide.slug} delay={index * 80} className="h-full">
             <Link
               href={`/guide/${guide.slug}`}
-              className="group flex h-full flex-col rounded-2xl border border-gunmetal/10 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+              className="group flex h-full flex-col overflow-hidden rounded-2xl border border-gunmetal/10 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
             >
-              <p className="mb-3 font-sans text-xs font-medium uppercase tracking-wide text-blue-green">
-                {guide.readTime}
-              </p>
-              <h2 className="mb-2 font-serif text-xl text-gunmetal transition-colors group-hover:text-blue-green">
-                {guide.title}
-              </h2>
-              <p className="mb-4 flex-1 text-sm leading-relaxed text-gunmetal/70">
-                {guide.excerpt}
-              </p>
-              <span className="font-sans text-sm font-medium text-blue-green">
-                Read the guide →
-              </span>
+              <div className="relative aspect-[16/10] overflow-hidden bg-gunmetal/5">
+                <Image
+                  src={guide.image.src}
+                  alt={guide.image.alt}
+                  fill
+                  placeholder="blur"
+                  blurDataURL={blurFor(guide.image.src)}
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                />
+                <span className="absolute left-4 top-4 rounded-full bg-gunmetal/60 px-3 py-1 font-sans text-xs font-medium uppercase tracking-wide text-alabaster backdrop-blur-sm">
+                  {guide.readTime}
+                </span>
+              </div>
+              <div className="flex flex-1 flex-col p-6">
+                <h2 className="mb-2 font-serif text-xl text-gunmetal transition-colors group-hover:text-blue-green">
+                  {guide.title}
+                </h2>
+                <p className="mb-4 flex-1 text-sm leading-relaxed text-gunmetal/70">
+                  {guide.excerpt}
+                </p>
+                <span className="font-sans text-sm font-medium text-blue-green">
+                  Read the guide →
+                </span>
+              </div>
             </Link>
           </Reveal>
         ))}
