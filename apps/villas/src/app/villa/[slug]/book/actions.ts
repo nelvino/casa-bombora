@@ -340,7 +340,7 @@ export async function createPaymentSession(
     return {
       ok: false,
       error:
-        "We couldn't start the secure checkout. Your dates are still held — please try again, or contact us if it keeps failing.",
+        "We couldn't start the secure checkout. Your dates are still held. Please try again, or contact us if it keeps failing.",
     }
   }
 

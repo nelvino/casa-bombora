@@ -242,7 +242,7 @@ export default function GuidePage({ params }: Props) {
                 Stay minutes from it all
               </h2>
               <p className="mx-auto mb-6 max-w-md text-sm text-alabaster/70">
-                Villa Teduh and Villa Langit sit on a quiet lane in Pecatu —
+                Villa Teduh and Villa Langit sit on a quiet lane in Pecatu,
                 close to everything in this guide, far from the noise.
               </p>
               <div className="flex flex-wrap justify-center gap-3">

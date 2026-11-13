@@ -24,7 +24,7 @@ export function ImageBreak() {
       </div>
       <Reveal className="relative z-10 max-w-3xl px-6 text-center">
         <p className="font-serif text-2xl leading-snug text-alabaster md:text-4xl">
-          Evenings slow down here — still water, warm light, and the bamboo
+          Evenings slow down here. Still water, warm light, and the bamboo
           glowing after dark.
         </p>
       </Reveal>

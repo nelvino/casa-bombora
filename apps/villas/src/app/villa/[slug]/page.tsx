@@ -64,7 +64,7 @@ const houseRules = [
   { term: 'Quiet hours', detail: '10:00 PM – 7:00 AM' },
   { term: 'Smoking', detail: 'Not permitted inside' },
   { term: 'Pets', detail: 'Not allowed' },
-  { term: 'Cancellation', detail: 'Flexible — confirm terms when booking' },
+  { term: 'Cancellation', detail: 'Flexible, confirm terms when booking' },
 ]
 
 const faq = [
@@ -82,11 +82,11 @@ const faq = [
   },
   {
     q: 'Is the Wi-Fi good enough for remote work?',
-    a: 'Yes — both villas have fast fibre Wi-Fi and quiet workspaces, popular with remote workers.',
+    a: 'Yes, both villas have fast fibre Wi-Fi and quiet workspaces, popular with remote workers.',
   },
   {
     q: 'How do I get around?',
-    a: 'Most guests rent a scooter or use drivers. We can arrange both on arrival — beaches, gyms, and cafés are all within about 15 minutes.',
+    a: 'Most guests rent a scooter or use drivers. We can arrange both on arrival. Beaches, gyms, and cafés are all within about 15 minutes.',
   },
 ]
 
@@ -253,7 +253,7 @@ export default function VillaPage({ params }: Props) {
               <section>
                 <h2 className="mb-4 font-serif text-2xl text-gunmetal">Location</h2>
                 <p className="mb-4 text-gunmetal/80">
-                  {villa.name} sits on a quiet lane in Pecatu, Uluwatu — a
+                  {villa.name} sits on a quiet lane in Pecatu, Uluwatu, a
                   peaceful base about 7 minutes&apos; drive from the famous
                   Uluwatu surf breaks, and ~45 minutes from the airport.
                 </p>

@@ -53,7 +53,7 @@ export function Hero() {
             className="mb-10 max-w-xl text-lg leading-relaxed text-alabaster/90 drop-shadow-sm md:text-xl opacity-0 animate-fade-up"
             style={{ animationDelay: '0.35s' }}
           >
-            Minimal, design-forward stays on a quiet lane in Uluwatu — minutes
+            Minimal, design-forward stays on a quiet lane in Uluwatu, minutes
             from the Bukit&apos;s famous surf breaks and clifftop sunsets. Two
             boutique villas, each with a private pool.
           </p>

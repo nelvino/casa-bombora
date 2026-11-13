@@ -7,7 +7,7 @@ const STEPS = [
   {
     src: '/images/shared/process-sketch.webp',
     label: 'The sketch',
-    caption: 'Every villa begins on paper — the arch, the pool, the light.',
+    caption: 'Every villa begins on paper: the arch, the pool, the light.',
   },
   {
     src: '/images/shared/process-render.webp',
@@ -31,19 +31,19 @@ export function Story() {
               Our story
             </p>
             <h2 className="mb-5 text-gunmetal">
-              Designed, built and cared for — by us
+              Designed, built and cared for by us
             </h2>
             <p className="max-w-xl text-gunmetal/70">
               Casa Bombora is a small design-and-build studio in Uluwatu. We
               found the land, drew these villas line by line, and built them
-              with our own team — and we&apos;re still the ones who look after
+              with our own team, and we&apos;re still the ones who look after
               them. When you stay here, you&apos;re a guest of the people who
               made the place.
             </p>
           </Reveal>
           <Reveal delay={150} className="md:pb-2">
             <p className="font-serif text-lg italic leading-relaxed text-lion md:text-xl">
-              From first sketch to the keys in your hand — nothing was left to
+              From first sketch to the keys in your hand, nothing was left to
               chance.
             </p>
           </Reveal>

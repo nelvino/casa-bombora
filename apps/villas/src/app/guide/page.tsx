@@ -7,9 +7,9 @@ import { GUIDES } from '@/lib/data/guides'
 import { blurFor } from '@/lib/data/image-blur'
 
 export const metadata: Metadata = {
-  title: 'Uluwatu guides — where to surf, eat, and go out',
+  title: 'Uluwatu guides: where to surf, eat, and go out',
   description:
-    'Our local guides to Uluwatu and the Bukit Peninsula: the best surf breaks, cafés, gyms, nightlife and practical tips — curated by your Casa Bombora hosts.',
+    'Our local guides to Uluwatu and the Bukit Peninsula: the best surf breaks, cafés, gyms, nightlife and practical tips, curated by your Casa Bombora hosts.',
   alternates: { canonical: '/guide' },
 }
 
@@ -22,7 +22,7 @@ export default function GuidesPage() {
         </p>
         <h1 className="mb-4 text-gunmetal">Uluwatu, from people who live here</h1>
         <p className="mx-auto max-w-2xl text-gunmetal/70">
-          Honest guides to the Bukit Peninsula — the surf breaks, cafés, temples
+          Honest guides to the Bukit Peninsula: the surf breaks, cafés, temples
           and sunset spots we send our own guests to. All within about fifteen
           minutes of the villas.
         </p>

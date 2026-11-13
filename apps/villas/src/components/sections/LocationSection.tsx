@@ -39,7 +39,7 @@ export function LocationSection() {
               A calm corner of the Bukit Peninsula
             </h2>
             <p className="mb-6 max-w-xl text-gunmetal/70">
-              The villas sit on a quiet residential lane in Pecatu, Uluwatu —
+              The villas sit on a quiet residential lane in Pecatu, Uluwatu,
               peaceful and private, yet only about 7 minutes&apos; drive from
               the famous Uluwatu surf breaks and clifftop sunsets. Our team can
               arrange scooters, drivers, and day trips.
@@ -55,7 +55,7 @@ export function LocationSection() {
               </li>
               <li className="flex items-center gap-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-blue-green" />
-                Quiet residential lane — no through traffic
+                Quiet residential lane with no through traffic
               </li>
             </ul>
             <Link

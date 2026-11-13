@@ -9,7 +9,7 @@ export const NEARBY_SPOTS: NearbySpot[] = [
   {
     name: 'Padang Padang Beach',
     distance: '~6 min drive',
-    detail: 'Iconic white-sand cove — swim, sunbathe, or learn to surf.',
+    detail: 'Iconic white-sand cove for a swim, a sunbathe, or a first surf lesson.',
   },
   {
     name: 'Uluwatu Temple',
@@ -19,12 +19,12 @@ export const NEARBY_SPOTS: NearbySpot[] = [
   {
     name: 'Suluban Beach & Single Fin',
     distance: '~9 min drive',
-    detail: 'Cave beach and clifftop bar — Sunday sunsets are legendary.',
+    detail: 'Cave beach and clifftop bar. Sunday sunsets are legendary.',
   },
   {
     name: 'Bingin Beach',
     distance: '~10 min drive',
-    detail: 'Laid-back surf spot with a mechanical left — the cliff scene is rebuilding after 2025\u2019s demolitions.',
+    detail: 'Laid-back surf spot with a mechanical left. The cliff scene is still rebuilding after 2025\u2019s demolitions.',
   },
   {
     name: 'Nyang Nyang Beach',
